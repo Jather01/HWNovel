@@ -12,21 +12,106 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/user")
     @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="inner">
+        <h1 class="logo_left">
+            <a href="/Home/Main" class="link"></a>
+        </h1>
+        <form id="Findid" name="Findid" method="POST" action="/User/FoundId">
+            <input type="hidden" name="Userid" id="Userid" asp-for="Userid" value="">
+            <input type="hidden" name="Name" id="Name" asp-for="Name" value="">
+        </form>
+        <div class="content form">
+            <div class="form_content">
+                <div class="form_section">
+                    <div class="item_style tip_text">
+                        회원가입 당시에 입력했던 이름과 생년월일을 입력해주세요.
+                    </div>
+                    <div class="form_list">
+                        <div class="form_item user" id="nameDiv">
+                            <input type="text" id="name" name="name" placeholder="이름" class="input" value="" maxlength="40">
+                        </div>
+                        <div class="form_item user" id="birthdayDiv">
+                            <input type="text" id="birthdayInput" placeholder="생년월일 8자리" class="input" value="" maxlength="8">
+                        </div>
+                    </div>
+                    <div class="error_text item_style" id="nameMsg" style="display: none">이름 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="birthdayMsg" style="display: none">생년월일 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="errorMsg" style="display: none">아이디를 찾지 못했습니다. 입력하신 정보를 다시 확인해주세요.</div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_submit_wrap">
+            <button type="button" class="btn_submit" id="btnFindid">아이디 찾기</button>
+        </div>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
 
-    <script>
+    <script type="text/JavaScript">
+
+        $("#btnFindid").click(function () {
+            var bool = "true";
+
+            if ($("#name").val() == "") {
+                $("#nameMsg").text("이름 : 이름을 입력해주세요.");
+                $("#nameMsg").css("display", "");
+                $("#nameDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#nameMsg").css("display", "none");
+                $("#nameDiv").removeClass("error");
+                $("#Name").val($("#name").val());
+            }
+
+            var birthCheck = /^[\d]+$/;
+            if ($("#birthdayInput").val() == "") {
+                $("#birthdayMsg").text("생년월일 : 생년월일을 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else if (!birthCheck.test($("#birthdayInput").val())) {
+                $("#birthdayMsg").text("생년월일 : 8자리의 숫자를 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else if ($("#birthdayInput").val().length != 8) {
+                $("#birthdayMsg").text("생년월일 : 8자리의 생년월일을 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#birthdayMsg").css("display", "none");
+                $("#birthdayDiv").removeClass("error");
+            }
+
+            if (bool == "true") {
+                $.ajax({
+                    url: "/Ajax/FindId",
+                    type: "POST",
+                    data: { name: $("#name").val(), birthday: $("#birthdayInput").val() },
+                    success: function (r) {
+                        if (r == "") {
+                            $("#errorMsg").css("display", "");
+                        } else {
+                            console.log("success");
+                            $("#errorMsg").css("display", "none");
+                            console.log("success");
+                            $("#Userid").val(r);
+                            console.log("success");
+                            $("#Findid").submit();
+                            console.log("success");
+                        }
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
+        });
     </script>
-</head>
-<body>
-    <header class="header" role="banner">
-        <div class="header_inner">
-            <a href="/Home/Main" class="logo"></a>
-        </div>
-    </header>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">FindId</h1>
-    </section>
-</body>
-</html>
+</body >
+</html >

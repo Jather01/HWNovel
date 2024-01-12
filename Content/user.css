@@ -574,6 +574,11 @@ input[type=text]::-webkit-input-placeholder {
     color:#999;
 }
 
+.item_style.nomal_text {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
 .error_text {
     margin: 10px 4px 0;
     font-size: 13px;
@@ -602,9 +607,36 @@ input[type=text]::-webkit-input-placeholder {
             content: ''
         }
 
-.error_text + .form_list {
-    margin-top: 10px
+    .error_text + .form_list {
+        margin-top: 10px
+    }
+
+.list_text {
+    margin: 0 4px 0;
+    font-size: 20px;
+    line-height: 18px;
 }
+
+    .list_text.foundid_item_style {
+        position: relative;
+        padding-left: 8px;
+        letter-spacing: -.4px
+    }
+
+        .list_text.foundid_item_style + .foundid_item_style {
+            margin-top: 0
+        }
+
+        .list_text.foundid_item_style::before {
+            position: absolute;
+            top: 9px;
+            left: 0;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #000;
+            content: ''
+        }
 
 .form_item {
     display: flex;
@@ -696,6 +728,16 @@ input[type=text]::-webkit-input-placeholder {
         font-size: 15px;
         padding: 6px 12px 6px 12px;
     }
+
+.foundid_item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 50px;
+    justify-content: space-between;
+}
 
 .input {
     flex: 1 1 auto;

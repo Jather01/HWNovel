@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW Novel</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/user")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script type="text/JavaScript">
+        function doLogin(id) {
+            $("#id").val(id);
+            $("#goLogin").submit();
+        }
+    </script>
+</head>
+<body>
+    <div class="inner">
+        <h1 class="logo_left">
+            <a href="/Home/Main" class="link"></a>
+        </h1>
+        <form id="goLogin" name="goLogin" method="POST" action="/User/Login">
+            <input type="hidden" name="id" id="id" value="">
+        </form>
+        <div class="content form">
+            <div class="form_content">
+                <div class="form_section">
+                    <div class="item_style nomal_text">
+                        <font>@ViewBag.name</font>님의 아이디는 다음과 같습니다.
+                    </div>
+                    @foreach (var item in ViewBag.ids)
+                    {
+                        <div class="foundid_item">
+                            <div class="list_text foundid_item_style">@item</div>
+                            <button type="button" class="btn btn-outline-dark" onclick="doLogin('@item');">이 아이디로 로그인</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body >
+</html >

@@ -49,5 +49,38 @@ namespace HWNovel.Controllers
             else result = "1";
             return Json(result);
         }
+
+        [HttpPost]
+        public JsonResult FindId(string name, string birthday)
+        {
+            string result = ""; // 0: 중복 있음, 1: 중복 없음
+
+            var ids = new List<HWN01>();
+
+            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(birthday))
+            {
+                ids = db.HWN01.Where(x =>
+                           x.NAME == name
+                        && x.BIRTHDAY == birthday
+                        && x.POWER == "2"
+                        && x.USEYN == "1")
+                        .ToList();
+            }
+            if(ids.Count > 0)
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        result += ids[i].USERID;
+                    } else
+                    {
+                        result += "," + ids[i].USERID;
+                    }
+                }
+            }
+
+            return Json(result);
+        }
     }
 }
