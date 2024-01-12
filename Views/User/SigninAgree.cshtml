@@ -1,0 +1,118 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW Novel</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/user")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="inner">
+        <h1 class="logo_left">
+            <a href="/Home/Main" class="link"></a>
+        </h1>
+        <div class="content">
+            <ul class="terms_list">
+                <li class="terms_item">
+                    <div class="check_terms">
+                        <div class="check_wrap">
+                            <input type="checkbox" id="termsService" class="checkbox" />
+                            <label for="termsService">
+                                <em class="option point">[필수]</em>
+                                <div class="text_wrap">
+                                    <span class="text">이용약관</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="terms_box" tabindex="0">
+                        <div class="article">
+                            <span class="article_title">여러분을 환영합니다.</span>
+                            <p class="article_text">
+                                HWNovel 서비스 및 제품을 이용해 주셔서 감사합니다. HWNovel은 다양한 HWNovel 서비스의 이용과
+                                관련하여 약관에 대한 사용자의 동의를 필요로 합니다.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="terms_item">
+                    <div class="check_terms">
+                        <div class="check_wrap">
+                            <input type="checkbox" id="termsPrivacy" class="checkbox" />
+                            <label for="termsPrivacy">
+                                <em class="option point">[필수]</em>
+                                <div class="text_wrap">
+                                    <span class="text">개인정보 수집 및 이용</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="terms_box" tabindex="0">
+                        <div class="article">
+                            <p class="article_text">
+                                개인정보보호법에 따라 HWNovel에 회원가입 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및
+                                이용목적, 개인정보의 보유 및 이용기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내 드리오니
+                                자세히 읽은 후 동의하여 주시기 바랍니다.
+                            </p>
+                        </div>
+                        <div class="article">
+                            <span class="article_title">1. 수집하는 개인정보</span>
+                            <p class="article_text">
+                                회원가입 시점에 HWNovel이 이용자로부터 수집하는 개인정보는 아래와 같습니다.<br />
+                                - 성함<br />
+                                - 생년월일
+                            </p>
+                        </div>
+                        <div class="article">
+                            <span class="article_title">2. 개인정보 수집 및 이용 동의를 거부할 권리</span>
+                            <p class="article_text">
+                                이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가 있습니다. 회원가입 시 수집하는 최소한의 개인정보,
+                                즉, 필수 항목에 대한 수집 및 이용 동의를 거부하실 경우, 회원가입이 어려울 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="btn_submit_wrap">
+                <button type="button" id="btnAgree" class="btn_submit" disabled>다음</button>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script type="text/JavaScript">
+        function btnAgreeYn() {
+            if ($("#termsService").is(":checked", true) && $("#termsPrivacy").is(":checked", true)) {
+                $("#btnAgree").prop("disabled", false);
+            } else {
+                $("#btnAgree").prop("disabled", true);
+            }
+        }
+
+        $("#termsService").click(function () {
+            btnAgreeYn();
+        });
+
+        $("#termsPrivacy").click(function () {
+            btnAgreeYn();
+        });
+
+        $("#btnAgree").click(function () {
+            if ($("#termsService").is(":checked", true) && $("#termsPrivacy").is(":checked", true)) {
+                location.href = "/User/Signin";
+            } else {
+                return;
+            }
+        });
+    </script>
+</body>
+</html>

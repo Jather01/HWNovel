@@ -1,0 +1,566 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HWNovelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="HWN01">
+          <Key>
+            <PropertyRef Name="USERID" />
+          </Key>
+          <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ENCPASSWORD" Type="varchar" MaxLength="100" />
+          <Property Name="NAME" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="BIRTHDAY" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="NICKNAME" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="POWER" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="USEYN" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SIGNUPDATE" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN011">
+          <Key>
+            <PropertyRef Name="USERID" />
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="DATE" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN012">
+          <Key>
+            <PropertyRef Name="USERID" />
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="DATE" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN02">
+          <Key>
+            <PropertyRef Name="GROUPNO" />
+          </Key>
+          <Property Name="GROUPNO" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="GROUPNAME" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN021">
+          <Key>
+            <PropertyRef Name="GROUPNO" />
+            <PropertyRef Name="CODENO" />
+          </Key>
+          <Property Name="GROUPNO" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="CODENO" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="CODENAME" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN03">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="NOVELTITLE" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NOVELINFO" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="WRITER" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="GENRE" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="THUMNAIL" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ENDYN" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="MON" Type="varchar" MaxLength="1" />
+          <Property Name="TUE" Type="varchar" MaxLength="1" />
+          <Property Name="WED" Type="varchar" MaxLength="1" />
+          <Property Name="THU" Type="varchar" MaxLength="1" />
+          <Property Name="FRI" Type="varchar" MaxLength="1" />
+          <Property Name="SAT" Type="varchar" MaxLength="1" />
+          <Property Name="SUN" Type="varchar" MaxLength="1" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN031">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMTITLE" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="WRITERCOMMENT" Type="text" />
+          <Property Name="VIEWCNT" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN032">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+            <PropertyRef Name="USERCOMMENTNO" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENTNO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENT" Type="text" Nullable="false" />
+          <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN033">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="STARPOINT" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN04">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="NOVELTITLE" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NOVELINFO" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="WRITER" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="GENRE" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="THUMNAIL" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ENDYN" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN041">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMTITLE" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="WRITERCOMMENT" Type="text" />
+          <Property Name="VIEWCNT" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN042">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+            <PropertyRef Name="USERCOMMENTNO" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENTNO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENT" Type="text" Nullable="false" />
+          <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN043">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="STARPOINT" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWNNOTICE">
+          <Key>
+            <PropertyRef Name="NOTICENO" />
+          </Key>
+          <Property Name="NOTICENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="NOTICETEXT" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="HWNovelModelStoreContainer">
+          <EntitySet Name="HWN01" EntityType="Self.HWN01" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN011" EntityType="Self.HWN011" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN012" EntityType="Self.HWN012" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN02" EntityType="Self.HWN02" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN021" EntityType="Self.HWN021" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN03" EntityType="Self.HWN03" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN031" EntityType="Self.HWN031" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN032" EntityType="Self.HWN032" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN033" EntityType="Self.HWN033" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN04" EntityType="Self.HWN04" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN041" EntityType="Self.HWN041" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN042" EntityType="Self.HWN042" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWN043" EntityType="Self.HWN043" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HWNNOTICE" EntityType="Self.HWNNOTICE" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HWNovelModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="HWN01">
+          <Key>
+            <PropertyRef Name="USERID" />
+          </Key>
+          <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ENCPASSWORD" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BIRTHDAY" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NICKNAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="POWER" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="USEYN" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SIGNUPDATE" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN011">
+          <Key>
+            <PropertyRef Name="USERID" />
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DATE" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN012">
+          <Key>
+            <PropertyRef Name="USERID" />
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="DATE" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN02">
+          <Key>
+            <PropertyRef Name="GROUPNO" />
+          </Key>
+          <Property Name="GROUPNO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GROUPNAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN021">
+          <Key>
+            <PropertyRef Name="GROUPNO" />
+            <PropertyRef Name="CODENO" />
+          </Key>
+          <Property Name="GROUPNO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CODENO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CODENAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HWN03">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELTITLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELINFO" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WRITER" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GENRE" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="THUMNAIL" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ENDYN" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MON" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="TUE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="WED" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="THU" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="FRI" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SAT" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SUN" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN031">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMTITLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WRITERCOMMENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VIEWCNT" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN032">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+            <PropertyRef Name="USERCOMMENTNO" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENTNO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN033">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="STARPOINT" Type="Decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN04">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELTITLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELINFO" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WRITER" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GENRE" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="THUMNAIL" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ENDYN" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN041">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMTITLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WRITERCOMMENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VIEWCNT" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN042">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+            <PropertyRef Name="USERCOMMENTNO" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENTNO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERCOMMENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWN043">
+          <Key>
+            <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="VOLUMENO" />
+          </Key>
+          <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="STARPOINT" Type="Decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="HWNNOTICE">
+          <Key>
+            <PropertyRef Name="NOTICENO" />
+          </Key>
+          <Property Name="NOTICENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="NOTICETEXT" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityContainer Name="HWNovelEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="HWN01" EntityType="Self.HWN01" />
+          <EntitySet Name="HWN011" EntityType="Self.HWN011" />
+          <EntitySet Name="HWN012" EntityType="Self.HWN012" />
+          <EntitySet Name="HWN02" EntityType="Self.HWN02" />
+          <EntitySet Name="HWN021" EntityType="Self.HWN021" />
+          <EntitySet Name="HWN03" EntityType="Self.HWN03" />
+          <EntitySet Name="HWN031" EntityType="Self.HWN031" />
+          <EntitySet Name="HWN032" EntityType="Self.HWN032" />
+          <EntitySet Name="HWN033" EntityType="Self.HWN033" />
+          <EntitySet Name="HWN04" EntityType="Self.HWN04" />
+          <EntitySet Name="HWN041" EntityType="Self.HWN041" />
+          <EntitySet Name="HWN042" EntityType="Self.HWN042" />
+          <EntitySet Name="HWN043" EntityType="Self.HWN043" />
+          <EntitySet Name="HWNNOTICE" EntityType="Self.HWNNOTICE" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HWNovelModelStoreContainer" CdmEntityContainer="HWNovelEntities">
+          <EntitySetMapping Name="HWN01">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN01">
+              <MappingFragment StoreEntitySet="HWN01">
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="ENCPASSWORD" ColumnName="ENCPASSWORD" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="BIRTHDAY" ColumnName="BIRTHDAY" />
+                <ScalarProperty Name="NICKNAME" ColumnName="NICKNAME" />
+                <ScalarProperty Name="POWER" ColumnName="POWER" />
+                <ScalarProperty Name="USEYN" ColumnName="USEYN" />
+                <ScalarProperty Name="SIGNUPDATE" ColumnName="SIGNUPDATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN011">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN011">
+              <MappingFragment StoreEntitySet="HWN011">
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN012">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN012">
+              <MappingFragment StoreEntitySet="HWN012">
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN02">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN02">
+              <MappingFragment StoreEntitySet="HWN02">
+                <ScalarProperty Name="GROUPNO" ColumnName="GROUPNO" />
+                <ScalarProperty Name="GROUPNAME" ColumnName="GROUPNAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN021">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN021">
+              <MappingFragment StoreEntitySet="HWN021">
+                <ScalarProperty Name="GROUPNO" ColumnName="GROUPNO" />
+                <ScalarProperty Name="CODENO" ColumnName="CODENO" />
+                <ScalarProperty Name="CODENAME" ColumnName="CODENAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN03">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN03">
+              <MappingFragment StoreEntitySet="HWN03">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="NOVELTITLE" ColumnName="NOVELTITLE" />
+                <ScalarProperty Name="NOVELINFO" ColumnName="NOVELINFO" />
+                <ScalarProperty Name="WRITER" ColumnName="WRITER" />
+                <ScalarProperty Name="GENRE" ColumnName="GENRE" />
+                <ScalarProperty Name="THUMNAIL" ColumnName="THUMNAIL" />
+                <ScalarProperty Name="ENDYN" ColumnName="ENDYN" />
+                <ScalarProperty Name="MON" ColumnName="MON" />
+                <ScalarProperty Name="TUE" ColumnName="TUE" />
+                <ScalarProperty Name="WED" ColumnName="WED" />
+                <ScalarProperty Name="THU" ColumnName="THU" />
+                <ScalarProperty Name="FRI" ColumnName="FRI" />
+                <ScalarProperty Name="SAT" ColumnName="SAT" />
+                <ScalarProperty Name="SUN" ColumnName="SUN" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN031">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN031">
+              <MappingFragment StoreEntitySet="HWN031">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
+                <ScalarProperty Name="VOLUMTITLE" ColumnName="VOLUMTITLE" />
+                <ScalarProperty Name="NOVELTEXT" ColumnName="NOVELTEXT" />
+                <ScalarProperty Name="WRITERCOMMENT" ColumnName="WRITERCOMMENT" />
+                <ScalarProperty Name="VIEWCNT" ColumnName="VIEWCNT" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN032">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN032">
+              <MappingFragment StoreEntitySet="HWN032">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
+                <ScalarProperty Name="USERCOMMENTNO" ColumnName="USERCOMMENTNO" />
+                <ScalarProperty Name="USERCOMMENT" ColumnName="USERCOMMENT" />
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN033">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN033">
+              <MappingFragment StoreEntitySet="HWN033">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="STARPOINT" ColumnName="STARPOINT" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN04">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN04">
+              <MappingFragment StoreEntitySet="HWN04">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="NOVELTITLE" ColumnName="NOVELTITLE" />
+                <ScalarProperty Name="NOVELINFO" ColumnName="NOVELINFO" />
+                <ScalarProperty Name="WRITER" ColumnName="WRITER" />
+                <ScalarProperty Name="GENRE" ColumnName="GENRE" />
+                <ScalarProperty Name="THUMNAIL" ColumnName="THUMNAIL" />
+                <ScalarProperty Name="ENDYN" ColumnName="ENDYN" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN041">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN041">
+              <MappingFragment StoreEntitySet="HWN041">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
+                <ScalarProperty Name="VOLUMTITLE" ColumnName="VOLUMTITLE" />
+                <ScalarProperty Name="NOVELTEXT" ColumnName="NOVELTEXT" />
+                <ScalarProperty Name="WRITERCOMMENT" ColumnName="WRITERCOMMENT" />
+                <ScalarProperty Name="VIEWCNT" ColumnName="VIEWCNT" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN042">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN042">
+              <MappingFragment StoreEntitySet="HWN042">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
+                <ScalarProperty Name="USERCOMMENTNO" ColumnName="USERCOMMENTNO" />
+                <ScalarProperty Name="USERCOMMENT" ColumnName="USERCOMMENT" />
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWN043">
+            <EntityTypeMapping TypeName="HWNovelModel.HWN043">
+              <MappingFragment StoreEntitySet="HWN043">
+                <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
+                <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="STARPOINT" ColumnName="STARPOINT" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HWNNOTICE">
+            <EntityTypeMapping TypeName="HWNovelModel.HWNNOTICE">
+              <MappingFragment StoreEntitySet="HWNNOTICE">
+                <ScalarProperty Name="NOTICENO" ColumnName="NOTICENO" />
+                <ScalarProperty Name="NOTICETEXT" ColumnName="NOTICETEXT" />
+                <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="없음" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

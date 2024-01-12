@@ -1,0 +1,265 @@
+﻿@model HWNovel.Models.User
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW Novel</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/user")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="inner">
+        <h1 class="logo_left">
+            <a href="/Home/Main" class="link"></a>
+        </h1>
+        <form id="Signin" name="Signin" method="POST" asp-controller="User" asp-action="Signin">
+            <input type="hidden" name="Userid" id="Userid" asp-for="Userid" value="">
+            <input type="hidden" name="Password" id="Password" asp-for="Password" value="">
+            <input type="hidden" name="Name" id="Name" asp-for="Name" value="">
+            <input type="hidden" name="Birthday" id="Birthday" asp-for="Birthday" value="">
+            <input type="hidden" name="Nickname" id="Nickname" asp-for="Nickname" value="">
+        </form>
+        <div class="content form">
+            <div class="form_content">
+                <div class="form_section">
+                    <div class="form_list">
+                        <div class="form_item user" id="idDiv">
+                            <input type="text" id="id" name="id" placeholder="아이디" class="input" value="" maxlength="20" autocapitalize="off">
+                            <input type="hidden" id="idCheck" name="idCheck">
+                            <div class="btnOverlap">
+                                <button type="button" class="btn btn-outline-dark btnButton" id="idOverlap">중복확인</button>
+                            </div>
+                        </div>
+                        <div class="form_item user" id="pswd1Div">
+                            <input type="password" id="pswd1" name="pswd1" placeholder="비밀번호" class="input" value="" maxlength="20" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div class="item_style tip_text">
+                        영어, 숫자, 특수기호(~`!@@#$%^&*-_=+)가 포함된 비밀번호를 입력해주세요.
+                    </div>
+                    <div class="form_list">
+                        <div class="form_item user" id="pswd2Div">
+                            <input type="password" id="pswd2" name="pswd2" placeholder="비밀번호 확인" class="input" value="" maxlength="20" autocomplete="new-password">
+                        </div>
+                        <div class="form_item user" id="nameDiv">
+                            <input type="text" id="name" name="name" placeholder="이름" class="input" value="" maxlength="40">
+                        </div>
+                        <div class="form_item user" id="birthdayDiv">
+                            <input type="text" id="birthdayInput" placeholder="생년월일 8자리" class="input" value="" maxlength="8">
+                        </div>
+                        <div class="form_item user" id="nicknameDiv">
+                            <input type="text" id="nickname" name="nickname" placeholder="닉네임" class="input" value="" maxlength="20">
+                            <input type="hidden" id="nicknameCheck" name="nicknameCheck">
+                            <div class="btnOverlap">
+                                <button type="button" class="btn btn-outline-dark btnButton" id="nicknameOverlap">중복확인</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error_text item_style" id="idMsg" style="display: none">아이디 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="pswd1Msg" style="display: none">비밀번호 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="pswd2Msg" style="display: none">비밀번호 확인 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="nameMsg" style="display: none">이름 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="birthdayMsg" style="display: none">생년월일 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="nicknameMsg" style="display: none">닉네임 : 필수 정보입니다.</div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_submit_wrap">
+            <button type="button" class="btn_submit" id="btnSignin">회원가입</button>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+<script type="text/JavaScript">
+    $(".input").keydown(function (e) {
+        if (e.keyCode == 32) return false;
+    });
+
+    $("#idOverlap").click(function () {
+        var idCheck = /^[a-z\d]+$/;
+        if ($("#id").val() == "") {
+            $("#idMsg").text("아이디 : 아이디를 입력해주세요.");
+            $("#idMsg").css("display", "");
+            $("#idDiv").addClass("error");
+        } else if (!idCheck.test($("#id").val())) {
+            $("#idMsg").text("아이디 : 영문 소문자, 숫자만 사용 가능합니다.");
+            $("#idMsg").css("display", "");
+            $("#idDiv").addClass("error");
+            return;
+        } else {
+            $.ajax({
+                url: "/Ajax/IdOverlap",
+                type: "POST",
+                data: {id: $("#id").val()},
+                success: function (r) {
+                    if (r == "0") {
+                        $("#idMsg").text("아이디 : 중복된 아이디입니다.");
+                        $("#idMsg").css("display", "");
+                        $("#idCheck").val("");
+                        $("#idDiv").addClass("error");
+                    } else if (r == "1") {
+                        $("#idMsg").css("display", "none");
+                        $("#idCheck").val("check");
+                        $("#idDiv").removeClass("error");
+                    }
+                },
+                failure: function () { alert("fail"); },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+    });
+
+    $("#nicknameOverlap").click(function () {
+        if ($("#nickname").val() == "") {
+            $("#nicknameMsg").text("닉네임 : 닉네임을 입력해주세요.");
+            $("#nicknameMsg").css("display", "");
+            $("#nicknameDiv").addClass("error");
+            return;
+        } else {
+            $.ajax({
+                url: "/Ajax/NicknameOverlap",
+                type: "POST",
+                data: {nickname: $("#nickname").val()},
+                success: function (r) {
+                    if (r == "0") {
+                        $("#nicknameMsg").text("닉네임 : 중복된 아이디입니다.");
+                        $("#nicknameMsg").css("display", "");
+                        $("#nicknameCheck").val("");
+                        $("#nicknameDiv").addClass("error");
+                    } else if (r == "1") {
+                        $("#nicknameMsg").css("display", "none");
+                        $("#nicknameCheck").val("check");
+                        $("#nicknameDiv").removeClass("error");
+                    }
+                },
+                failure: function () { alert("fail"); },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+    });
+
+    $("#btnSignin").click(function () {
+        var bool = "true";
+        var idCheck = /^[a-z\d]+$/;
+        if ($("#id").val() == "") {
+            $("#idMsg").text("아이디 : 아이디를 입력해주세요.");
+            $("#idMsg").css("display", "");
+            $("#idDiv").addClass("error");
+            bool = "false";
+        } else if (!idCheck.test($("#id").val())) {
+            $("#idMsg").text("아이디 : 영문 소문자, 숫자만 사용 가능합니다.");
+            $("#idMsg").css("display", "");
+            $("#idDiv").addClass("error");
+            bool = "false";
+        } else if($("#idCheck").val() != "check") {
+            $("#idMsg").text("아이디 : 아이디 중복확인을 해주세요.");
+            $("#idMsg").css("display", "");
+            $("#idDiv").addClass("error");
+            bool = "false";
+        } else {
+            $("#idMsg").css("display", "none");
+            $("#idDiv").removeClass("error");
+            $("#Userid").val($("#id").val());
+        }
+
+        var pwCheck = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~`!@@#$%^&*-_=+])[A-Za-z\d~`!@@#$%^&*-_=+]+$/;
+        if ($("#pswd1").val() == "") {
+            $("#pswd1Msg").text("비밀번호 : 비밀번호를 입력해주세요.");
+            $("#pswd1Msg").css("display", "");
+            $("#pswd1Div").addClass("error");
+            bool = "false";
+        } else if (!pwCheck.test($("#pswd1").val())) {
+            $("#pswd1Msg").text("비밀번호 : 규칙에 맞는 비밀번호를 입력해주세요.");
+            $("#pswd1Msg").css("display", "");
+            $("#pswd1Div").addClass("error");
+            bool = "false";
+        } else {
+            $("#pswd1Msg").css("display", "none");
+            $("#pswd1Div").removeClass("error");
+            $("#Password").val($("#pswd1").val());
+        }
+            
+        if ($("#pswd2").val() == "") {
+            $("#pswd2Msg").text("비밀번호 확인 : 비밀번호 확인을 입력해주세요.");
+            $("#pswd2Msg").css("display", "");
+            $("#pswd2Div").addClass("error");
+            bool = "false";
+        } else if ($("#pswd2").val() != $("#pswd1").val()) {
+            $("#pswd2Msg").text("비밀번호 확인 : 비밀번호 확인과 비밀번호가 일치하지 않습니다.");
+            $("#pswd2Msg").css("display", "");
+            $("#pswd2Div").addClass("error");
+            bool = "false";
+        } else {
+            $("#pswd2Msg").css("display", "none");
+            $("#pswd2Div").removeClass("error");
+        }
+            
+        if ($("#name").val() == "") {
+            $("#nameMsg").text("이름 : 이름을 입력해주세요.");
+            $("#nameMsg").css("display", "");
+            $("#nameDiv").addClass("error");
+            bool = "false";
+        } else {
+            $("#nameMsg").css("display", "none");
+            $("#nameDiv").removeClass("error");
+            $("#Name").val($("#name").val());
+        }
+
+        var birthCheck = /^[\d]+$/;
+        if ($("#birthdayInput").val() == "") {
+            $("#birthdayMsg").text("생년월일 : 생년월일을 입력해주세요.");
+            $("#birthdayMsg").css("display", "");
+            $("#birthdayDiv").addClass("error");
+            bool = "false";
+        } else if (!birthCheck.test($("#birthdayInput").val())) {
+            $("#birthdayMsg").text("생년월일 : 8자리의 숫자를 입력해주세요.");
+            $("#birthdayMsg").css("display", "");
+            $("#birthdayDiv").addClass("error");
+            bool = "false";
+        } else if ($("#birthdayInput").val().length != 8) {
+            $("#birthdayMsg").text("생년월일 : 8자리의 생년월일을 입력해주세요.");
+            $("#birthdayMsg").css("display", "");
+            $("#birthdayDiv").addClass("error");
+            bool = "false";
+        } else{
+            $("#birthdayMsg").css("display", "none");
+            $("#birthdayDiv").removeClass("error");
+            $("#Birthday").val($("#birthdayInput").val());
+        }
+
+        if ($("#nickname").val() == "") {
+            $("#nicknameMsg").text("닉네임 : 닉네임을 입력해주세요.");
+            $("#nicknameMsg").css("display", "");
+            $("#nicknameDiv").addClass("error");
+            bool = "false";
+        } else if ($("#nicknameCheck").val() != "check") {
+            $("#nicknameMsg").text("닉네임 : 닉네임 중복확인을 해주세요.");
+            $("#nicknameMsg").css("display", "");
+            $("#nicknameDiv").addClass("error");
+            bool = "false";
+        } else {
+            $("#nicknameMsg").css("display", "none");
+            $("#nicknameDiv").removeClass("error");
+            $("#Nickname").val($("#nickname").val());
+        }
+
+        if (bool == "true") {
+            $("#Signin").submit();
+        }
+    });
+</script>
+</body>
+</html>

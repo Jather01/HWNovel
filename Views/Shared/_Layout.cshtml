@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW Novel</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script>
+        function search() {
+
+        }
+    </script>
+</head>
+<body onload="navbarHighlight();">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
+        <div class="container">
+            <a href="/Home/Main" class="logo"></a>
+            <div class="d-flex" role="search">
+                <input class="form-control me-2" type="text" placeholder="작품명 또는 작가명을 입력해주세요." style="font-size:14px; width:280px;">
+                <button class="btn btn-outline-dark" type="button" onclick="search();">검색</button>&nbsp;
+                <a href="/User/Login" class="btn btn-outline-dark">로그인</a>
+            </div>
+        </div>
+    </nav>
+    <div class="menu_area container" id="lnb_height">
+        <ul id="lnb" class="lnb">
+            <li class="m1">
+                <a href="/Home/Main" class="lnb_link">
+                    <span class="lnb_txt">홈</span>
+                </a>
+            </li>
+            <li class="m2 ">
+                <a href="/Serial/Day" class="lnb_link">
+                    <span class="lnb_txt">연재 웹소설</span>
+                </a>
+            </li>
+            <li class="m3 ">
+                <a href="/Challenge/Rom" class="lnb_link">
+                    <span class="lnb_txt">도전 웹소설</span>
+                </a>
+            </li>
+            <li class="m4 ">
+                <a href="/Mypage/Rec" class="lnb_link">
+                    <span class="lnb_txt">마이페이지</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

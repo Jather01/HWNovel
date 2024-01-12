@@ -1,0 +1,212 @@
+﻿body, input, textarea, button, table {
+    font-size: 12px;
+    font-family: '나눔바른고딕', NanumBarunGothic, '나눔고딕', NanumGothic;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+.logo {
+    background-image: url(Images/logo.png);
+    background-size: 244px 44px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: top;
+    width: 244px;
+    height: 44px
+}
+
+.menu_area {
+    position: relative;
+}
+
+.lnb {
+    position: relative;
+}
+
+    .lnb::after {
+        display: table;
+        clear: both;
+        content: '';
+    }
+
+    .lnb li {
+        float: left;
+        margin-left: 18px;
+    }
+
+        .lnb li:first-child {
+            margin-left: 0;
+        }
+
+    .lnb .m2.sub {
+        height: 110px;
+    }
+
+    .lnb .m3.sub {
+        height: 110px;
+    }
+
+    .lnb .m4.sub {
+        height: 110px;
+    }
+
+    .lnb .m5.sub {
+        height: 110px;
+    }
+
+    .lnb .m6 {
+        margin-left: 31px;
+    }
+
+        .lnb .m6.sub {
+            height: 110px;
+        }
+
+    .lnb .m_super_casting.sub {
+        height: 110px;
+    }
+
+    .lnb a {
+        display: block;
+        position: relative;
+        padding: 0 15px;
+        text-align: center;
+    }
+
+        .lnb a:hover, .lnb a:active {
+            text-decoration: none;
+        }
+
+    .lnb .lnb_link {
+        font-size: 16px;
+        color: #000;
+        line-height: 56px;
+    }
+
+    .lnb .lnb_txt {
+        display: inline-block;
+    }
+
+        .lnb .lnb_txt.is_new::after, .lnb .lnb_txt.new::after {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            margin: 18px 0 0 1px;
+            border-radius: 4px;
+            background-color: #fe1919;
+            content: '';
+        }
+
+    .lnb .on .lnb_txt {
+        color: #7030A0;
+        font-weight: bold;
+        height: 54px;
+        border-bottom: 2px solid #7030A0;
+    }
+
+    .lnb .sub .snb {
+        visibility: visible;
+    }
+
+    .lnb .line {
+        position: absolute;
+        left: -15px;
+        top: 21px;
+        height: 12px;
+        background-color: #f0f0f0;
+    }
+
+.snb {
+    visibility: hidden;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    width: 970px;
+}
+
+    .snb li {
+        margin-left: 8px;
+        height: auto;
+    }
+
+    .snb a {
+        padding: 0 20px;
+        height: 100%;
+    }
+
+        .snb a:hover, .snb a:visited {
+            text-decoration: none;
+        }
+
+    .snb .ico_window {
+        background-position: -368px -160px;
+        background-repeat: no-repeat;
+        width: 12px;
+        height: 12px;
+        margin: 3px 0 0 4px;
+    }
+
+    .snb .on .ico_window {
+        background-position: -368px -125px;
+        background-repeat: no-repeat;
+        width: 12px;
+        height: 12px;
+    }
+
+    .snb .sub_link {
+        padding: 9px 0 0 0;
+        font-size: 15px;
+        line-height: 53px;
+        color: #000;
+    }
+
+    .snb .sub_txt {
+        position: relative;
+        display: block;
+        padding: 8px 14px;
+        line-height: 20px;
+        border-radius: 36px;
+    }
+
+        .snb .sub_txt.is_new::after {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            margin: 0 0 0 1px;
+            border-radius: 4px;
+            background-color: #ff3a3a;
+            content: '';
+        }
+
+    .snb .on .sub_link {
+        color: #7030A0;
+    }
+
+    .snb .on .sub_txt {
+        background-color: #7030A0;
+        color: #fff;
+    }
+
+        .snb .on .sub_txt.is_new::after {
+            background-color: #fff;
+        }
+
+.blind {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+}
+
+ul, ol {
+    list-style: none;
+}
