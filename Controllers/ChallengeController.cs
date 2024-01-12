@@ -8,28 +8,34 @@ namespace HWNovel.Controllers
 {
     public class ChallengeController : Controller
     {
-        public ActionResult Rom()
+        public ActionResult Gen()
         {
-            return View();
-        }
+            string genre = Request.Params["genre"] as string;
+            string genName = "";
 
-        public ActionResult Rof()
-        {
-            return View();
-        }
+            if (genre == "1")
+            {
+                genName = "Rom";
+            }
+            else if (genre == "2")
+            {
+                genName = "Rof";
+            }
+            else if (genre == "3")
+            {
+                genName = "Fan";
+            }
+            else if (genre == "4")
+            {
+                genName = "Hro";
+            }
+            else if (genre == "5")
+            {
+                genName = "Mys";
+            }
 
-        public ActionResult Fan()
-        {
-            return View();
-        }
+            ViewBag.topmenu = genName;
 
-        public ActionResult Hro()
-        {
-            return View();
-        }
-
-        public ActionResult Mys()
-        {
             return View();
         }
     }

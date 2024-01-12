@@ -236,10 +236,6 @@
       <DependentUpon>HWNovelDataModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
-    <Content Include="Scripts\common_challenge.js" />
-    <Content Include="Scripts\common_home.js" />
-    <Content Include="Scripts\common_mypage.js" />
-    <Content Include="Scripts\common_serial.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
@@ -261,30 +257,22 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Challenge\Fan.cshtml" />
-    <Content Include="Views\Challenge\Hro.cshtml" />
-    <Content Include="Views\Challenge\Mys.cshtml" />
-    <Content Include="Views\Challenge\Rof.cshtml" />
-    <Content Include="Views\Challenge\Rom.cshtml" />
     <Content Include="Views\Home\Main.cshtml" />
     <Content Include="Views\Mypage\Cha.cshtml" />
     <Content Include="Views\Mypage\Min.cshtml" />
     <Content Include="Views\Mypage\Rec.cshtml" />
     <Content Include="Views\Mypage\Wis.cshtml" />
     <Content Include="Views\Serial\Day.cshtml" />
-    <Content Include="Views\Serial\Fan.cshtml" />
     <Content Include="Views\Serial\Fin.cshtml" />
-    <Content Include="Views\Serial\Hro.cshtml" />
-    <Content Include="Views\Serial\Mys.cshtml" />
     <Content Include="Views\Serial\New.cshtml" />
-    <Content Include="Views\Serial\Rof.cshtml" />
-    <Content Include="Views\Serial\Rom.cshtml" />
     <Content Include="Views\User\FindId.cshtml" />
     <Content Include="Views\User\FindPw.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Signin.cshtml" />
     <Content Include="Views\User\SigninAgree.cshtml" />
     <Content Include="Views\User\FoundId.cshtml" />
+    <Content Include="Views\Serial\Gen.cshtml" />
+    <Content Include="Views\Challenge\Gen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

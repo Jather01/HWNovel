@@ -10,41 +10,50 @@ namespace HWNovel.Controllers
     {
         public ActionResult New()
         {
+            ViewBag.topmenu = "New";
             return View();
         }
 
         public ActionResult Day()
         {
-            return View();
-        }
-
-        public ActionResult Fan()
-        {
+            ViewBag.topmenu = "Day";
             return View();
         }
 
         public ActionResult Fin()
         {
+            ViewBag.topmenu = "Fin";
             return View();
         }
 
-        public ActionResult Hro()
+        public ActionResult Gen()
         {
-            return View();
-        }
+            string genre = Request.Params["genre"] as string;
+            string genName = "";
 
-        public ActionResult Mys()
-        {
-            return View();
-        }
+            if(genre == "1")
+            {
+                genName = "Rom";
+            }
+            else if (genre == "2")
+            {
+                genName = "Rof";
+            }
+            else if (genre == "3")
+            {
+                genName = "Fan";
+            }
+            else if (genre == "4")
+            {
+                genName = "Hro";
+            }
+            else if (genre == "5")
+            {
+                genName = "Mys";
+            }
 
-        public ActionResult Rof()
-        {
-            return View();
-        }
+            ViewBag.topmenu = genName;
 
-        public ActionResult Rom()
-        {
             return View();
         }
     }
