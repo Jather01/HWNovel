@@ -12,21 +12,122 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/user")
     @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="inner">
+        <h1 class="logo_left">
+            <a href="/Home/Main" class="link"></a>
+        </h1>
+        <form id="Findpw" name="Findpw" method="POST" action="/User/ResetPw">
+            <input type="hidden" name="Userid" id="Userid" asp-for="Userid" value="">
+        </form>
+        <div class="content form">
+            <div class="form_content">
+                <div class="form_section">
+                    <div class="item_style tip_text">
+                        아이디, 이름, 생년월일을 입력해주세요.
+                    </div>
+                    <div class="form_list">
+                        <div class="form_item user" id="idDiv">
+                            <input type="text" id="id" name="id" placeholder="아이디" class="input" value="" maxlength="40">
+                        </div>
+                        <div class="form_item user" id="nameDiv">
+                            <input type="text" id="name" name="name" placeholder="이름" class="input" value="" maxlength="40">
+                        </div>
+                        <div class="form_item user" id="birthdayDiv">
+                            <input type="text" id="birthdayInput" placeholder="생년월일 8자리" class="input" value="" maxlength="8">
+                        </div>
+                    </div>
+                    <div class="error_text item_style" id="idMsg" style="display: none">아이디 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="nameMsg" style="display: none">이름 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="birthdayMsg" style="display: none">생년월일 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="errorMsg" style="display: none">입력하신 정보를 다시 확인해주세요.</div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_submit_wrap">
+            <button type="button" class="btn_submit" id="btnResetPw">비밀번호 재설정</button>
+        </div>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
 
-    <script>
+    <script type="text/JavaScript">
+
+        $("#btnResetPw").click(function () {
+            var bool = "true";
+
+            var idCheck = /^[a-z\d]+$/;
+            if ($("#id").val() == "") {
+                $("#idMsg").text("아이디 : 아이디를 입력해주세요.");
+                $("#idMsg").css("display", "");
+                $("#idDiv").addClass("error");
+                bool = "false";
+            } else if (!idCheck.test($("#id").val())) {
+                $("#idMsg").text("아이디 : 영문 소문자, 숫자만 사용 가능합니다.");
+                $("#idMsg").css("display", "");
+                $("#idDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#idMsg").css("display", "none");
+                $("#idDiv").removeClass("error");
+                $("#Userid").val($("#id").val());
+            }
+
+            if ($("#name").val() == "") {
+                $("#nameMsg").text("이름 : 이름을 입력해주세요.");
+                $("#nameMsg").css("display", "");
+                $("#nameDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#nameMsg").css("display", "none");
+                $("#nameDiv").removeClass("error");
+                $("#Name").val($("#name").val());
+            }
+
+            var birthCheck = /^[\d]+$/;
+            if ($("#birthdayInput").val() == "") {
+                $("#birthdayMsg").text("생년월일 : 생년월일을 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else if (!birthCheck.test($("#birthdayInput").val())) {
+                $("#birthdayMsg").text("생년월일 : 8자리의 숫자를 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else if ($("#birthdayInput").val().length != 8) {
+                $("#birthdayMsg").text("생년월일 : 8자리의 생년월일을 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#birthdayMsg").css("display", "none");
+                $("#birthdayDiv").removeClass("error");
+            }
+
+            if (bool == "true") {
+                $.ajax({
+                    url: "/Ajax/FindPw",
+                    type: "POST",
+                    data: { id: $("#id").val(), name: $("#name").val(), birthday: $("#birthdayInput").val() },
+                    success: function (r) {
+                        if (r == "0") {
+                            $("#errorMsg").css("display", "");
+                        } else if(r == "1") {
+                            $("#errorMsg").css("display", "none");
+                            $("#Userid").val($("#id").val());
+                            $("#Findpw").submit();
+                        }
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
+        });
     </script>
-</head>
-<body>
-    <header class="header" role="banner">
-        <div class="header_inner">
-            <a href="/Home/Main" class="logo"></a>
-        </div>
-    </header>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">FindPw</h1>
-    </section>
 </body>
 </html>

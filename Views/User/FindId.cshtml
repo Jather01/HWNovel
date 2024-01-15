@@ -96,13 +96,9 @@
                         if (r == "") {
                             $("#errorMsg").css("display", "");
                         } else {
-                            console.log("success");
                             $("#errorMsg").css("display", "none");
-                            console.log("success");
                             $("#Userid").val(r);
-                            console.log("success");
                             $("#Findid").submit();
-                            console.log("success");
                         }
                     },
                     failure: function () { alert("fail"); },

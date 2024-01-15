@@ -10,6 +10,7 @@ namespace HWNovel.Controllers
     {
         public ActionResult Main()
         {
+            ViewBag.userinfo = Session["userinfo"];
             return View();
         }
     }

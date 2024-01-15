@@ -1,0 +1,110 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW Novel</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/user")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+    </script>
+</head>
+<body>
+    <div class="inner">
+        <h1 class="logo_left">
+            <a href="/Home/Main" class="link"></a>
+        </h1>
+        <form id="UpdatePw" name="UpdatePw" method="POST" action="/User/UpdatePw">
+            <input type="hidden" name="Userid" id="Userid" asp-for="Userid" value="@ViewBag.id">
+            <input type="hidden" name="Password" id="Password" asp-for="Password" value="">
+        </form>
+        <div class="content form">
+            <div class="form_content">
+                <div class="form_section">
+                    <div class="item_style nomal_text">
+                        <font>@ViewBag.id</font>의 새 비밀번호를 입력해주세요.
+                    </div>
+                    <div class="form_list">
+                        <div class="form_item user" id="pswd1Div">
+                            <input type="password" id="pswd1" name="pswd1" placeholder="비밀번호" class="input" value="" maxlength="20" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div class="item_style tip_text">
+                        영어, 숫자, 특수기호(~`!@@#$%^&*-_=+)가 포함된 비밀번호를 입력해주세요.
+                    </div>
+                    <div class="form_list">
+                        <div class="form_item user" id="pswd2Div">
+                            <input type="password" id="pswd2" name="pswd2" placeholder="비밀번호 확인" class="input" value="" maxlength="20" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div class="error_text item_style" id="pswd1Msg" style="display: none">비밀번호 : 필수 정보입니다.</div>
+                    <div class="error_text item_style" id="pswd2Msg" style="display: none">비밀번호 확인 : 필수 정보입니다.</div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_submit_wrap">
+            <button type="button" class="btn_submit" id="btnUpdatePw">비밀번호 재설정</button>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script type="text/JavaScript">
+        $(".input").keydown(function (e) {
+            if (e.keyCode == 32) return false;
+        });
+
+        $("#btnUpdatePw").click(function () {
+            var bool = "true";
+
+            var pwCheck = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~`!@@#$%^&*_=+-])[A-Za-z\d~`!@@#$%^&*_=+-]+$/;
+            if ($("#pswd1").val() == "") {
+                $("#pswd1Msg").text("비밀번호 : 비밀번호를 입력해주세요.");
+                $("#pswd1Msg").css("display", "");
+                $("#pswd1Div").addClass("error");
+                bool = "false";
+            } else if (!pwCheck.test($("#pswd1").val())) {
+                $("#pswd1Msg").text("비밀번호 : 규칙에 맞는 비밀번호를 입력해주세요.");
+                $("#pswd1Msg").css("display", "");
+                $("#pswd1Div").addClass("error");
+                bool = "false";
+            } else {
+                $("#pswd1Msg").css("display", "none");
+                $("#pswd1Div").removeClass("error");
+                $("#Password").val($("#pswd1").val());
+            }
+
+            if ($("#pswd2").val() == "") {
+                $("#pswd2Msg").text("비밀번호 확인 : 비밀번호 확인을 입력해주세요.");
+                $("#pswd2Msg").css("display", "");
+                $("#pswd2Div").addClass("error");
+                bool = "false";
+            } else if ($("#pswd2").val() != $("#pswd1").val()) {
+                $("#pswd2Msg").text("비밀번호 확인 : 비밀번호 확인과 비밀번호가 일치하지 않습니다.");
+                $("#pswd2Msg").css("display", "");
+                $("#pswd2Div").addClass("error");
+                bool = "false";
+            } else {
+                $("#pswd2Msg").css("display", "none");
+                $("#pswd2Div").removeClass("error");
+            }
+
+            if (bool == "true") {
+                $("#Password").val($("#pswd1").val());
+                $("#UpdatePw").submit();
+            }
+        });
+    </script>
+</body>
+</html>

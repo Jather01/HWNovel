@@ -69,7 +69,15 @@
             <div class="d-flex" role="search">
                 <input class="form-control me-2" type="text" placeholder="작품명 또는 작가명을 입력해주세요." style="font-size:14px; width:280px;">
                 <button class="btn btn-outline-dark" type="button" onclick="search();">검색</button>&nbsp;
-                <a href="/User/Login" class="btn btn-outline-dark">로그인</a>
+                @if (ViewBag.userinfo == null)
+                {
+                    <a href="/User/Login" class="btn btn-outline-dark">로그인</a>
+                }
+                else
+                {
+                    <font>@ViewBag.userinfo[2]</font><font>님 환영합니다.</font>
+                    <a href="/User/Logout" class="btn btn-outline-dark">로그아웃</a>
+                }
             </div>
         </div>
     </nav>

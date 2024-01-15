@@ -210,6 +210,10 @@ input[type=text]::-webkit-input-placeholder {
         font-weight: 700
     }
 
+.id_pw_wrap {
+    margin-bottom: 8px;
+}
+
 .id_pw_wrap .input_row {
     display: table;
     table-layout: fixed;
@@ -457,6 +461,15 @@ input[type=text]::-webkit-input-placeholder {
     vertical-align: middle
 }
 
+.check_terms .keep_text {
+    margin-right: 5px;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: -.8px;
+    color: #777;
+    vertical-align: middle
+}
+
 .terms_box {
     overflow: auto;
     box-sizing: border-box;
@@ -646,7 +659,6 @@ input[type=text]::-webkit-input-placeholder {
     max-width: 100%;
     min-height: 50px;
     padding: 14px 17px 13px;
-    justify-content: space-between;
 }
 
     .form_item:first-of-type {

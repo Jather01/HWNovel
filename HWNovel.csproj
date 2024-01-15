@@ -186,7 +186,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HWNovelDataModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\User.cs" />
+    <Compile Include="ViewModels\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +273,7 @@
     <Content Include="Views\User\FoundId.cshtml" />
     <Content Include="Views\Serial\Gen.cshtml" />
     <Content Include="Views\Challenge\Gen.cshtml" />
+    <Content Include="Views\User\ResetPw.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

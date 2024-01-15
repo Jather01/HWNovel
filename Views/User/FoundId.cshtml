@@ -15,7 +15,7 @@
 
     <script type="text/JavaScript">
         function doLogin(id) {
-            $("#id").val(id);
+            $("#Userid").val(id);
             $("#goLogin").submit();
         }
     </script>
@@ -26,7 +26,7 @@
             <a href="/Home/Main" class="link"></a>
         </h1>
         <form id="goLogin" name="goLogin" method="POST" action="/User/Login">
-            <input type="hidden" name="id" id="id" value="">
+            <input type="hidden" name="Userid" id="Userid" asp-for="Userid" value="">
         </form>
         <div class="content form">
             <div class="form_content">

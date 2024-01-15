@@ -1,5 +1,20 @@
-﻿@{
+﻿@using System.Web;
+@{
     Layout = null;
+    HttpCookie cookie = Request.Cookies["HWNovel"];
+
+    string cookyId = "";
+    string idVal = ViewBag.Id;
+
+    if (cookie != null)
+    {
+        cookyId = Server.UrlDecode(cookie["id"]);
+    }
+
+    if(idVal == null)
+    {
+        idVal = cookyId;
+    }
 }
 
 <!DOCTYPE html>
@@ -20,63 +35,63 @@
         </div>
     </header>
     <div class="content">
-        <div class="login_wrap">
-            <form id="Login" name="Login" autocomplete="off" action="/Home/LoginPro" method="POST">
-                <input type="hidden" name="userid" id="userid" value="">
-                <input type="hidden" name="password" id="password" value="">
-            </form>
+        <div>
+            <div class="login_wrap">
+                <div>
+                    <form id="Login" name="Login" action="/User/Login" method="POST">
+                        <input type="hidden" name="Userid" id="Userid" asp-for="Userid" value="">
+                        <input type="hidden" name="Password" id="Password" asp-for="Password" value="">
+                        <input type="hidden" name="CookyId" id="CookyId" asp-for="CookyId" value="">
+                    </form>
+                </div>
 
-            <ul class="panel_wrap">
-                <li class="panel_item" style="display: block;">
-                    <div class="panel_inner" role="tabpanel" aria-controls="loinid">
-                        <div class="id_pw_wrap">
-                            <div class="input_row" id="id_line">
-                                <input type="text" id="id" name="id" placeholder="아이디" title="아이디" class="input_text" maxlength="40" value="@ViewBag.id">
-                                <span role="button" class="btn_delete" id="id_clear" style="display: none;">
-                                    <span class="icon_delete">
-                                        <span class="blind">삭제</span>
-                                    </span>
-                                </span>
+                <ul class="panel_wrap">
+                    <li class="panel_item" style="display: block;">
+                        <div class="panel_inner" role="tabpanel" aria-controls="loinid">
+                            <div class="id_pw_wrap">
+                                <div class="input_row" id="id_line">
+                                    <input type="text" id="id" name="id" placeholder="아이디" title="아이디" class="input_text" maxlength="40">
+                                </div>
+                                <div class="input_row" id="pw_line">
+                                    <input type="password" id="pw" name="pw" placeholder="비밀번호" title="비밀번호" class="input_text" maxlength="16">
+                                </div>
                             </div>
-                            <div class="input_row" id="pw_line">
-                                <input type="password" id="pw" name="pw" placeholder="비밀번호" title="비밀번호" class="input_text" maxlength="16">
-                                <span role="button" class="btn_delete" id="pw_clear" style="display: none;">
-                                    <span class="icon_delete">
-                                        <span class="blind">삭제</span>
-                                    </span>
-                                </span>
+                            <div class="check_terms">
+                                <div class="check_wrap">
+                                    <input type="checkbox" id="keep" class="checkbox" />
+                                    <label for="keep" class="keep_text">
+                                        <div class="text_wrap">
+                                            <span class="keep_text">아이디 저장</span>
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="login_error_wrap" id="err_capslock" style="display: none;">
-                            <div class="error_message">
-                                <strong>CapsLock</strong>이 켜져 있습니다.
-                            </div>
-                        </div>
 
-                        <div class="login_error_wrap" id="err_empty_id" style="display: none;">
-                            <div class="error_message">
-                                <strong>아이디</strong>를 입력해 주세요.
+                            <div class="login_error_wrap" id="err_empty_id" style="display: none;">
+                                <div class="error_message">
+                                    <strong>아이디</strong>를 입력해 주세요.
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="login_error_wrap" id="err_empty_pw" style="display: none;">
-                            <div class="error_message">
-                                <strong>비밀번호</strong>를 입력해 주세요.
+                            <div class="login_error_wrap" id="err_empty_pw" style="display: none;">
+                                <div class="error_message">
+                                    <strong>비밀번호</strong>를 입력해 주세요.
+                                </div>
                             </div>
-                        </div>
-                        <div class="login_error_wrap" id="err_common" style="display:none;">
-                            <div class="error_message" style="width:90%">
+                            <div class="login_error_wrap" id="err_common" style="display:none;">
+                                <div class="error_message" style="width:90%">
 
+                                </div>
+                            </div>
+                            <div class="btn_login_wrap">
+                                <button type="button" class="btn_login" id="doLogin">
+                                    <span class="btn_text">로그인</span>
+                                </button>
                             </div>
                         </div>
-                        <div class="btn_login_wrap">
-                            <button type="button" class="btn_login" id="doLogin">
-                                <span class="btn_text">로그인</span>
-                            </button>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
         <ul class="find_wrap" id="find_wrap">
             <li><a href="/User/FindId" class="find_text">아이디 찾기</a></li>
@@ -88,10 +103,53 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
 
-    <script type="text/JavaScript">
-        $("#doLogin").click(function () {
-            alert("로그인");
+<script type="text/JavaScript">
+        $(function () {
+            var error = "@ViewBag.loginError";
+            if (error == "error") {
+                $("#err_common").children("div").html("아이디 또는 비밀번호를 잘못 입력했습니다.<br/>입력하신 내용을 다시 확인해주세요.");
+                $("#err_common").css("display", "");
+            } else {
+                $("#err_common").css("display", "none");
+            }
+
+            if ("@cookyId" != "") {
+                $("#keep").prop("checked", true);
+            }
+
+            if ("@idVal" != "") {
+                $("#id").val("@idVal");
+            }
         });
-    </script>
+
+        $(".input_text").keydown(function (e) {
+            if (e.keyCode == 32) return false;
+        });
+
+        $("#doLogin").click(function () {
+            var bool = "true";
+
+            if ($("#id").val() == "") {
+                $("#err_empty_id").css("display", "");
+                bool = "false";
+            } else {
+                $("#err_empty_id").css("display", "none");
+            }
+
+            if ($("#pw").val() == "") {
+                $("#err_empty_pw").css("display", "");
+                bool = "false";
+            }  else {
+                $("#err_empty_pw").css("display", "none");
+            }
+
+            if (bool == "true") {
+                $("#Userid").val($("#id").val());
+                $("#Password").val($("#pw").val());
+                $("#CookyId").val($("#keep").is(":checked"));
+                $("#Login").submit();
+            }
+        });
+</script>
 </body>
 </html>

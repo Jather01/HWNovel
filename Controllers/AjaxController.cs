@@ -1,8 +1,5 @@
-﻿using HWNovel.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace HWNovel.Controllers
@@ -53,9 +50,9 @@ namespace HWNovel.Controllers
         [HttpPost]
         public JsonResult FindId(string name, string birthday)
         {
-            string result = ""; // 0: 중복 있음, 1: 중복 없음
+            string result = "";
 
-            var ids = new List<HWN01>();
+            var ids = new List<string>();
 
             if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(birthday))
             {
@@ -64,6 +61,7 @@ namespace HWNovel.Controllers
                         && x.BIRTHDAY == birthday
                         && x.POWER == "2"
                         && x.USEYN == "1")
+                        .Select(x => x.USERID)
                         .ToList();
             }
             if(ids.Count > 0)
@@ -72,12 +70,38 @@ namespace HWNovel.Controllers
                 {
                     if (i == 0)
                     {
-                        result += ids[i].USERID;
+                        result += ids[i];
                     } else
                     {
-                        result += "," + ids[i].USERID;
+                        result += "," + ids[i];
                     }
                 }
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public JsonResult FindPw(string id, string name, string birthday)
+        {
+            string result = "0"; // 0: 아이디 없음, 1: 아이디 있음
+
+            var ids = new List<string>();
+
+            if (!string.IsNullOrEmpty(id) &&  !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(birthday))
+            {
+                ids = db.HWN01.Where(x =>
+                           x.USERID == id
+                        && x.NAME == name
+                        && x.BIRTHDAY == birthday
+                        && x.POWER == "2"
+                        && x.USEYN == "1")
+                        .Select(x => x.USERID)
+                        .ToList();
+            }
+            if (ids.Count > 0)
+            {
+                result = "1";
             }
 
             return Json(result);
