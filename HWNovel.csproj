@@ -206,7 +206,28 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Images\check-circle-fill.svg" />
+    <Content Include="Content\Images\check-circle.svg" />
+    <Content Include="Content\Images\img0.jpg" />
+    <Content Include="Content\Images\img1.jpg" />
+    <Content Include="Content\Images\img10.jpg" />
+    <Content Include="Content\Images\img100.jpg" />
+    <Content Include="Content\Images\img101.png" />
+    <Content Include="Content\Images\img102.jpg" />
+    <Content Include="Content\Images\img103.png" />
+    <Content Include="Content\Images\img104.jpg" />
+    <Content Include="Content\Images\img105.jpg" />
+    <Content Include="Content\Images\img11.jpg" />
+    <Content Include="Content\Images\img12.jpg" />
+    <Content Include="Content\Images\img2.jpg" />
+    <Content Include="Content\Images\img3.jpg" />
+    <Content Include="Content\Images\img4.jpg" />
+    <Content Include="Content\Images\img7.jpg" />
+    <Content Include="Content\Images\img8.jpg" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\paging-left.svg" />
+    <Content Include="Content\Images\paging-right.svg" />
+    <Content Include="Content\Images\search.svg" />
     <Content Include="Content\novel.css" />
     <Content Include="Content\user.css" />
     <Content Include="favicon.ico" />
@@ -274,6 +295,7 @@
     <Content Include="Views\Serial\Gen.cshtml" />
     <Content Include="Views\Challenge\Gen.cshtml" />
     <Content Include="Views\User\ResetPw.cshtml" />
+    <Content Include="Views\Home\Notice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

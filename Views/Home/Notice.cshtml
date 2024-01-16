@@ -1,0 +1,100 @@
+﻿<main>
+    <div class="component_section">
+        <div>
+            <h2 class="noti_title">공지사항</h2>
+        </div>
+        <div class="notice_search">
+            <form id="searchNotice" name="searchNotice" method="POST" action="/Home/Notice">
+                @if (ViewBag.userinfo != null)
+                {
+                    if (ViewBag.userinfo[3] == "1")
+                    {
+                        <button type="button" class="btn btn-outline-dark admin_btn" id="noticeWrite">등록</button>
+                    }
+
+                }
+                <div class="search_input">
+                    <div class="input_box typing form-group">
+                        <input placeholder="제목, 내용" name="searchValue" class="input_text" value="">
+                        <button type="submit" class="btn_search btn btn-primary"><span class="blind">검색</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="notice_content">
+            <ul class="notice_table">
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>HWNovel 도전 웹소설 서비스 오픈 안내</span>
+                        </p>
+                        <span class="date">2024.01.12</span>
+                    </a>
+                </li>
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>완결 안내</span>
+                        </p>
+                        <span class="date">2024.01.10</span>
+                    </a>
+                </li>
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>신작 안내</span>
+                        </p>
+                        <span class="date">2024.01.03</span>
+                    </a>
+                </li>
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>HWNovel 서비스 오픈 안내</span>
+                        </p>
+                        <span class="date">2024.01.02</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="notice_paging">
+            <ul class="paging">
+                <li class="page_arrow prev page-item">
+                    <a class="page-link" role="button" href="#">
+                        <span class="blind">이전 페이지로 이동</span>
+                    </a>
+                </li>
+                <li class="page-item active">
+                    <span class="page-link">
+                        1
+                        <span class="blind">(current)</span>
+                    </span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" role="button" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" role="button" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" role="button" href="#">4</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" role="button" href="#">5</a>
+                </li>
+                <li class="page_arrow next page-item">
+                    <a class="page-link" role="button" href="#">
+                        <span class="blind">다음 페이지로 이동</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $("#noticeWrite").click(function () {
+
+        });
+    </script>
+}

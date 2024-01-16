@@ -13,5 +13,17 @@ namespace HWNovel.Controllers
             ViewBag.userinfo = Session["userinfo"];
             return View();
         }
+
+        public ActionResult Notice()
+        {
+            ViewBag.userinfo = Session["userinfo"];
+            return View();
+        }
+
+        public ActionResult Search()
+        {
+            ViewBag.userinfo = Session["userinfo"];
+            return View();
+        }
     }
 }

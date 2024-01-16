@@ -26,18 +26,15 @@ label {
 input[type="checkbox"] {
     width: 20px;
     height: 20px;
-    border-radius: 50%;
-    border: 1px solid #999;
-    appearance: none;
     cursor: pointer;
     transition: background 0.2s;
+    background-image: url(/Content/Images/check-circle.svg);
+    background-repeat: no-repeat;
 }
 
     input[type="checkbox"]:checked {
-        content: '✔';
-        color:#fff;
-        background: #7030A0;
-        border: none;
+        background-image: url(/Content/Images/check-circle-fill.svg);
+        background-repeat: no-repeat;
     }
 
 .container {

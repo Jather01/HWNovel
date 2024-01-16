@@ -7,68 +7,20 @@
     <title>HW Novel</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
-<script>
-        function search() {
-
-        }
-
-        function navbarHighlight() {
-            var menu1 = window.location.pathname.split('/')[1];
-            var html = "";
-            var pageName = "@ViewBag.topmenu";
-
-            if (menu1 == "Home") {
-                $(".m1").addClass("on");
-            } else if (menu1 == "Serial") {
-                $(".m2").addClass("on sub");
-
-                html += "<ul class='snb'>"
-                html += "    <li class='" + (pageName == "Day" ? "on" : "") + "'><a href='/Serial/Day' class='sub_link'><span class='sub_txt'>요일별</span></a></li>";
-                html += "    <li class='" + (pageName == "New" ? "on" : "") + "'><a href='/Serial/New' class='sub_link'><span class='sub_txt'>이 달의 신작</span></a></li>";
-                html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Serial/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
-                html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Serial/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
-                html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Serial/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
-                html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Serial/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
-                html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Serial/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
-                html += "    <li class='" + (pageName == "Fin" ? "on" : "") + "'><a href='/Serial/Fin' class='sub_link'><span class='sub_txt'>완결</span></a></li>";
-                html += "</ul>";
-
-                $(".m2").append(html);
-            } else if (menu1 == "Challenge") {
-                $(".m3").addClass("on sub");
-
-                html += "<ul class='snb'>"
-                html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Challenge/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
-                html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Challenge/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
-                html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Challenge/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
-                html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Challenge/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
-                html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Challenge/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
-                html += "</ul>";
-
-                $(".m3").append(html);
-            } else if (menu1 == "Mypage") {
-                $(".m4").addClass("on sub");
-
-                html += "<ul class='snb'>"
-                html += "    <li class='" + (pageName == "Rec" ? "on" : "") + "'><a href='/Mypage/Rec' class='sub_link'><span class='sub_txt'>최근 본 작품</span></a></li>";
-                html += "    <li class='" + (pageName == "Wis" ? "on" : "") + "'><a href='/Mypage/Wis' class='sub_link'><span class='sub_txt'>관심작품</span></a></li>";
-                html += "    <li class='" + (pageName == "Cha" ? "on" : "") + "'><a href='/Mypage/Cha' class='sub_link'><span class='sub_txt'>도전 웹소설</span></a></li>";
-                html += "    <li class='" + (pageName == "Min" ? "on" : "") + "'><a href='/Mypage/Min' class='sub_link'><span class='sub_txt'>내 정보</span></a></li>";
-                html += "</ul>";
-
-                $(".m4").append(html);
-            }
-        }
-</script>
 </head>
-<body onload="navbarHighlight();">
+<body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
         <div class="container">
             <a href="/Home/Main" class="logo"></a>
             <div class="d-flex" role="search">
-                <input class="form-control me-2" type="text" placeholder="작품명 또는 작가명을 입력해주세요." style="font-size:14px; width:280px;">
-                <button class="btn btn-outline-dark" type="button" onclick="search();">검색</button>&nbsp;
+                <form id="TopSearch" name="TopSearch" method="POST" action="/Home/Search">
+                    <div class="top_search">
+                        <div class="input_box">
+                            <input placeholder="제목, 내용" name="topSearchValue" class="input_text" value="">
+                            <button type="submit" class="btn_search"><span class="blind">검색</span></button>
+                        </div>
+                    </div>
+                </form>
                 @if (ViewBag.userinfo == null)
                 {
                     <a href="/User/Login" class="btn btn-outline-dark">로그인</a>
@@ -108,9 +60,61 @@
     <div class="container body-content">
         @RenderBody()
     </div>
+    <div class="container body-content copyright">
+        <span>ⓒ 2024. HWNovel all rights reserved.</span>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script>
+        $(function () {
+                var menu1 = window.location.pathname.split('/')[1];
+                var html = "";
+                var pageName = "@ViewBag.topmenu";
+
+                if (menu1 == "Home") {
+                    $(".m1").addClass("on");
+                } else if (menu1 == "Serial") {
+                    $(".m2").addClass("on sub");
+
+                    html += "<ul class='snb'>"
+                    html += "    <li class='" + (pageName == "Day" ? "on" : "") + "'><a href='/Serial/Day' class='sub_link'><span class='sub_txt'>요일별</span></a></li>";
+                    html += "    <li class='" + (pageName == "New" ? "on" : "") + "'><a href='/Serial/New' class='sub_link'><span class='sub_txt'>이 달의 신작</span></a></li>";
+                    html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Serial/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
+                    html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Serial/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
+                    html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Serial/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
+                    html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Serial/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
+                    html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Serial/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
+                    html += "    <li class='" + (pageName == "Fin" ? "on" : "") + "'><a href='/Serial/Fin' class='sub_link'><span class='sub_txt'>완결</span></a></li>";
+                    html += "</ul>";
+
+                    $(".m2").append(html);
+                } else if (menu1 == "Challenge") {
+                    $(".m3").addClass("on sub");
+
+                    html += "<ul class='snb'>"
+                    html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Challenge/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
+                    html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Challenge/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
+                    html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Challenge/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
+                    html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Challenge/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
+                    html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Challenge/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
+                    html += "</ul>";
+
+                    $(".m3").append(html);
+                } else if (menu1 == "Mypage") {
+                    $(".m4").addClass("on sub");
+
+                    html += "<ul class='snb'>"
+                    html += "    <li class='" + (pageName == "Rec" ? "on" : "") + "'><a href='/Mypage/Rec' class='sub_link'><span class='sub_txt'>최근 본 작품</span></a></li>";
+                    html += "    <li class='" + (pageName == "Wis" ? "on" : "") + "'><a href='/Mypage/Wis' class='sub_link'><span class='sub_txt'>관심작품</span></a></li>";
+                    html += "    <li class='" + (pageName == "Cha" ? "on" : "") + "'><a href='/Mypage/Cha' class='sub_link'><span class='sub_txt'>도전 웹소설</span></a></li>";
+                    html += "    <li class='" + (pageName == "Min" ? "on" : "") + "'><a href='/Mypage/Min' class='sub_link'><span class='sub_txt'>내 정보</span></a></li>";
+                    html += "</ul>";
+
+                    $(".m4").append(html);
+                }
+        });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

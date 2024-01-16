@@ -1,29 +1,595 @@
 ﻿<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">Main</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
-
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/Content/Images/img0.jpg" class="d-block w-100 main_banner_img">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>First slide label</h5>
+                    <p>Some representative placeholder content for the first slide.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/Images/img1.jpg" class="d-block w-100 main_banner_img">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Second slide label</h5>
+                    <p>Some representative placeholder content for the second slide.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/Images/img2.jpg" class="d-block w-100 main_banner_img">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Third slide label</h5>
+                    <p>Some representative placeholder content for the third slide.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/Images/img3.jpg" class="d-block w-100 main_banner_img">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Fourth slide label</h5>
+                    <p>Some representative placeholder content for the fourth slide.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="component_section">
+        <div class="component_head">
+            <ul class="genre_title">
+                <li class="genre_title_item">
+                    <h2 class="title">로맨스</h2>
+                </li>
+            </ul>
+            <ul class="genre_title">
+                <li class="genre_title_item">
+                    <h2 class="title">로판</h2>
+                </li>
+            </ul>
+            <ul class="genre_title">
+                <li class="genre_title_item">
+                    <h2 class="title">판타지</h2>
+                </li>
+            </ul>
+            <ul class="genre_title">
+                <li class="genre_title_item">
+                    <h2 class="title">무협</h2>
+                </li>
+            </ul>
+            <ul class="genre_title">
+                <li class="genre_title_item">
+                    <h2 class="title">미스터리</h2>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <ul class="genre_rank">
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img4.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="title">로맨스 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img7.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">2</em></p>
+                            <p class="title_group">
+                                <span class="title">로맨스 랭킹 2</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img8.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">3</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">로맨스 랭킹 3</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">4</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">로맨스 랭킹 4</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img11.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">5</em></p>
+                            <p class="title_group">
+                                <span class="title">로맨스 랭킹 5</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="genre_rank">
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img11.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">로판 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img12.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">2</em></p>
+                            <p class="title_group">
+                                <span class="title">로판 랭킹 2</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img100.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">3</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">로판 랭킹 3</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img101.png" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">4</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">로판 랭킹 4</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img102.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">5</em></p>
+                            <p class="title_group">
+                                <span class="title">로판 랭킹 5</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="genre_rank">
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img103.png" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">판타지 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img104.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">2</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">판타지 랭킹 2</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img105.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">3</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">판타지 랭킹 3</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img8.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">4</em></p>
+                            <p class="title_group">
+                                <span class="title">판타지 랭킹 4</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img12.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">5</em></p>
+                            <p class="title_group">
+                                <span class="title">판타지 랭킹 5</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="genre_rank">
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">무협 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">무협 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">무협 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">무협 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">무협 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="genre_rank">
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">미스터리 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">미스터리 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">미스터리 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">미스터리 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="genre_item">
+                    <a href="#">
+                        <div class="genre_child_thum">
+                            <img src="~/Content/Images/img10.jpg" />
+                        </div>
+                        <div class="info_area">
+                            <p class="ranking"><em class="rank">1</em></p>
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">미스터리 랭킹 1</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="component_section">
+        <div class="component_head">
+            <ul class="notice_title">
+                <li>
+                    <a href="/Home/Notice">
+                        <h2 class="title">〉공지사항</h2>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="notice_content">
+            <ul class="notice_table">
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>HWNovel 도전 웹소설 서비스 오픈 안내</span>
+                        </p>
+                        <span class="date">2024.01.12</span>
+                    </a>
+                </li>
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>완결 안내</span>
+                        </p>
+                        <span class="date">2024.01.10</span>
+                    </a>
+                </li>
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>신작 안내</span>
+                        </p>
+                        <span class="date">2024.01.03</span>
+                    </a>
+                </li>
+                <li class="notice_item">
+                    <a href="#" class="notice_name">
+                        <p class="notice_item_title">
+                            <span>HWNovel 서비스 오픈 안내</span>
+                        </p>
+                        <span class="date">2024.01.02</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </main>
+@section scripts{
+    <script type="text/JavaScript">
+
+    </script>
+}
