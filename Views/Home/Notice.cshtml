@@ -1,100 +1,140 @@
-﻿<main>
+﻿@model IEnumerable<HWNovel.HWNNOTICE>
+
+@{
+    int pageNum = ViewBag.PageNum ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+    string keyword = ViewBag.KeyWord ?? string.Empty;
+    int keywordLength = keyword.Length;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+}
+<main>
+    <script type="text/JavaScript">
+        function pagingPrev(page) {
+            if (page - 1 > 0) {
+                $("#searchPage").val((page - 1));
+                $("#searchNotice").submit();
+            }
+        }
+
+        function paging(page) {
+            $("#searchPage").val((page));
+            $("#searchNotice").submit();
+        }
+
+        function pagingNext(page) {
+            if (page + 10 > @endPageNum) {
+                $("#searchPage").val((page + 10));
+                $("#searchNotice").submit();
+            }
+        }
+
+        function detail(noticeno) {
+            $("#Noticeno").val(noticeno);
+            $("#goNoticeDetail").submit();
+        }
+    </script>
     <div class="component_section">
         <div>
             <h2 class="noti_title">공지사항</h2>
         </div>
         <div class="notice_search">
-            <form id="searchNotice" name="searchNotice" method="POST" action="/Home/Notice">
+            <form id="searchNotice" name="searchNotice" method="GET" action="/Home/Notice">
                 @if (ViewBag.userinfo != null)
                 {
                     if (ViewBag.userinfo[3] == "1")
                     {
-                        <button type="button" class="btn btn-outline-dark admin_btn" id="noticeWrite">등록</button>
+                        <a href="/Home/NoticeWrite" class="btn btn-outline-dark">등록</a>
                     }
 
                 }
                 <div class="search_input">
                     <div class="input_box typing form-group">
-                        <input placeholder="제목, 내용" name="searchValue" class="input_text" value="">
+                        <input type="text" placeholder="제목, 내용" name="searchValue" asp-for="searchValue" class="input_text" value="@keyword">
+                        <input type="hidden" name="searchPage" id="searchPage" asp-for="searchPage" value="">
                         <button type="submit" class="btn_search btn btn-primary"><span class="blind">검색</span></button>
                     </div>
                 </div>
             </form>
         </div>
+        <form id="goNoticeDetail" name="goNoticeDetail" method="GET" action="/Home/NoticeDetail">
+            <input type="hidden" name="searchValue" asp-for="searchValue" value="@keyword">
+            <input type="hidden" name="searchPage" asp-for="searchPage" value="@pageNum">
+            <input type="hidden" name="Noticeno" id="Noticeno" asp-for="Noticeno" value="">
+        </form>
         <div class="notice_content">
             <ul class="notice_table">
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
-                        <p class="notice_item_title">
-                            <span>HWNovel 도전 웹소설 서비스 오픈 안내</span>
-                        </p>
-                        <span class="date">2024.01.12</span>
-                    </a>
-                </li>
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
-                        <p class="notice_item_title">
-                            <span>완결 안내</span>
-                        </p>
-                        <span class="date">2024.01.10</span>
-                    </a>
-                </li>
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
-                        <p class="notice_item_title">
-                            <span>신작 안내</span>
-                        </p>
-                        <span class="date">2024.01.03</span>
-                    </a>
-                </li>
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
-                        <p class="notice_item_title">
-                            <span>HWNovel 서비스 오픈 안내</span>
-                        </p>
-                        <span class="date">2024.01.02</span>
-                    </a>
-                </li>
+                @foreach (var item in Model)
+                {
+                    <li class="notice_item">
+                        <a href="javascript:detail('@item.NOTICENO')" class="notice_name">
+                            <p class="notice_item_title">
+                                <span>@item.NOTICETITLE</span>
+                            </p>
+                            <span class="date">@item.INSERTDT.ToString("yyyy.MM.dd")</span>
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
         <div class="notice_paging">
             <ul class="paging">
-                <li class="page_arrow prev page-item">
-                    <a class="page-link" role="button" href="#">
+                @if (startPageNum == 1)
+                {
+                    <li class="page_arrow prev page-item">
                         <span class="blind">이전 페이지로 이동</span>
-                    </a>
-                </li>
-                <li class="page-item active">
-                    <span class="page-link">
-                        1
-                        <span class="blind">(current)</span>
-                    </span>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" role="button" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" role="button" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" role="button" href="#">4</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" role="button" href="#">5</a>
-                </li>
-                <li class="page_arrow next page-item">
-                    <a class="page-link" role="button" href="#">
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow prev page-item">
+                        <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
+                            <span class="blind">이전 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = startPageNum; i <= endPageNum; i++)
+                {
+                    if (i == pageNum)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">
+                                @i
+                                <span class="blind">(current)</span>
+                            </span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                        </li>
+                    }
+                }
+                @if (endPageNum == pageCount)
+                {
+                    <li class="page_arrow next page-item">
                         <span class="blind">다음 페이지로 이동</span>
-                    </a>
-                </li>
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow next page-item">
+                        <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                            <span class="blind">다음 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
     </div>
 </main>
 @section scripts{
     <script type="text/JavaScript">
-        $("#noticeWrite").click(function () {
 
-        });
     </script>
 }

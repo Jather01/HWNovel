@@ -1,0 +1,72 @@
+﻿@{
+    HWNNOTICE view = ViewBag.noticeView;
+}
+
+<main>
+    <div class="component_section">
+        <div>
+            <h2 class="noti_title">공지사항</h2>
+        </div>
+        <div class="notice_write">
+            <ul class="notice_write_table">
+                <li class="notice_write_item">
+                    <div class="notice_write_item_title">@view.NOTICETITLE</div>
+                    <div class="notice_write_item_date">@view.INSERTDT.ToString("yyyy.MM.dd")</div>
+                </li>
+                <li class="notice_write_item">
+                    <div class="notice_write_item_detail">
+                        @view.NOTICETEXT
+                    </div>
+                </li>
+                <li class="notice-button-group">
+                    @if (ViewBag.userinfo != null)
+                    {
+                        if (ViewBag.userinfo[3] == "1")
+                        {
+                            <button type="button" class="btn btn-outline-primary" id="noticeEdit">수정</button>
+                            <button type="button" class="btn btn-outline-primary" id="noticeDelete">삭제</button>
+                        }
+
+                    }
+                    <button type="button" class="btn btn-outline-primary" id="noticeList">목록</button>
+                </li>
+            </ul>
+            <form id="goNoticeList" name="goNoticeList" method="GET"></form>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $("#noticeEdit").click(function () {
+            var html = "";
+            html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
+            html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
+            html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@ViewBag.NOTICENO'>";
+
+            $("#goNoticeList").html(html);
+            $("#goNoticeList").attr("action", "/Home/NoticeEdit");
+            $("#goNoticeList").submit();
+        });
+
+        $("#noticeDelete").click(function () {
+            var html = "";
+            html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
+            html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
+            html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@ViewBag.NOTICENO'>";
+
+            $("#goNoticeList").html(html);
+            $("#goNoticeList").attr("action", "/Home/NoticeDelete");
+            $("#goNoticeList").submit();
+        });
+
+        $("#noticeList").click(function () {
+            var html = "";
+            html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
+            html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
+
+            $("#goNoticeList").html(html);
+            $("#goNoticeList").attr("action", "/Home/Notice");
+            $("#goNoticeList").submit();
+        });
+    </script>
+}

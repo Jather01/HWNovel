@@ -12,6 +12,8 @@ namespace HWNovel
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class HWNovelEntities : DbContext
     {
@@ -39,5 +41,22 @@ namespace HWNovel
         public virtual DbSet<HWN042> HWN042 { get; set; }
         public virtual DbSet<HWN043> HWN043 { get; set; }
         public virtual DbSet<HWNNOTICE> HWNNOTICE { get; set; }
+    
+        public virtual int PRO_NOTICE_WRITE(Nullable<decimal> nOTICENO, string nOTICETITLE, string nOTICETEXT)
+        {
+            var nOTICENOParameter = nOTICENO.HasValue ?
+                new ObjectParameter("NOTICENO", nOTICENO) :
+                new ObjectParameter("NOTICENO", typeof(decimal));
+    
+            var nOTICETITLEParameter = nOTICETITLE != null ?
+                new ObjectParameter("NOTICETITLE", nOTICETITLE) :
+                new ObjectParameter("NOTICETITLE", typeof(string));
+    
+            var nOTICETEXTParameter = nOTICETEXT != null ?
+                new ObjectParameter("NOTICETEXT", nOTICETEXT) :
+                new ObjectParameter("NOTICETEXT", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_NOTICE_WRITE", nOTICENOParameter, nOTICETITLEParameter, nOTICETEXTParameter);
+        }
     }
 }

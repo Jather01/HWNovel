@@ -11,11 +11,11 @@ namespace HWNovel
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-
+    
     public partial class HWNNOTICE
     {
         public decimal NOTICENO { get; set; }
+        public string NOTICETITLE { get; set; }
         public string NOTICETEXT { get; set; }
         public System.DateTime INSERTDT { get; set; }
     }

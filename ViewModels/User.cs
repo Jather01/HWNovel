@@ -20,5 +20,8 @@ namespace HWNovel.ViewModels
         public DateTime Date { get; set; }          // 관심작품 등록일
         public int Volumeno { get; set; }           // 회차번호
         public string CookyId { get; set; }         // 아이디 저장 여부
+
+        public string PreUrl { get; set; }          // 로그인/로그아웃 후 돌아갈 페이지
+        public string LoginError { get; set; }          // 로그인 에러 여부
     }
 }

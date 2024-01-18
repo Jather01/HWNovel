@@ -11,18 +11,21 @@ namespace HWNovel.Controllers
         public ActionResult New()
         {
             ViewBag.topmenu = "New";
+            ViewBag.userinfo = Session["userinfo"];
             return View();
         }
 
         public ActionResult Day()
         {
             ViewBag.topmenu = "Day";
+            ViewBag.userinfo = Session["userinfo"];
             return View();
         }
 
         public ActionResult Fin()
         {
             ViewBag.topmenu = "Fin";
+            ViewBag.userinfo = Session["userinfo"];
             return View();
         }
 
@@ -53,6 +56,7 @@ namespace HWNovel.Controllers
             }
 
             ViewBag.topmenu = genName;
+            ViewBag.userinfo = Session["userinfo"];
 
             return View();
         }

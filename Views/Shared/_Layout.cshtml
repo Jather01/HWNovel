@@ -23,12 +23,24 @@
                 </form>
                 @if (ViewBag.userinfo == null)
                 {
-                    <a href="/User/Login" class="btn btn-outline-dark">로그인</a>
+                    @*<a href="/User/Login" class="btn btn-outline-dark">로그인</a>*@
+                    <form id="goLogin" name="goLogin" method="POST" action="/User/LoginForm">
+                        <input type="hidden" id="PreUrl" name="PreUrl" asp-for="PreUrl" value="" />
+                    </form>
+                    <button type="button" class="btn btn-outline-dark" id="btnLogin">로그인</button>
                 }
                 else
                 {
-                    <font>@ViewBag.userinfo[2]</font><font>님 환영합니다.</font>
-                    <a href="/User/Logout" class="btn btn-outline-dark">로그아웃</a>
+                    <div class="welcome-user">
+                        <span>
+                            <font style="font-weight:bold">@ViewBag.userinfo[2]</font><font>님 환영합니다.</font>
+                        </span>
+                    </div>
+                    @*<a href="/User/Logout" class="btn btn-outline-dark">로그아웃</a>*@
+                    <form id="goLogout" name="goLogout" method="POST" action="/User/Logout">
+                        <input type="hidden" id="PreUrl" name="PreUrl" value="" />
+                    </form>
+                    <button type="button" class="btn btn-outline-dark" id="btnLogout">로그아웃</button>
                 }
             </div>
         </div>
@@ -113,6 +125,18 @@
 
                     $(".m4").append(html);
                 }
+        });
+
+        $("#btnLogin").click(function () {
+            var url = window.location.pathname + window.location.search;
+            $("#PreUrl").val(url);
+            $("#goLogin").submit();
+        });
+
+        $("#btnLogout").click(function () {
+            var url = window.location.pathname + window.location.search;
+            $("#PreUrl").val(url);
+            $("#goLogout").submit();
         });
     </script>
     @RenderSection("scripts", required: false)

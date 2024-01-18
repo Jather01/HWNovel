@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HWNovelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HWNovelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="HWN01">
           <Key>
             <PropertyRef Name="USERID" />
@@ -165,9 +165,15 @@
             <PropertyRef Name="NOTICENO" />
           </Key>
           <Property Name="NOTICENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
-          <Property Name="NOTICETEXT" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NOTICETITLE" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="NOTICETEXT" Type="varchar(max)" Nullable="false" />
           <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
         </EntityType>
+        <Function Name="PRO_NOTICE_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOTICENO" Type="numeric" Mode="In" />
+          <Parameter Name="NOTICETITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOTICETEXT" Type="varchar(max)" Mode="In" />
+        </Function>
         <EntityContainer Name="HWNovelModelStoreContainer">
           <EntitySet Name="HWN01" EntityType="Self.HWN01" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HWN011" EntityType="Self.HWN011" Schema="dbo" store:Type="Tables" />
@@ -184,8 +190,7 @@
           <EntitySet Name="HWN043" EntityType="Self.HWN043" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HWNNOTICE" EntityType="Self.HWNNOTICE" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HWNovelModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -349,7 +354,8 @@
             <PropertyRef Name="NOTICENO" />
           </Key>
           <Property Name="NOTICENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
-          <Property Name="NOTICETEXT" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOTICETITLE" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NOTICETEXT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="INSERTDT" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityContainer Name="HWNovelEntities" annotation:LazyLoadingEnabled="true">
@@ -367,6 +373,11 @@
           <EntitySet Name="HWN042" EntityType="Self.HWN042" />
           <EntitySet Name="HWN043" EntityType="Self.HWN043" />
           <EntitySet Name="HWNNOTICE" EntityType="Self.HWNNOTICE" />
+          <FunctionImport Name="PRO_NOTICE_WRITE">
+            <Parameter Name="NOTICENO" Mode="In" Type="Decimal" />
+            <Parameter Name="NOTICETITLE" Mode="In" Type="String" />
+            <Parameter Name="NOTICETEXT" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -534,12 +545,14 @@
           <EntitySetMapping Name="HWNNOTICE">
             <EntityTypeMapping TypeName="HWNovelModel.HWNNOTICE">
               <MappingFragment StoreEntitySet="HWNNOTICE">
+                <ScalarProperty Name="NOTICETITLE" ColumnName="NOTICETITLE" />
                 <ScalarProperty Name="NOTICENO" ColumnName="NOTICENO" />
                 <ScalarProperty Name="NOTICETEXT" ColumnName="NOTICETEXT" />
                 <ScalarProperty Name="INSERTDT" ColumnName="INSERTDT" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PRO_NOTICE_WRITE" FunctionName="HWNovelModel.Store.PRO_NOTICE_WRITE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

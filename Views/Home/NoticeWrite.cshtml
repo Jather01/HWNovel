@@ -1,0 +1,89 @@
+﻿<main>
+    <div class="component_section">
+        <div>
+            <h2 class="noti_title">공지사항</h2>
+        </div>
+        <div class="notice_write">
+            <form id="writeNotice" name="writeNotice" method="POST" action="/Home/NoticeWrite" enctype="multipart/form-data">
+                <ul class="notice_write_table">
+                    <li class="notice_write_item">
+                        <div>
+                            <input type="text" placeholder="공지제목" name="Noticetitle" id="Noticetitle" asp-for="Noticetitle" maxlength="50" />
+                        </div>
+                    </li>
+                    <li class="notice_write_item">
+                        <div>
+                            <input type="file" class="form-control" placeholder="공지내용 파일" name="NoticeTextFile" id="NoticeTextFile" asp-for="NoticeTextFile" />
+                        </div>
+                    </li>
+                    <li class="notice_write_item">
+                        <span class="notice_write_item_priview_title">미리보기</span>
+                        <div class="notice_write_item_preview" id="textPreview">
+
+                        </div>
+                    </li>
+                    <li class="notice-button-group">
+                        <button type="button" class="btn btn-outline-primary" id="noticeSave">저장</button>
+                        <button type="button" class="btn btn-outline-primary" id="noticeList">목록</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            if ("@ViewBag.userinfo[3]" != "1") {
+                location.href = "/Home/Main";
+            }
+        });
+
+        $("#NoticeTextFile").change(function() {
+            if ($("#NoticeTextFile").val() != "") {
+                var ext = $('#NoticeTextFile').val().split('.').pop().toLowerCase();
+                if (ext != "txt") {
+                    alert("txt 파일을 업로드 해주세요.");
+                } else {
+                    const formData = new FormData();
+                    formData.append("NoticeTextFile", NoticeTextFile.files[0]);
+
+                    $.ajax({
+                        url: "/Ajax/NoticeFileRead",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (r) {
+                            $("#textPreview").html(r);
+                        },
+                        failure: function () { alert("fail"); },
+                        error: function () {
+                            alert("Error");
+                        }
+                    });
+                }
+            } else {
+                $("#textPreview").html("");
+            }
+        });
+
+        $("#noticeSave").click(function () {
+            if ($("#Noticetitle").val() == "") {
+                alert("공지제목을 입력해주세요.");
+                $("#Noticetitle").focus();
+            }
+
+            if ($("#NoticeTextFile").val() == "") {
+                alert("공지내용 파일을 입력해주세요.");
+                $("#NoticeTextFile").focus();
+            }
+
+            $("#writeNotice").submit();
+        });
+
+        $("#noticeList").click(function () {
+            location.href = "/Home/Notice";
+        });
+    </script>
+}

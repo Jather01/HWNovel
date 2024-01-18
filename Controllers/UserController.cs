@@ -8,13 +8,18 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.UI.WebControls;
 using System.Web.Security;
+using WebGrease.Activities;
 
 namespace HWNovel.Controllers
 {
     public class UserController : Controller
     {
-        public ActionResult Login()
+        public ActionResult LoginForm(User model)
         {
+            ViewBag.Id = model.Userid;
+            ViewBag.PreUrl = model.PreUrl;
+            ViewBag.loginError = model.LoginError;
+
             return View();
         }
 
@@ -42,7 +47,6 @@ namespace HWNovel.Controllers
                     result = db.HWN01.Where(x =>
                                x.USERID == id
                             && x.ENCPASSWORD == encpassword
-                            && x.POWER == "2"
                             && x.USEYN == "1")
                             .SingleOrDefault();
                 }
@@ -71,21 +75,31 @@ namespace HWNovel.Controllers
 
                 Response.Cookies.Add(cookie);
 
+                if(model.PreUrl != null && model.PreUrl != "")
+                {
+                    Response.Redirect(model.PreUrl, false);
+                    return null;
+                }
                 // 메인 홈 화면으로 이동
                 return RedirectToAction("Main", "Home");
             }
             else
             {
                 ViewBag.Id = id;
+                ViewBag.PreUrl = model.PreUrl;
                 ViewBag.loginError = "error";
 
-                return View();
+                return RedirectToAction("LoginForm", "User", new { Userid = id, PreUrl = model.PreUrl, LoginError = "error" });
             }
         }
 
-        public ActionResult Logout()
+        public ActionResult Logout(User model)
         {
             Session.Clear();
+            if (model.PreUrl != null && model.PreUrl != "")
+            {
+                Response.Redirect(model.PreUrl);
+            }
             return RedirectToAction("Main", "Home");
         }
 
@@ -128,7 +142,7 @@ namespace HWNovel.Controllers
                     db.HWN01.Add(user);
                     db.SaveChanges();
                 }
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("LoginForm", "User");
             }
             return View(model);
         }
@@ -196,7 +210,7 @@ namespace HWNovel.Controllers
                 }
             }
 
-            return RedirectToAction("Login", "User");
+            return RedirectToAction("LoginForm", "User");
         }
     }
 }

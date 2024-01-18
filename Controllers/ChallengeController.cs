@@ -35,6 +35,7 @@ namespace HWNovel.Controllers
             }
 
             ViewBag.topmenu = genName;
+            ViewBag.userinfo = Session["userinfo"];
 
             return View();
         }
