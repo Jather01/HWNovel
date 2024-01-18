@@ -1,4 +1,8 @@
-﻿<main>
+﻿@{ 
+    List<string> userinfo = userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : userinfo;
+}
+
+<main>
     <div class="component_section">
         <div>
             <h2 class="noti_title">공지사항</h2>
@@ -34,7 +38,7 @@
 @section scripts{
     <script type="text/JavaScript">
         $(function () {
-            if ("@ViewBag.userinfo[3]" != "1") {
+            if ("@userinfo[3]" != "1") {
                 location.href = "/Home/Main";
             }
         });
@@ -79,7 +83,9 @@
                 $("#NoticeTextFile").focus();
             }
 
-            $("#writeNotice").submit();
+            if ("@userinfo[3]" == "1") {
+                $("#writeNotice").submit();
+            }
         });
 
         $("#noticeList").click(function () {

@@ -177,5 +177,22 @@ namespace HWNovel.Controllers
 
             return View(noticeView);
         }
+
+        public ActionResult NoticeDelete(Notice model)
+        {
+            ViewBag.userinfo = Session["userinfo"];
+
+            if (ViewBag.userinfo[3] == "1")
+            {
+                using (var db = new HWNovelEntities())
+                {
+                    HWNNOTICE noticeView = db.HWNNOTICE.Where(x => x.NOTICENO.Equals(model.Noticeno)).SingleOrDefault();
+                    db.HWNNOTICE.Remove(noticeView);
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+        }
     }
 }

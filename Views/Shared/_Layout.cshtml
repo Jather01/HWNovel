@@ -23,7 +23,6 @@
                 </form>
                 @if (ViewBag.userinfo == null)
                 {
-                    @*<a href="/User/Login" class="btn btn-outline-dark">로그인</a>*@
                     <form id="goLogin" name="goLogin" method="POST" action="/User/LoginForm">
                         <input type="hidden" id="PreUrl" name="PreUrl" asp-for="PreUrl" value="" />
                     </form>
@@ -36,7 +35,6 @@
                             <font style="font-weight:bold">@ViewBag.userinfo[2]</font><font>님 환영합니다.</font>
                         </span>
                     </div>
-                    @*<a href="/User/Logout" class="btn btn-outline-dark">로그아웃</a>*@
                     <form id="goLogout" name="goLogout" method="POST" action="/User/Logout">
                         <input type="hidden" id="PreUrl" name="PreUrl" value="" />
                     </form>

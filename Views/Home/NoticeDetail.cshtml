@@ -1,5 +1,6 @@
 ﻿@{
     HWNNOTICE view = ViewBag.noticeView;
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
 }
 
 <main>
@@ -38,25 +39,30 @@
 @section scripts{
     <script type="text/JavaScript">
         $("#noticeEdit").click(function () {
-            var html = "";
-            html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
-            html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
-            html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@ViewBag.NOTICENO'>";
+            if ("@userinfo[3]" == "1") {
+                var html = "";
+                html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
+                html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
+                html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@view.NOTICENO'>";
 
-            $("#goNoticeList").html(html);
-            $("#goNoticeList").attr("action", "/Home/NoticeEdit");
-            $("#goNoticeList").submit();
+                $("#goNoticeList").html(html);
+                $("#goNoticeList").attr("action", "/Home/NoticeEdit");
+                $("#goNoticeList").submit();
+            }
         });
 
         $("#noticeDelete").click(function () {
-            var html = "";
-            html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
-            html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
-            html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@ViewBag.NOTICENO'>";
+            if ("@userinfo[3]" == "1") {
+                var html = "";
+                html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
+                html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
+                html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@view.NOTICENO'>";
 
-            $("#goNoticeList").html(html);
-            $("#goNoticeList").attr("action", "/Home/NoticeDelete");
-            $("#goNoticeList").submit();
+                $("#goNoticeList").html(html);
+                $("#goNoticeList").attr("action", "/Home/NoticeDelete");
+                $("#goNoticeList").attr("method", "POST");
+                $("#goNoticeList").submit();
+            }
         });
 
         $("#noticeList").click(function () {
