@@ -169,6 +169,11 @@
           <Property Name="NOTICETEXT" Type="varchar(max)" Nullable="false" />
           <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
         </EntityType>
+        <Function Name="PRO_NOTICE_EDIT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOTICENO" Type="numeric" Mode="In" />
+          <Parameter Name="NOTICETITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOTICETEXT" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="PRO_NOTICE_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOTICENO" Type="numeric" Mode="In" />
           <Parameter Name="NOTICETITLE" Type="varchar" Mode="In" />
@@ -378,6 +383,11 @@
             <Parameter Name="NOTICETITLE" Mode="In" Type="String" />
             <Parameter Name="NOTICETEXT" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PRO_NOTICE_EDIT">
+            <Parameter Name="NOTICENO" Mode="In" Type="Decimal" />
+            <Parameter Name="NOTICETITLE" Mode="In" Type="String" />
+            <Parameter Name="NOTICETEXT" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -553,6 +563,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PRO_NOTICE_WRITE" FunctionName="HWNovelModel.Store.PRO_NOTICE_WRITE" />
+          <FunctionImportMapping FunctionImportName="PRO_NOTICE_EDIT" FunctionName="HWNovelModel.Store.PRO_NOTICE_EDIT" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

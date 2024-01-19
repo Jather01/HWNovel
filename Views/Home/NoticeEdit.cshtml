@@ -1,4 +1,7 @@
-﻿@{ 
+﻿@model HWNovel.HWNNOTICE
+
+@{
+    HWNNOTICE view = ViewBag.noticeView;
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
 }
 
@@ -8,13 +11,12 @@
             <h2 class="noti_title">공지사항</h2>
         </div>
         <div class="notice_write">
-            <form id="writeNotice" name="writeNotice" method="POST" action="/Home/NoticeWritePro" enctype="multipart/form-data">
-                <input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>
-                <input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>
+            <form id="editNotice" name="editNotice" method="POST" action="/Home/NoticeEditPro" enctype="multipart/form-data">
+                <input type="hidden" name="Noticeno" id="Noticeno" asp-for="Noticeno" value="@Model.NOTICENO" />
                 <ul class="notice_write_table">
                     <li class="notice_write_item">
                         <div>
-                            <input type="text" placeholder="공지제목" name="Noticetitle" id="Noticetitle" asp-for="Noticetitle" maxlength="50" />
+                            <input type="text" placeholder="공지제목" name="Noticetitle" id="Noticetitle" asp-for="Noticetitle" maxlength="50" value="@Model.NOTICETITLE" />
                         </div>
                     </li>
                     <li class="notice_write_item">
@@ -25,7 +27,6 @@
                     <li class="notice_write_item">
                         <span class="notice_write_item_priview_title">미리보기</span>
                         <div class="notice_write_item_preview" id="textPreview">
-
                         </div>
                     </li>
                     <li class="notice-button-group">
@@ -86,7 +87,7 @@
             }
 
             if ("@userinfo[3]" == "1") {
-                $("#writeNotice").submit();
+                $("#editNotice").submit();
             }
         });
 

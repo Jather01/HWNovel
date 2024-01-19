@@ -299,6 +299,7 @@
     <Content Include="Views\Home\Notice.cshtml" />
     <Content Include="Views\Home\NoticeWrite.cshtml" />
     <Content Include="Views\Home\NoticeDetail.cshtml" />
+    <Content Include="Views\Home\NoticeEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

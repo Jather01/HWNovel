@@ -1,8 +1,9 @@
-﻿@{
+﻿@model HWNovel.HWNNOTICE
+
+@{
     HWNNOTICE view = ViewBag.noticeView;
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
 }
-
 <main>
     <div class="component_section">
         <div>
@@ -11,12 +12,24 @@
         <div class="notice_write">
             <ul class="notice_write_table">
                 <li class="notice_write_item">
-                    <div class="notice_write_item_title">@view.NOTICETITLE</div>
-                    <div class="notice_write_item_date">@view.INSERTDT.ToString("yyyy.MM.dd")</div>
+                    <div class="notice_write_item_title">@Model.NOTICETITLE</div>
+                    <div class="notice_write_item_date">@Model.INSERTDT.ToString("yyyy.MM.dd")</div>
                 </li>
                 <li class="notice_write_item">
-                    <div class="notice_write_item_detail">
-                        @view.NOTICETEXT
+                    <div class="notice_write_item_detail" id="noticeDetailText">
+                        <script>
+                            var html = "@Model.NOTICETEXT";
+
+                            html = html.replaceAll("&nbsp;", " ");
+                            html = html.replaceAll("&lt;", "<");
+                            html = html.replaceAll("&gt;", ">");
+                            html = html.replaceAll("&quot;", "\"");
+                            html = html.replaceAll("&#039;", "\'");
+                            html = html.replaceAll("&#39;", "\'");
+
+                            html = html.replaceAll("&amp;", "&");
+                            document.write(html);
+                        </script>
                     </div>
                 </li>
                 <li class="notice-button-group">
@@ -38,12 +51,13 @@
 </main>
 @section scripts{
     <script type="text/JavaScript">
+
         $("#noticeEdit").click(function () {
             if ("@userinfo[3]" == "1") {
                 var html = "";
                 html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
                 html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
-                html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@view.NOTICENO'>";
+                html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@Model.NOTICENO'>";
 
                 $("#goNoticeList").html(html);
                 $("#goNoticeList").attr("action", "/Home/NoticeEdit");
@@ -56,7 +70,7 @@
                 var html = "";
                 html += "<input type='hidden' name='searchValue' asp-for='searchValue' value='@ViewBag.KeyWord'>";
                 html += "<input type='hidden' name='searchPage' asp-for='searchPage' value='@ViewBag.PageNum'>";
-                html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@view.NOTICENO'>";
+                html += "<input type='hidden' name='Noticeno' asp-for='Noticeno' value='@Model.NOTICENO'>";
 
                 $("#goNoticeList").html(html);
                 $("#goNoticeList").attr("action", "/Home/NoticeDelete");

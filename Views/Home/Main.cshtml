@@ -552,38 +552,28 @@
         </div>
         <div class="notice_content">
             <ul class="notice_table">
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
+                @if (ViewBag.noticeList != null)
+                {
+                    foreach (var item in ViewBag.noticeList)
+                    {
+                        <li class="notice_item">
+                            <a href="/Home/NoticeDetail?Noticeno=@item.NOTICENO" class="notice_name">
+                                <p class="notice_item_title">
+                                    <span>@item.NOTICETITLE</span>
+                                </p>
+                                <span class="date">@item.INSERTDT.ToString("yyyy.MM.dd")</span>
+                            </a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="notice_item">
                         <p class="notice_item_title">
-                            <span>HWNovel 도전 웹소설 서비스 오픈 안내</span>
+                            <span>공지사항이 없습니다.</span>
                         </p>
-                        <span class="date">2024.01.12</span>
-                    </a>
-                </li>
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
-                        <p class="notice_item_title">
-                            <span>완결 안내</span>
-                        </p>
-                        <span class="date">2024.01.10</span>
-                    </a>
-                </li>
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
-                        <p class="notice_item_title">
-                            <span>신작 안내</span>
-                        </p>
-                        <span class="date">2024.01.03</span>
-                    </a>
-                </li>
-                <li class="notice_item">
-                    <a href="#" class="notice_name">
-                        <p class="notice_item_title">
-                            <span>HWNovel 서비스 오픈 안내</span>
-                        </p>
-                        <span class="date">2024.01.02</span>
-                    </a>
-                </li>
+                    </li>
+                }
             </ul>
         </div>
     </div>

@@ -17,6 +17,18 @@ namespace HWNovel.Controllers
         public ActionResult Main()
         {
             ViewBag.userinfo = Session["userinfo"];
+
+            List<HWNNOTICE> noticeList = new List<HWNNOTICE>();
+
+            using (var db = new HWNovelEntities())
+            {
+                noticeList = db.HWNNOTICE.OrderByDescending(x => x.NOTICENO)
+                                .Take(5)
+                                .ToList();
+            }
+
+            ViewBag.noticeList = noticeList;
+
             return View();
         }
 
@@ -85,49 +97,51 @@ namespace HWNovel.Controllers
             return View(noticeList);
         }
 
-        public ActionResult NoticeWrite()
-        {
-            List<string> userinfo = (List<string>)Session["userinfo"];
-
-            if(userinfo == null)
-            {
-                // 로그인 정보가 없으면 메인 홈 화면으로 이동
-                return RedirectToAction("Notice", "Home");
-            }
-            else
-            {
-                if (userinfo[3] != "1")
-                {
-                    // 로그인 정보가 있는데 관리자 계정이 아니면 메인 홈 화면으로 이동
-                    return RedirectToAction("Notice", "Home");
-                }
-            }
-
-            ViewBag.userinfo = userinfo;
-
-            return View();
-        }
-
-        [HttpPost]
         public ActionResult NoticeWrite(Notice model)
         {
             List<string> userinfo = (List<string>)Session["userinfo"];
 
             if (userinfo == null)
             {
-                // 로그인 정보가 없으면 메인 홈 화면으로 이동
-                return RedirectToAction("Notice", "Home");
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
             }
             else
             {
                 if (userinfo[3] != "1")
                 {
-                    // 로그인 정보가 있는데 관리자 계정이 아니면 메인 홈 화면으로 이동
-                    return RedirectToAction("Notice", "Home");
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
                 }
             }
 
-            if(model != null)
+            ViewBag.PageNum = model.searchPage;
+            ViewBag.KeyWord = model.searchValue;
+            ViewBag.userinfo = userinfo;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult NoticeWritePro(Notice model)
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+                }
+            }
+
+            if (model != null)
             {
                 if(model.Noticetitle != "" && model.NoticeTextFile != null)
                 {
@@ -158,7 +172,7 @@ namespace HWNovel.Controllers
                 }
             }
 
-            return RedirectToAction("Notice", "Home");
+            return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
         }
 
         public ActionResult NoticeDetail(Notice model)
@@ -191,6 +205,89 @@ namespace HWNovel.Controllers
                     db.SaveChanges();
                 }
             }
+
+            return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+        }
+
+        public ActionResult NoticeEdit(Notice model)
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+                }
+            }
+
+            HWNNOTICE noticeView = new HWNNOTICE();
+            using (var db = new HWNovelEntities())
+            {
+                noticeView = db.HWNNOTICE.Where(x => x.NOTICENO.Equals(model.Noticeno)).SingleOrDefault();
+            }
+
+            ViewBag.PageNum = model.searchPage;
+            ViewBag.KeyWord = model.searchValue;
+            ViewBag.userinfo = userinfo;
+
+            return View(noticeView);
+        }
+
+        [HttpPost]
+        public ActionResult NoticeEditPro(Notice model)
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+                }
+            }
+
+            if (model != null)
+            {
+                if (model.Noticetitle != "" && model.NoticeTextFile != null)
+                {
+                    HttpPostedFileBase noticeFile = model.NoticeTextFile;
+                    string noticeText = "";
+                    if (noticeFile != null && noticeFile.ContentLength > 0)
+                    {
+                        using (var reader = new StreamReader(noticeFile.InputStream))
+                        {
+                            while (!reader.EndOfStream)
+                            {
+                                //ReadLine 메서드로 한 행을 읽어 들여 line 변수에 대입
+                                noticeText += reader.ReadLine();
+                            }
+                        }
+                    }
+
+                    using (var db = new HWNovelEntities())
+                    {
+                        db.PRO_NOTICE_EDIT(model.Noticeno, model.Noticetitle, noticeText);
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            ViewBag.PageNum = model.searchPage;
+            ViewBag.KeyWord = model.searchValue;
+            ViewBag.userinfo = userinfo;
 
             return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
         }
