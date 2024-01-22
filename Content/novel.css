@@ -490,10 +490,6 @@ button, input, select, textarea {
     border-bottom: 1px solid #e8e8e8;
 }
 
-/*.notice_item + .notice_item {
-        border-top: 1px solid #e8e8e8;
-    }*/
-
 .noti_title {
     margin-top: 17px;
     font-size: 30px;
@@ -723,6 +719,46 @@ button, input, select, textarea {
 }
 
 .notice-button-group {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.myinfo_section {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 42px;
+}
+
+.myinfo_table {
+    margin: 40px 0 0 0;
+    padding: 0 0 0 30px;
+}
+
+.myinfo_item {
+    display: block;
+    position: relative;
+    padding: 0 118px 0 10px;
+    margin: 0 0 30px 0;
+}
+
+.myinfo_item_title {
+    width: 20%;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    vertical-align: middle;
+}
+
+.myinfo_item_value {
+    display: inline-block;
+    font-size: 18px;
+    color: #8a8a8a;
+    vertical-align: middle;
+}
+
+.myinfo_button_group {
     margin-top: 30px;
     text-align: center;
 }

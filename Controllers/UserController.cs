@@ -57,10 +57,10 @@ namespace HWNovel.Controllers
 
                 // 세션에 로그인 정보 저장
                 List<string> userinfo = new List<string>(new string[] {
-                    result.USERID,
-                    result.NAME,
-                    result.NICKNAME,
-                    result.POWER
+                    result.USERID,      // 아이디
+                    result.NAME,        // 이름
+                    result.NICKNAME,    // 닉네임
+                    result.POWER        // 권한
                 });
 
                 Session["userinfo"] = userinfo;
@@ -96,10 +96,6 @@ namespace HWNovel.Controllers
         public ActionResult Logout(User model)
         {
             Session.Clear();
-            if (model.PreUrl != null && model.PreUrl != "")
-            {
-                Response.Redirect(model.PreUrl);
-            }
             return RedirectToAction("Main", "Home");
         }
 
