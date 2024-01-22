@@ -1,0 +1,156 @@
+﻿@model HWNovel.HWN01
+
+@{
+    HWNNOTICE view = ViewBag.noticeView;
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+<main>
+    <div class="myinfo_section">
+        <div>
+            <h2 class="noti_title">내 정보</h2>
+        </div>
+        <div class="myinfo_content">
+            <ul class="myinfo_table">
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">아이디</span>
+                    <span class="myinfo_item_value">@ViewBag.userinfo[0]</span>
+                </li>
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">이름</span>
+                    <span class="pwcheck_item_input" id="nameLi">
+                        <input type="text" id="name" name="name" placeholder="이름" class="input" value="" maxlength="40">
+                    </span>
+                </li>
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">생년월일</span>
+                    <span class="pwcheck_item_input" id="birthLi">
+                        <input type="text" id="birthdayInput" placeholder="생년월일 8자리" class="input" value="" maxlength="8">
+                    </span>
+                </li>
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">닉네임</span>
+                    <span class="pwcheck_item_input" id="nicknameLi">
+                        <input type="text" id="nickname" name="nickname" placeholder="닉네임" class="input" value="" maxlength="20">
+                        <input type="hidden" id="nicknameCheck" name="nicknameCheck">
+                    </span>
+                    <button type="button" class="btn btn-outline-dark btnButton" id="nicknameOverlap">중복확인</button>
+                </li>
+            </ul>
+            <div class="error_text item_style" id="nameMsg" style="display: none">이름 : 필수 정보입니다.</div>
+            <div class="error_text item_style" id="birthdayMsg" style="display: none">생년월일 : 필수 정보입니다.</div>
+            <div class="error_text item_style" id="nicknameMsg" style="display: none">닉네임 : 필수 정보입니다.</div>
+        </div>
+        <form id="InfoUpdate" name="InfoUpdate" action="/Mypage/InfoUpdate" method="post">
+            <input type="hidden" name="Name" id="Name" asp-for="Name" value="">
+            <input type="hidden" name="Birthday" id="Birthday" asp-for="Birthday" value="">
+            <input type="hidden" name="Nickname" id="Nickname" asp-for="Nickname" value="">
+        </form>
+        <div class="myinfo_button_group">
+            <button type="button" class="btn btn-outline-primary" id="btnSave">변경</button>
+            <button type="button" class="btn btn-outline-primary" id="btnCancel">취소</button>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            if ("@userinfo[3]" == "0") {
+                location.href = "/Home/Main";
+            }
+        });
+
+        $("#nickname").change(function () {
+            $("#nicknameCheck").val("");
+        });
+
+        $("#nicknameOverlap").click(function () {
+            if ($("#nickname").val() == "") {
+                $("#nicknameMsg").text("닉네임 : 닉네임을 입력해주세요.");
+                $("#nicknameMsg").css("display", "");
+                $("#nicknameLi").addClass("error");
+                return;
+            } else {
+                $.ajax({
+                    url: "/Ajax/NicknameOverlap",
+                    type: "POST",
+                    data: { nickname: $("#nickname").val() },
+                    success: function (r) {
+                        if (r == "0") {
+                            $("#nicknameMsg").text("닉네임 : 중복된 닉네임입니다.");
+                            $("#nicknameMsg").css("display", "");
+                            $("#nicknameCheck").val("");
+                            $("#nicknameLi").addClass("error");
+                        } else if (r == "1") {
+                            $("#nicknameMsg").css("display", "none");
+                            $("#nicknameCheck").val("check");
+                            $("#nicknameLi").removeClass("error");
+                            alert("사용가능한 닉네임 입니다.");
+                        }
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
+        });
+
+        $("#btnSave").click(function () {
+            var bool = "true";
+
+            if ($("#name").val() == "") {
+                $("#nameMsg").text("이름 : 이름을 입력해주세요.");
+                $("#nameMsg").css("display", "");
+                $("#nameDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#nameMsg").css("display", "none");
+                $("#nameDiv").removeClass("error");
+                $("#Name").val($("#name").val());
+            }
+
+            var birthCheck = /^[\d]+$/;
+            if ($("#birthdayInput").val() == "") {
+                $("#birthdayMsg").text("생년월일 : 생년월일을 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else if (!birthCheck.test($("#birthdayInput").val())) {
+                $("#birthdayMsg").text("생년월일 : 8자리의 숫자를 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else if ($("#birthdayInput").val().length != 8) {
+                $("#birthdayMsg").text("생년월일 : 8자리의 생년월일을 입력해주세요.");
+                $("#birthdayMsg").css("display", "");
+                $("#birthdayDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#birthdayMsg").css("display", "none");
+                $("#birthdayDiv").removeClass("error");
+                $("#Birthday").val($("#birthdayInput").val());
+            }
+
+            if ($("#nickname").val() == "") {
+                $("#nicknameMsg").text("닉네임 : 닉네임을 입력해주세요.");
+                $("#nicknameMsg").css("display", "");
+                $("#nicknameDiv").addClass("error");
+                bool = "false";
+            } else if ($("#nicknameCheck").val() != "check") {
+                $("#nicknameMsg").text("닉네임 : 닉네임 중복확인을 해주세요.");
+                $("#nicknameMsg").css("display", "");
+                $("#nicknameDiv").addClass("error");
+                bool = "false";
+            } else {
+                $("#nicknameMsg").css("display", "none");
+                $("#nicknameDiv").removeClass("error");
+                $("#Nickname").val($("#nickname").val());
+            }
+
+            if (bool == "true") {
+                $("#InfoUpdate").submit();
+            }
+        });
+    </script>
+}

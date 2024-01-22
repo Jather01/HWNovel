@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 
 namespace HWNovel.Controllers
 {
@@ -108,7 +110,6 @@ namespace HWNovel.Controllers
                            x.USERID == id
                         && x.NAME == name
                         && x.BIRTHDAY == birthday
-                        && x.POWER == "2"
                         && x.USEYN == "1")
                         .Select(x => x.USERID)
                         .ToList();
@@ -141,6 +142,42 @@ namespace HWNovel.Controllers
                         }
                     }
                 }
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public JsonResult PwCheck(string id, string pw)
+        {
+            string result = "0"; // 0: 인증 실패, 1: 인증 성공
+
+            HWN01 user = new HWN01();
+
+            if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(pw))
+            {
+                SHA256 sha = new SHA256Managed();
+                byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(pw));
+                StringBuilder sb = new StringBuilder();
+                foreach (byte b in hash)
+                {
+                    sb.AppendFormat("{0:x2}", b);
+                }
+
+                string encpassword = sb.ToString();
+
+                using (var db = new HWNovelEntities())
+                {
+                    user = db.HWN01.Where(x =>
+                           x.USERID == id
+                        && x.ENCPASSWORD == encpassword
+                        && x.USEYN == "1")
+                        .SingleOrDefault();
+                }
+            }
+            if (user != null)
+            {
+                result = "1";
             }
 
             return Json(result);

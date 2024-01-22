@@ -1,0 +1,82 @@
+﻿@{
+    HWNNOTICE view = ViewBag.noticeView;
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+<main>
+    <div class="pwcheck_section">
+        <div class="pwcheck_title">
+            회원님의 개인정보를 안전하게 보호하기 위해<br />
+            인증 후 변경이 가능합니다.
+        </div>
+        <div class="myinfo_content">
+            <ul class="myinfo_table">
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">아이디</span>
+                    <span class="pwcheck_item_value">@userinfo[0]</span>
+                </li>
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">비밀번호</span>
+                    <span class="pwcheck_item_input">
+                        <input type="password" id="password" name="password" maxlength="20" autocomplete="new-password">
+                    </span>
+                </li>
+            </ul>
+            <div class="error_text item_style" id="errorMsg" style="display: none"></div>
+        </div>
+        <form id="nextPage" name="nextPage" action="" method="post">
+            <input type="hidden" id="pwYn" name="pwYn" asp-for="pwYn" value="" />
+        </form>
+        <div class="myinfo_button_group">
+            <button type="button" class="btn btn-outline-primary" id="pwCheck">확인</button>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            if ("@userinfo[3]" == "0") {
+                location.href = "/Home/Main";
+            }
+        });
+
+        $("#pwCheck").click(function () {
+            var bool = "true";
+
+            if ($("#password").val() == "") {
+                $("#errorMsg").text("비밀번호 : 비밀번호를 입력해주세요.");
+                $("#errorMsg").css("display", "");
+                $(".pwcheck_item_input").addClass("error");
+                bool = "false";
+            } else {
+                $("#errorMsg").css("display", "none");
+                $(".pwcheck_item_input").removeClass("error");
+            }
+
+            if (bool == "true") {
+                $.ajax({
+                    url: "/Ajax/PwCheck",
+                    type: "POST",
+                    data: { id: "@userinfo[0]", pw: $("#password").val() },
+                    success: function (r) {
+                        if (r == "0") {
+                            $("#errorMsg").text("비밀번호 : 비밀번호 인증에 실패했습니다.");
+                            $("#errorMsg").css("display", "");
+                            $(".pwcheck_item_input").addClass("error");
+                        } else {
+                            $("#errorMsg").css("display", "none");
+                            $(".pwcheck_item_input").removeClass("error");
+                            $("#pwYn").val(r);
+                            $("#nextPage").attr("action","/Mypage/@(ViewBag.NextUrl)Form");
+                            $("#nextPage").submit();
+                        }
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
+        });
+    </script>
+}

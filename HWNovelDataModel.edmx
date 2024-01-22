@@ -179,6 +179,12 @@
           <Parameter Name="NOTICETITLE" Type="varchar" Mode="In" />
           <Parameter Name="NOTICETEXT" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="PRO_USER_INFOUPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="USERID" Type="varchar" Mode="In" />
+          <Parameter Name="NAME" Type="varchar" Mode="In" />
+          <Parameter Name="BIRTHDAY" Type="varchar" Mode="In" />
+          <Parameter Name="NICKNAME" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="HWNovelModelStoreContainer">
           <EntitySet Name="HWN01" EntityType="Self.HWN01" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HWN011" EntityType="Self.HWN011" Schema="dbo" store:Type="Tables" />
@@ -388,6 +394,12 @@
             <Parameter Name="NOTICETITLE" Mode="In" Type="String" />
             <Parameter Name="NOTICETEXT" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PRO_USER_INFOUPDATE">
+            <Parameter Name="USERID" Mode="In" Type="String" />
+            <Parameter Name="NAME" Mode="In" Type="String" />
+            <Parameter Name="BIRTHDAY" Mode="In" Type="String" />
+            <Parameter Name="NICKNAME" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -564,6 +576,7 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PRO_NOTICE_WRITE" FunctionName="HWNovelModel.Store.PRO_NOTICE_WRITE" />
           <FunctionImportMapping FunctionImportName="PRO_NOTICE_EDIT" FunctionName="HWNovelModel.Store.PRO_NOTICE_EDIT" />
+          <FunctionImportMapping FunctionImportName="PRO_USER_INFOUPDATE" FunctionName="HWNovelModel.Store.PRO_USER_INFOUPDATE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

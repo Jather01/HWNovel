@@ -75,5 +75,26 @@ namespace HWNovel
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_NOTICE_EDIT", nOTICENOParameter, nOTICETITLEParameter, nOTICETEXTParameter);
         }
+    
+        public virtual int PRO_USER_INFOUPDATE(string uSERID, string nAME, string bIRTHDAY, string nICKNAME)
+        {
+            var uSERIDParameter = uSERID != null ?
+                new ObjectParameter("USERID", uSERID) :
+                new ObjectParameter("USERID", typeof(string));
+    
+            var nAMEParameter = nAME != null ?
+                new ObjectParameter("NAME", nAME) :
+                new ObjectParameter("NAME", typeof(string));
+    
+            var bIRTHDAYParameter = bIRTHDAY != null ?
+                new ObjectParameter("BIRTHDAY", bIRTHDAY) :
+                new ObjectParameter("BIRTHDAY", typeof(string));
+    
+            var nICKNAMEParameter = nICKNAME != null ?
+                new ObjectParameter("NICKNAME", nICKNAME) :
+                new ObjectParameter("NICKNAME", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_USER_INFOUPDATE", uSERIDParameter, nAMEParameter, bIRTHDAYParameter, nICKNAMEParameter);
+        }
     }
 }

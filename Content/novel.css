@@ -742,14 +742,18 @@ button, input, select, textarea {
     margin: 0 0 30px 0;
 }
 
-.myinfo_item_title {
-    width: 20%;
-    display: inline-block;
-    font-size: 18px;
-    font-weight: bold;
-    color: #000;
-    vertical-align: middle;
-}
+    .myinfo_item > .btnButton {
+        margin-left: 15px;
+    }
+
+    .myinfo_item_title {
+        width: 20%;
+        display: inline-block;
+        font-size: 18px;
+        font-weight: bold;
+        color: #000;
+        vertical-align: middle;
+    }
 
 .myinfo_item_value {
     display: inline-block;
@@ -762,3 +766,73 @@ button, input, select, textarea {
     margin-top: 30px;
     text-align: center;
 }
+
+.pwcheck_section {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 42px;
+}
+
+.pwcheck_title {
+    text-align: center;
+    font-size: 16px;
+}
+
+.pwcheck_item_value {
+    display: inline-block;
+    font-size: 18px;
+    color: #000;
+    vertical-align: middle;
+}
+
+.pwcheck_item_input {
+    border: 1px solid #8a8a8a;
+    border-radius: 28px;
+    padding: 2px 14px 2px 14px;
+    font-size: 18px;
+    vertical-align: middle;
+    display: inline-block
+}
+
+    .pwcheck_item_input > input {
+        font-size: 16px;
+    }
+
+    .pwcheck_item_input.error {
+        border-color: #ff3f3f;
+    }
+
+        .pwcheck_item_input.error >input::-moz-placeholder {
+            color: #ff3f3f
+        }
+
+        .pwcheck_item_input.error >input::placeholder {
+            color: #ff3f3f
+        }
+
+.error_text {
+    margin: 10px 4px 0;
+    font-size: 13px;
+    line-height: 18px;
+    color: #ff3f3f;
+    padding-left: 30px;
+}
+
+    .error_text.item_style {
+        position: relative;
+        padding-left: 8px;
+        margin-left: 50px;
+        letter-spacing: -.4px;
+    }
+
+        .error_text.item_style::before {
+            position: absolute;
+            top: 7px;
+            left: 0;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #ff3f3f;
+            content: ''
+        }

@@ -1,6 +1,9 @@
-﻿using System;
+﻿using HWNovel.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -115,6 +118,198 @@ namespace HWNovel.Controllers
                 {
                     ViewBag.NextUrl = NextUrl;
                     return View();
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult InfoUpdateForm(string pwYn)
+        {
+            ViewBag.topmenu = "Min";
+            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 로그인 화면으로 이동
+                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Min" });
+            }
+            else
+            {
+                if (pwYn == "")
+                {
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult InfoUpdate(User user)
+        {
+            ViewBag.topmenu = "Min";
+            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 로그인 화면으로 이동
+                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Min" });
+            }
+            else
+            {
+                if (user == null)
+                {
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    string name = user.Userid;
+                    string birthday = user.Birthday;
+                    string nickname = user.Nickname;
+
+                    if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(birthday) && !string.IsNullOrEmpty(nickname))
+                    {
+                        using (var db = new HWNovelEntities())
+                        {
+                            db.PRO_USER_INFOUPDATE(userinfo[0], name, birthday, nickname);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    return RedirectToAction("Min", "Mypage");
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult PwUpdateForm(string pwYn)
+        {
+            ViewBag.topmenu = "Min";
+            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 로그인 화면으로 이동
+                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Min" });
+            }
+            else
+            {
+                if (pwYn == "")
+                {
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult PwUpdate(User user)
+        {
+            ViewBag.topmenu = "Min";
+            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 로그인 화면으로 이동
+                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Min" });
+            }
+            else
+            {
+                if (user == null)
+                {
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    string id = user.Userid;
+                    string password = user.Password;
+
+                    if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(password))
+                    {
+                        using (var db = new HWNovelEntities())
+                        {
+                            var result = db.HWN01.SingleOrDefault(b => b.USERID == id);
+                            if (result != null)
+                            {
+                                SHA256 sha = new SHA256Managed();
+                                byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(model.Password));
+                                StringBuilder sb = new StringBuilder();
+                                foreach (byte b in hash)
+                                {
+                                    sb.AppendFormat("{0:x2}", b);
+                                }
+
+                                result.ENCPASSWORD = sb.ToString();
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                    return RedirectToAction("Min", "Mypage");
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UserDeleteForm(string pwYn)
+        {
+            ViewBag.topmenu = "Min";
+            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 로그인 화면으로 이동
+                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Min" });
+            }
+            else
+            {
+                if (pwYn == "")
+                {
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UserDelete(User user)
+        {
+            ViewBag.topmenu = "Min";
+            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 로그인 화면으로 이동
+                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Min" });
+            }
+            else
+            {
+                if (user == null)
+                {
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Min", "Mypage");
                 }
             }
         }

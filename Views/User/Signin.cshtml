@@ -84,6 +84,14 @@
         if (e.keyCode == 32) return false;
     });
 
+    $("#id").change(function () {
+        $("#idCheck").val("");
+    });
+
+    $("#nickname").change(function () {
+        $("#nicknameCheck").val("");
+    });
+    
     $("#idOverlap").click(function () {
         var idCheck = /^[a-z\d]+$/;
         if ($("#id").val() == "") {
@@ -134,7 +142,7 @@
                 data: {nickname: $("#nickname").val()},
                 success: function (r) {
                     if (r == "0") {
-                        $("#nicknameMsg").text("닉네임 : 중복된 아이디입니다.");
+                        $("#nicknameMsg").text("닉네임 : 중복된 닉네임입니다.");
                         $("#nicknameMsg").css("display", "");
                         $("#nicknameCheck").val("");
                         $("#nicknameDiv").addClass("error");
