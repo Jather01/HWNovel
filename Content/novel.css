@@ -742,6 +742,13 @@ button, input, select, textarea {
     margin: 0 0 30px 0;
 }
 
+    .myinfo_item.tip_text {
+        margin-top: -15px;
+        margin-bottom: 20px;
+        color: #999;
+        padding-left: 10px;
+    }
+
     .myinfo_item > .btnButton {
         margin-left: 15px;
     }
@@ -836,3 +843,52 @@ button, input, select, textarea {
             background: #ff3f3f;
             content: ''
         }
+
+.user_delete_check {
+    margin-left: 20px;
+}
+
+.check_wrap {
+    flex: 1 1 auto;
+}
+
+    .check_wrap .checkbox {
+        margin-left: -20px;
+        vertical-align: middle;
+    }
+
+    .check_wrap label {
+        display: inline-block;
+        position: relative;
+        margin-left: -32px;
+        padding: 4px 0 4px 32px;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
+    .check_wrap .keep_text {
+        margin-right: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: -.8px;
+        vertical-align: middle;
+    }
+
+    .check_wrap .checkbox {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        transition: background 0.2s;
+        background-image: url(/Content/Images/check-circle.svg);
+        background-repeat: no-repeat;
+    }
+
+        .check_wrap .checkbox:checked {
+            background-image: url(/Content/Images/check-circle-fill.svg);
+            background-repeat: no-repeat;
+        }
+
+.user_delete_text {
+    font-size: 18px;
+    font-weight: bold;
+}

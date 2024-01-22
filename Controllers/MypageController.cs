@@ -234,7 +234,7 @@ namespace HWNovel.Controllers
                 }
                 else
                 {
-                    string id = user.Userid;
+                    string id = userinfo[0];
                     string password = user.Password;
 
                     if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(password))
@@ -245,7 +245,7 @@ namespace HWNovel.Controllers
                             if (result != null)
                             {
                                 SHA256 sha = new SHA256Managed();
-                                byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(model.Password));
+                                byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(password));
                                 StringBuilder sb = new StringBuilder();
                                 foreach (byte b in hash)
                                 {
@@ -309,7 +309,24 @@ namespace HWNovel.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Min", "Mypage");
+                    string id = userinfo[0];
+
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        using (var db = new HWNovelEntities())
+                        {
+                            var result = db.HWN01.SingleOrDefault(b => b.USERID == id);
+                            if (result != null)
+                            {
+                                result.USEYN = "2";
+                                db.SaveChanges();
+                            }
+                        }
+
+                        Response.Cookies["HWNovel"].Expires = DateTime.Today.AddDays(-1);
+                    }
+
+                    return RedirectToAction("Logout", "User");
                 }
             }
         }

@@ -1,0 +1,103 @@
+﻿@model HWNovel.HWN01
+
+@{
+    HWNNOTICE view = ViewBag.noticeView;
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+<main>
+    <div class="myinfo_section">
+        <div>
+            <h2 class="noti_title">내 정보</h2>
+        </div>
+        <div class="myinfo_content">
+            <ul class="myinfo_table">
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">아이디</span>
+                    <span class="myinfo_item_value">@ViewBag.userinfo[0]</span>
+                </li>
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">비밀번호</span>
+                    <span class="pwcheck_item_input" id="pswd1Li">
+                        <input type="password" id="pswd1" name="pswd1" placeholder="비밀번호" class="input" value="" maxlength="20" autocomplete="new-password">
+                    </span>
+                </li>
+                <li class="myinfo_item tip_text">
+                    영어, 숫자, 특수기호(~`!@@#$%^&*-_=+)가 포함된 비밀번호를 입력해주세요.
+                </li>
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">비밀번호 확인</span>
+                    <span class="pwcheck_item_input" id="pswd2Li">
+                        <input type="password" id="pswd2" name="pswd2" placeholder="비밀번호 확인" class="input" value="" maxlength="20" autocomplete="new-password">
+                    </span>
+                </li>
+            </ul>
+            <div class="error_text item_style" id="pswd1Msg" style="display: none">비밀번호 : 필수 정보입니다.</div>
+            <div class="error_text item_style" id="pswd2Msg" style="display: none">비밀번호 확인 : 필수 정보입니다.</div>
+        </div>
+        <form id="PwUpdate" name="PwUpdate" action="/Mypage/PwUpdate" method="post">
+            <input type="hidden" name="Password" id="Password" asp-for="Password" value="">
+        </form>
+        <div class="myinfo_button_group">
+            <button type="button" class="btn btn-outline-primary" id="btnSave">변경</button>
+            <button type="button" class="btn btn-outline-dark" id="btnCancel">취소</button>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            if ("@userinfo[3]" == "0") {
+                location.href = "/Home/Main";
+            }
+        });
+
+        $(".input").keydown(function (e) {
+            if (e.keyCode == 32) return false;
+        });
+
+        $("#btnSave").click(function () {
+            var bool = "true";
+
+            var pwCheck = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~`!@@#$%^&*_=+-])[A-Za-z\d~`!@@#$%^&*_=+-]+$/;
+            if ($("#pswd1").val() == "") {
+                $("#pswd1Msg").text("비밀번호 : 비밀번호를 입력해주세요.");
+                $("#pswd1Msg").css("display", "");
+                $("#pswd1Li").addClass("error");
+                bool = "false";
+            } else if (!pwCheck.test($("#pswd1").val())) {
+                $("#pswd1Msg").text("비밀번호 : 규칙에 맞는 비밀번호를 입력해주세요.");
+                $("#pswd1Msg").css("display", "");
+                $("#pswd1Li").addClass("error");
+                bool = "false";
+            } else {
+                $("#pswd1Msg").css("display", "none");
+                $("#pswd1Li").removeClass("error");
+                $("#Password").val($("#pswd1").val());
+            }
+
+            if ($("#pswd2").val() == "") {
+                $("#pswd2Msg").text("비밀번호 확인 : 비밀번호 확인을 입력해주세요.");
+                $("#pswd2Msg").css("display", "");
+                $("#pswd2Li").addClass("error");
+                bool = "false";
+            } else if ($("#pswd2").val() != $("#pswd1").val()) {
+                $("#pswd2Msg").text("비밀번호 확인 : 비밀번호 확인과 비밀번호가 일치하지 않습니다.");
+                $("#pswd2Msg").css("display", "");
+                $("#pswd2Li").addClass("error");
+                bool = "false";
+            } else {
+                $("#pswd2Msg").css("display", "none");
+                $("#pswd2Li").removeClass("error");
+            }
+
+            if (bool == "true") {
+                $("#PwUpdate").submit();
+            }
+        });
+
+        $("#btnCancel").click(function () {
+            location.href = "/Mypage/Min"
+        });
+    </script>
+}

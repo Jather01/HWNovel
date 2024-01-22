@@ -1,0 +1,69 @@
+﻿@model HWNovel.HWN01
+
+@{
+    HWNNOTICE view = ViewBag.noticeView;
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+<main>
+    <div class="myinfo_section">
+        <div>
+            <h2 class="noti_title">회원 탈퇴</h2>
+        </div>
+        <div class="myinfo_content">
+            <ul class="myinfo_table">
+                <li class="myinfo_item">
+                    <span class="myinfo_item_title">아이디</span>
+                    <span class="myinfo_item_value">@ViewBag.userinfo[0]</span>
+                </li>
+                <li class="myinfo_item user_delete_text">
+                    @(userinfo[1])님 정말로 탈퇴 하시겠습니까?<br/>
+                    한번 탈퇴하면 다시 되돌릴 수 없습니다.
+                </li>
+                <li class="myinfo_item">
+                    <div class="check_wrap user_delete_check">
+                        <input type="checkbox" id="keep" class="checkbox" />
+                        <label for="keep" class="keep_text">
+                            <div class="text_wrap">
+                                <span class="keep_text">네, 탈퇴하겠습니다.</span>
+                            </div>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <form id="UserDelete" name="UserDelete" action="/Mypage/UserDelete" method="post">
+            <input type="hidden" name="Name" id="Name" asp-for="Name" value="">
+        </form>
+        <div class="myinfo_button_group">
+            <button type="button" class="btn btn-outline-dark" id="btnCancel">취소</button>
+            <button type="button" class="btn btn-outline-danger" id="btnDelete">회원탈퇴</button>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            if ("@userinfo[3]" == "0") {
+                location.href = "/Home/Main";
+            }
+        });
+
+        $("#btnDelete").click(function () {
+            var bool = "true";
+
+            if (!$("#keep").is(":checked")) {
+                alert("회원탈퇴를 하시려면 \"네, 탈퇴하겠습니다.\"에 체크해주세요.");
+                bool = "false";
+            }
+
+            if (bool == "true") {
+                $("#UserDelete").submit();
+            }
+        });
+
+        $("#btnCancel").click(function () {
+            location.href = "/Mypage/Min"
+        });
+    </script>
+}

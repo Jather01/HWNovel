@@ -302,6 +302,8 @@
     <Content Include="Views\Home\NoticeEdit.cshtml" />
     <Content Include="Views\Mypage\Pwcheck.cshtml" />
     <Content Include="Views\Mypage\InfoUpdateForm.cshtml" />
+    <Content Include="Views\Mypage\PwUpdateForm.cshtml" />
+    <Content Include="Views\Mypage\UserDeleteForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

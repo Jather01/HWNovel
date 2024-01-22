@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 using WebGrease.Activities;
+using System.Net;
 
 namespace HWNovel.Controllers
 {
@@ -64,16 +65,22 @@ namespace HWNovel.Controllers
                 });
 
                 Session["userinfo"] = userinfo;
-
-                HttpCookie cookie = new HttpCookie("HWNovel")
+                if(model.CookyId == "true")
                 {
-                    Domain = "localhost",
-                    Expires = DateTime.Now.AddDays(3)
-                };
+                    HttpCookie cookie = new HttpCookie("HWNovel")
+                    {
+                        Domain = "localhost",
+                        Expires = DateTime.Now.AddDays(3)
+                    };
 
-                cookie["id"] = Server.UrlEncode(id);
+                    cookie["id"] = Server.UrlEncode(id);
 
-                Response.Cookies.Add(cookie);
+                    Response.Cookies.Add(cookie);
+                }
+                else
+                {
+                    Response.Cookies["HWNovel"].Expires = DateTime.Today.AddDays(-1);
+                }
 
                 if(model.PreUrl != null && model.PreUrl != "")
                 {
