@@ -196,13 +196,20 @@ namespace HWNovel.Controllers
         {
             ViewBag.userinfo = Session["userinfo"];
 
-            if (ViewBag.userinfo[3] == "1")
+            if (ViewBag.userinfo == null)
             {
-                using (var db = new HWNovelEntities())
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
+            }
+            else {
+                if (ViewBag.userinfo[3] == "1")
                 {
-                    HWNNOTICE noticeView = db.HWNNOTICE.Where(x => x.NOTICENO.Equals(model.Noticeno)).SingleOrDefault();
-                    db.HWNNOTICE.Remove(noticeView);
-                    db.SaveChanges();
+                    using (var db = new HWNovelEntities())
+                    {
+                        HWNNOTICE noticeView = db.HWNNOTICE.Where(x => x.NOTICENO.Equals(model.Noticeno)).SingleOrDefault();
+                        db.HWNNOTICE.Remove(noticeView);
+                        db.SaveChanges();
+                    }
                 }
             }
 

@@ -87,7 +87,7 @@ button, input, select, textarea {
     }
 
         .top_search .input_box .btn_search:before {
-            background-image: url(/Content/Images/search.svg);
+            background-image: url(/Content/Icons/search.svg);
             background-repeat: no-repeat;
             content: '';
             display: block;
@@ -592,7 +592,7 @@ button, input, select, textarea {
             }
 
                 .notice_search .search_input .input_box .btn_search:before {
-                    background-image: url(/Content/Images/search.svg);
+                    background-image: url(/Content/Icons/search.svg);
                     background-repeat: no-repeat;
                     content: '';
                     display: block;
@@ -641,7 +641,7 @@ button, input, select, textarea {
     }
 
     .notice_paging .page_arrow.prev {
-        background-image: url(/Content/Images/paging-left.svg);
+        background-image: url(/Content/Icons/paging-left.svg);
         background-repeat: no-repeat;
         background-position: center;
         width: 30px;
@@ -649,7 +649,7 @@ button, input, select, textarea {
     }
 
     .notice_paging .page_arrow.next {
-        background-image: url(/Content/Images/paging-right.svg);
+        background-image: url(/Content/Icons/paging-right.svg);
         background-repeat: no-repeat;
         background-position: center;
         width: 30px;
@@ -879,12 +879,12 @@ button, input, select, textarea {
         height: 20px;
         cursor: pointer;
         transition: background 0.2s;
-        background-image: url(/Content/Images/check-circle.svg);
+        background-image: url(/Content/Icons/check-circle.svg);
         background-repeat: no-repeat;
     }
 
         .check_wrap .checkbox:checked {
-            background-image: url(/Content/Images/check-circle-fill.svg);
+            background-image: url(/Content/Icons/check-circle-fill.svg);
             background-repeat: no-repeat;
         }
 
@@ -892,3 +892,117 @@ button, input, select, textarea {
     font-size: 18px;
     font-weight: bold;
 }
+
+.novel_write {
+    border-top: 1px solid #e8e8e8;
+    padding-left: 10px;
+}
+
+.novel_write_table {
+    margin: 0;
+    padding: 0;
+}
+
+.novel_write_item {
+    line-height: 54px;
+    position: relative;
+    vertical-align: middle;
+}
+
+    .novel_write_item + .novel_write_item {
+        border-top: 1px solid #e8e8e8;
+    }
+
+    .novel_write_item > span {
+        display: inline-block;
+        line-height: 54px;
+        vertical-align: middle;
+    }
+
+.novel_li_thumbnail {
+    line-height: normal;
+}
+
+.novel_thumbnail_preview {
+    width: 500px;
+    height: 714px;
+    border: 1px solid #adadad;
+}
+
+.novel_input {
+    font-size: 16px;
+    width: 100%;
+    line-height: normal;
+}
+
+.novel_select {
+    line-height: normal;
+    font-size: 16px;
+    vertical-align: middle;
+    width: 115px;
+}
+
+.novel_txtarea {
+    height: 306px;
+    line-height: 26px;
+    width: 100%;
+    padding: 19px 0;
+    font-size: 15px;
+    resize: none;
+}
+
+.novel_sub_title {
+    font-size: 18px;
+    font-weight: bold;
+    width: 8%;
+}
+
+.novel_sub_genre {
+    margin-right:30px;
+}
+
+.novel_sub_thumbnail {
+    width:90%;
+}
+
+.novel_write_item_priview_title {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.novel_day_slt {
+    display: inline-block;
+    line-height: 54px;
+    vertical-align: middle;
+    margin-left: 30px;
+}
+
+    .novel_day_slt tr {
+        line-height: 32px;
+    }
+
+        .novel_day_slt tr td {
+            width: 36px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+            .novel_day_slt tr td label {
+                position: relative;
+                z-index: -1;
+            }
+
+            .novel_day_slt tr td input[type="checkbox"] {
+                display:none;
+            }
+
+            .novel_day_slt tr td.off {
+                border: 1px solid #e0e0e0;
+                color: #959595;
+            }
+
+            .novel_day_slt tr td.on {
+                border: 2px solid #7030A0;
+                color: #7030A0;
+                font-weight:bold;
+            }

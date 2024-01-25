@@ -1,0 +1,153 @@
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+<main>
+    <div class="component_section">
+        <div>
+            <h2 class="noti_title">소설 신규 작성</h2>
+        </div>
+        <div class="novel_write">
+            <form id="writeSerialNovel" name="writeSerialNovel" method="POST" action="/Serial/NovelWrite" enctype="multipart/form-data">
+                <ul class="novel_write_table">
+                    <li class="novel_write_item">
+                        <input type="text" class="novel_input" placeholder="제목" name="Noveltitle" id="Noveltitle" asp-for="Noveltitle" maxlength="50" />
+                    </li>
+
+                    <li class="novel_write_item">
+                        <span class="novel_sub_title">장르</span>
+                        <span class="novel_sub_genre">
+                            <select class="novel_select form-select" name="Genre" id="Genre" asp-for="Genre">
+                                <option value="">장르선택</option>
+                                @foreach (var genre in ViewBag.GenreList)
+                                {
+                                    <option value="@genre.CODENO">@genre.CODENAME</option>
+                                }
+                            </select>
+                        </span>
+                        <span class="novel_sub_title">연재 주기</span>
+                        <table class="novel_day_slt" id="daySlt">
+                            <tbody>
+                                <tr>
+                                    <td class="off">
+                                        <input type="checkbox" name="Mon" id="day1" asp-for="Mon" class="day_of_the_week" value="1">
+                                        <label for="day1">월</label>
+                                    </td>
+                                    <td class="off">
+                                        <input type="checkbox" name="Tue" id="day2" asp-for="Tue" class="day_of_the_week">
+                                        <label for="day2">화</label>
+                                    </td>
+                                    <td class="off">
+                                        <input type="checkbox" name="Wed" id="day3" asp-for="Wed" class="day_of_the_week">
+                                        <label for="day3">수</label>
+                                    </td>
+                                    <td class="off">
+                                        <input type="checkbox" name="Thu" id="day4" asp-for="Thu" class="day_of_the_week">
+                                        <label for="day4">목</label>
+                                    </td>
+                                    <td class="off">
+                                        <input type="checkbox" name="Fri" id="day5" asp-for="Fri" class="day_of_the_week">
+                                        <label for="day5">금</label>
+                                    </td>
+                                    <td class="off">
+                                        <input type="checkbox" name="Sat" id="day6" asp-for="Sat" class="day_of_the_week">
+                                        <label for="day6">토</label>
+                                    </td>
+                                    <td class="off">
+                                        <input type="checkbox" name="Sun" id="day7" asp-for="Sun" class="day_of_the_week">
+                                        <label for="day7">일</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                    <li class="novel_write_item">
+                        <span class="novel_sub_title">썸네일</span>
+                        <span class="novel_sub_thumbnail">
+                            <input type="file" class="novel_input form-control" name="ThumbnailFile" id="ThumbnailFile" asp-for="ThumbnailFile" accept=".jpg" />
+                        </span>
+                    </li>
+                    <li class="novel_li_thumbnail" id="thumbnailPreview"></li>
+                    <li class="novel_write_item" id="novelInfoArea">
+                        <textarea placeholder="작품 소개" class="novel_txtarea" id="Novelinfo" name="Novelinfo" asp-for="Novelinfo"></textarea>
+                    </li>
+                    <li class="notice-button-group">
+                        <button type="button" class="btn btn-outline-primary" id="btnSave">저장</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnCancel">취소</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        var checkUnload = true;
+
+        $(function () {
+            if ("@userinfo[3]" != "1") {
+                checkUnload = false;
+                location.href = "/Serial/Day";
+            }
+        });
+
+        $(window).on("beforeunload", function () {
+            if (checkUnload) return '페이지를 벗어나시겠습니까?';
+        });
+
+        $("#daySlt td").click(function () {
+            var className = $(this).attr('class');
+            if (className == 'on') {
+                $(this).attr('class', 'off');
+            } else if (className == 'off') {
+                $(this).attr('class', 'on');
+            }
+        });
+
+        $('#novelInfoArea').each(function () {
+            var update = function () {
+                var input = $("#Novelinfo");
+                var before = 500;
+                var now = 500 - input.val().length;
+
+                if (now < 0) {
+                    var str = input.val();
+                    $("#Novelinfo").focus();
+
+                    var inputVal = str.substr(0, 500);
+                    alert('작품 소개는 500자까지 입력 가능합니다.');
+
+                    now = 0;
+
+                    input.val(inputVal);
+                }
+            };
+
+            $('#Novelinfo').bind('input keyup paste', function () {
+                setTimeout(update, 0);
+            });
+
+            update();
+        });
+
+        $("#ThumbnailFile").change(function () {
+            $("#thumbnailPreview").empty();
+            if ($("#ThumbnailFile").val() != "") {
+                var ext = $('#ThumbnailFile').val().split('.').pop().toLowerCase();
+                if (ext != "jpg") {
+                    alert("jpg 파일을 업로드 해주세요.");
+                } else {
+                    var file = this.files[0];
+
+                    var image = new Image();
+                    var ImageTempUrl = window.URL.createObjectURL(file);
+
+                    image.src = ImageTempUrl;
+
+                    $("#thumbnailPreview").append(image);
+                }
+            } else {
+            }
+        });
+    </script>
+}

@@ -28,12 +28,12 @@ input[type="checkbox"] {
     height: 20px;
     cursor: pointer;
     transition: background 0.2s;
-    background-image: url(/Content/Images/check-circle.svg);
+    background-image: url(/Content/Icons/check-circle.svg);
     background-repeat: no-repeat;
 }
 
     input[type="checkbox"]:checked {
-        background-image: url(/Content/Images/check-circle-fill.svg);
+        background-image: url(/Content/Icons/check-circle-fill.svg);
         background-repeat: no-repeat;
     }
 

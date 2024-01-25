@@ -20,6 +20,7 @@ namespace HWNovel
         public string NOVELTEXT { get; set; }
         public string WRITERCOMMENT { get; set; }
         public decimal VIEWCNT { get; set; }
+        public string OPENDT { get; set; }
         public System.DateTime INSERTDT { get; set; }
     }
 }

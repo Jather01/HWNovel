@@ -23,7 +23,7 @@ namespace HWNovel.Controllers
 
             if (!string.IsNullOrEmpty(id))
             {
-                using(var db = new HWNovelEntities())
+                using (var db = new HWNovelEntities())
                 {
                     ids = db.HWN01.Where(x => x.USERID == id).ToList();
                     totalCount = ids.Count();
