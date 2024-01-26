@@ -8,10 +8,16 @@
             <h2 class="noti_title">소설 신규 작성</h2>
         </div>
         <div class="novel_write">
-            <form id="writeSerialNovel" name="writeSerialNovel" method="POST" action="/Serial/NovelWrite" enctype="multipart/form-data">
+            <form id="writeSerialNovel" name="writeSerialNovel" method="POST" action="/Serial/NovelWritePro" enctype="multipart/form-data">
+                <input type="hidden" name="searchValue" asp-for="searchValue" value="@ViewBag.searchValue" />
+                <input type="hidden" name="searchPage" asp-for="searchPage" value="@ViewBag.searchPage" />
+                <input type="hidden" name="searchGenre" asp-for="searchGenre" value="@ViewBag.searchGenre" />
                 <ul class="novel_write_table">
                     <li class="novel_write_item">
-                        <input type="text" class="novel_input" placeholder="제목" name="Noveltitle" id="Noveltitle" asp-for="Noveltitle" maxlength="50" />
+                        <input type="text" class="novel_input" placeholder="제목" name="Noveltitle" id="Noveltitle" asp-for="Noveltitle" maxlength="1000" />
+                    </li>
+                    <li class="novel_write_item">
+                        <input type="text" class="novel_input" placeholder="작가명" name="Writer" id="Writer" asp-for="Writer" maxlength="20" />
                     </li>
                     <li class="novel_write_item">
                         <span class="novel_sub_title">장르</span>
@@ -33,40 +39,42 @@
                                         <label for="day1">월</label>
                                     </td>
                                     <td class="off">
-                                        <input type="checkbox" name="Tue" id="day2" asp-for="Tue" class="day_of_the_week">
+                                        <input type="checkbox" name="Tue" id="day2" asp-for="Tue" class="day_of_the_week" value="1">
                                         <label for="day2">화</label>
                                     </td>
                                     <td class="off">
-                                        <input type="checkbox" name="Wed" id="day3" asp-for="Wed" class="day_of_the_week">
+                                        <input type="checkbox" name="Wed" id="day3" asp-for="Wed" class="day_of_the_week" value="1">
                                         <label for="day3">수</label>
                                     </td>
                                     <td class="off">
-                                        <input type="checkbox" name="Thu" id="day4" asp-for="Thu" class="day_of_the_week">
+                                        <input type="checkbox" name="Thu" id="day4" asp-for="Thu" class="day_of_the_week" value="1">
                                         <label for="day4">목</label>
                                     </td>
                                     <td class="off">
-                                        <input type="checkbox" name="Fri" id="day5" asp-for="Fri" class="day_of_the_week">
+                                        <input type="checkbox" name="Fri" id="day5" asp-for="Fri" class="day_of_the_week" value="1">
                                         <label for="day5">금</label>
                                     </td>
                                     <td class="off">
-                                        <input type="checkbox" name="Sat" id="day6" asp-for="Sat" class="day_of_the_week">
+                                        <input type="checkbox" name="Sat" id="day6" asp-for="Sat" class="day_of_the_week" value="1">
                                         <label for="day6">토</label>
                                     </td>
                                     <td class="off">
-                                        <input type="checkbox" name="Sun" id="day7" asp-for="Sun" class="day_of_the_week">
+                                        <input type="checkbox" name="Sun" id="day7" asp-for="Sun" class="day_of_the_week" value="1">
                                         <label for="day7">일</label>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </li>
-                    <li class="novel_write_item">
+                    <li class="novel_write_item novel_li_thumbnail">
                         <span class="novel_sub_title">썸네일</span>
                         <span class="novel_sub_thumbnail">
                             <input type="file" class="novel_input form-control" name="ThumbnailFile" id="ThumbnailFile" asp-for="ThumbnailFile" accept=".jpg" />
                         </span>
+                        <div id="thumbnailPreview">
+
+                        </div>
                     </li>
-                    <li class="novel_li_thumbnail" id="thumbnailPreview"></li>
                     <li class="novel_write_item" id="novelInfoArea">
                         <textarea placeholder="작품 소개" class="novel_txtarea" id="Novelinfo" name="Novelinfo" asp-for="Novelinfo"></textarea>
                     </li>
@@ -94,12 +102,13 @@
             if (checkUnload) return '페이지를 벗어나시겠습니까?';
         });
 
-        $("#daySlt td").click(function () {
-            var className = $(this).attr('class');
-            if (className == 'on') {
-                $(this).attr('class', 'off');
-            } else if (className == 'off') {
-                $(this).attr('class', 'on');
+        $("#daySlt td input[type='checkbox']").change(function () {
+            var check = $(this);
+            
+            if (check.is(":checked")) {
+                $(this).closest("td").attr('class', 'on');
+            } else {
+                $(this).closest("td").attr('class', 'off');
             }
         });
 
@@ -150,11 +159,84 @@
 
         $("#btnCancel").click(function () {
             checkUnload = false;
-            location.href = "/Serial/NovelManage";
+            var url = "/Serial/NovelManage?";
+
+            if ("@ViewBag.searchPage" != "1") {
+                url += "&searchPage=@ViewBag.searchPage";
+            }
+            if ("@ViewBag.searchValue" != "") {
+                url += "&searchValue=@ViewBag.searchValue";
+            }
+            if ("@ViewBag.searchGenre" != "") {
+                url += "&searchGenre=@ViewBag.searchGenre";
+            }
+
+            location.href = url;
         });
 
         $("#btnSave").click(function () {
+            if ($("#Noveltitle").val() == "") {
+                alert("제목을 입력해주세요.");
+                $("#Noveltitle").focus();
+                return;
+            }
+            if ($("#Writer").val() == "") {
+                alert("작가를 입력해주세요.");
+                $("#Writer").focus();
+                return;
+            }
 
+            if ($("#Genre").val() == "") {
+                alert("장르를 선택해주세요.");
+                $("#Genre").focus();
+                return;
+            }
+
+            var daily = 0;
+            if ($("#day1").is(":checked")) {
+                daily++;
+            }
+            if ($("#day2").is(":checked")) {
+                daily++;
+            }
+            if ($("#day3").is(":checked")) {
+                daily++;
+            }
+            if ($("#day4").is(":checked")) {
+                daily++;
+            }
+            if ($("#day5").is(":checked")) {
+                daily++;
+            }
+            if ($("#day6").is(":checked")) {
+                daily++;
+            }
+            if ($("#day7").is(":checked")) {
+                daily++;
+            }
+
+            if (daily == 0) {
+                alert("연재주기를 선택해주세요.");
+                $("#Mon").focus();
+                return;
+            }
+
+            if ($("#ThumbnailFile").val() == "") {
+                alert("썸네일을 첨부해주세요.");
+                $("#ThumbnailFile").focus();
+                return;
+            }
+
+            if ($("#Novelinfo").val() == "") {
+                alert("작품 소개를 입력해주세요.");
+                $("#Novelinfo").focus();
+                return;
+            }
+
+            if ("@userinfo[3]" == "1") {
+                checkUnload = false;
+                $("#writeSerialNovel").submit();
+            }
         });
     </script>
 }

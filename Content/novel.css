@@ -923,6 +923,10 @@ button, input, select, textarea {
     line-height: normal;
 }
 
+    .novel_li_thumbnail #thumbnailPreview {
+        margin-bottom: 10px;
+    }
+
 .novel_thumbnail_preview {
     width: 500px;
     height: 714px;
@@ -988,8 +992,10 @@ button, input, select, textarea {
         }
 
             .novel_day_slt tr td label {
+                width:100%;
+                height: 100%;
                 position: relative;
-                z-index: -1;
+                cursor: pointer;
             }
 
             .novel_day_slt tr td input[type="checkbox"] {
@@ -1021,6 +1027,10 @@ button, input, select, textarea {
 
 .novel_head {
     padding-left:2em;
+}
+
+.right_area > form {
+    display: -webkit-inline-box;
 }
 
 .right_area .input_box {

@@ -15,7 +15,7 @@ namespace HWNovel
     public partial class HWN031
     {
         public string NOVELID { get; set; }
-        public decimal VOLUMENO { get; set; }
+        public string VOLUMENO { get; set; }
         public string VOLUMTITLE { get; set; }
         public string NOVELTEXT { get; set; }
         public string WRITERCOMMENT { get; set; }

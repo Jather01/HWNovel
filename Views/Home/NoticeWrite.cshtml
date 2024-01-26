@@ -78,11 +78,13 @@
             if ($("#Noticetitle").val() == "") {
                 alert("공지제목을 입력해주세요.");
                 $("#Noticetitle").focus();
+                return;
             }
 
             if ($("#NoticeTextFile").val() == "") {
                 alert("공지내용 파일을 입력해주세요.");
                 $("#NoticeTextFile").focus();
+                return;
             }
 
             if ("@userinfo[3]" == "1") {

@@ -79,9 +79,9 @@
             <PropertyRef Name="VOLUMENO" />
           </Key>
           <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMENO" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="VOLUMTITLE" Type="varchar" MaxLength="1000" Nullable="false" />
-          <Property Name="NOVELTEXT" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="varchar(max)" Nullable="false" />
           <Property Name="WRITERCOMMENT" Type="text" />
           <Property Name="VIEWCNT" Type="numeric" Precision="10" Scale="0" Nullable="false" />
           <Property Name="OPENDT" Type="varchar" MaxLength="8" Nullable="false" />
@@ -130,9 +130,9 @@
             <PropertyRef Name="VOLUMENO" />
           </Key>
           <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMENO" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="VOLUMTITLE" Type="varchar" MaxLength="1000" Nullable="false" />
-          <Property Name="NOVELTEXT" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="varchar(max)" Nullable="false" />
           <Property Name="WRITERCOMMENT" Type="text" />
           <Property Name="VIEWCNT" Type="numeric" Precision="10" Scale="0" Nullable="false" />
           <Property Name="OPENDT" Type="varchar" MaxLength="8" Nullable="false" />
@@ -180,6 +180,21 @@
           <Parameter Name="NOTICENO" Type="numeric" Mode="In" />
           <Parameter Name="NOTICETITLE" Type="varchar" Mode="In" />
           <Parameter Name="NOTICETEXT" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="PRO_NOVEL_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELINFO" Type="varchar" Mode="In" />
+          <Parameter Name="WRITER" Type="varchar" Mode="In" />
+          <Parameter Name="GENRE" Type="varchar" Mode="In" />
+          <Parameter Name="THUMNAIL" Type="varchar" Mode="In" />
+          <Parameter Name="MON" Type="varchar" Mode="In" />
+          <Parameter Name="TUE" Type="varchar" Mode="In" />
+          <Parameter Name="WED" Type="varchar" Mode="In" />
+          <Parameter Name="THU" Type="varchar" Mode="In" />
+          <Parameter Name="FRI" Type="varchar" Mode="In" />
+          <Parameter Name="SAT" Type="varchar" Mode="In" />
+          <Parameter Name="SUN" Type="varchar" Mode="In" />
         </Function>
         <Function Name="PRO_USER_INFOUPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="USERID" Type="varchar" Mode="In" />
@@ -281,9 +296,9 @@
             <PropertyRef Name="VOLUMENO" />
           </Key>
           <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMENO" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
           <Property Name="VOLUMTITLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NOVELTEXT" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="WRITERCOMMENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="VIEWCNT" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
           <Property Name="OPENDT" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
@@ -332,9 +347,9 @@
             <PropertyRef Name="VOLUMENO" />
           </Key>
           <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="VOLUMENO" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
           <Property Name="VOLUMTITLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NOVELTEXT" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELTEXT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="WRITERCOMMENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="VIEWCNT" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
           <Property Name="OPENDT" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
@@ -403,6 +418,21 @@
             <Parameter Name="NAME" Mode="In" Type="String" />
             <Parameter Name="BIRTHDAY" Mode="In" Type="String" />
             <Parameter Name="NICKNAME" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_NOVEL_WRITE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="NOVELTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELINFO" Mode="In" Type="String" />
+            <Parameter Name="WRITER" Mode="In" Type="String" />
+            <Parameter Name="GENRE" Mode="In" Type="String" />
+            <Parameter Name="THUMNAIL" Mode="In" Type="String" />
+            <Parameter Name="MON" Mode="In" Type="String" />
+            <Parameter Name="TUE" Mode="In" Type="String" />
+            <Parameter Name="WED" Mode="In" Type="String" />
+            <Parameter Name="THU" Mode="In" Type="String" />
+            <Parameter Name="FRI" Mode="In" Type="String" />
+            <Parameter Name="SAT" Mode="In" Type="String" />
+            <Parameter Name="SUN" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
       </Schema>
@@ -583,6 +613,7 @@
           <FunctionImportMapping FunctionImportName="PRO_NOTICE_WRITE" FunctionName="HWNovelModel.Store.PRO_NOTICE_WRITE" />
           <FunctionImportMapping FunctionImportName="PRO_NOTICE_EDIT" FunctionName="HWNovelModel.Store.PRO_NOTICE_EDIT" />
           <FunctionImportMapping FunctionImportName="PRO_USER_INFOUPDATE" FunctionName="HWNovelModel.Store.PRO_USER_INFOUPDATE" />
+          <FunctionImportMapping FunctionImportName="PRO_NOVEL_WRITE" FunctionName="HWNovelModel.Store.PRO_NOVEL_WRITE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

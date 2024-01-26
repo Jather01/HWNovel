@@ -2,8 +2,10 @@
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
 }
 
-@{ 
-    int pageNum = ViewBag.PageNum ?? 1;
+@{
+    string searchValue = ViewBag.searchValue ?? "";
+    string searchGenre = ViewBag.searchGenre ?? "all";
+    int pageNum = ViewBag.searchPage ?? 1;
     int totalCount = ViewBag.TotalCount ?? 0;
     int listCount = ViewBag.ListCount ?? 1;
     int startPageNum = ViewBag.StartPageNum ?? 1;
@@ -16,19 +18,21 @@
 <main>
     <div class="component_section">
         <div class="component_head novel_head">
-            <button type="button" class="btn_new_write btn btn-outline-dark">신작 등록</button>
+            <button type="button" id="writeNewNovel" class="btn_new_write btn btn-outline-dark">신작 등록</button>
             <div class="right_area">
-                <div class="input_box">
-                    <input placeholder="제목, 내용" name="topSearchValue" class="input_text" value="">
-                    <button type="submit" class="btn_search"><span class="blind">검색</span></button>
-                </div>
-                <select class="novel_select form-select" name="Genre" id="Genre" asp-for="Genre">
-                    <option value="all">전체</option>
-                    @foreach (var genre in ViewBag.GenreList)
-                    {
-                        <option value="@genre.CODENO">@genre.CODENAME</option>
-                    }
-                </select>
+                <form id="NovelManageSearch" name="NovelManageSearch" method="GET" action="/Serial/NovelManage">
+                    <div class="input_box">
+                        <input placeholder="제목, 내용" name="searchValue" class="input_text" value="@searchValue">
+                        <button type="submit" class="btn_search"><span class="blind">검색</span></button>
+                    </div>
+                    <select class="novel_select form-select" name="searchGenre" id="searchGenre" asp-for="searchGenre">
+                        <option value="all" @(searchGenre == "all" ? "selected" : "")>전체</option>
+                        @foreach (var genre in ViewBag.GenreList)
+                        {
+                            <option value="@genre.CODENO" @(searchGenre == genre.CODENO ? "selected" : "")>@genre.CODENAME</option>
+                        }
+                    </select>
+                </form>
             </div>
         </div>
         <ul class="card_list type1">
@@ -111,3 +115,26 @@
         </div>
     </div>
 </main>
+@section scripts{
+    <script type="text/JavaScript">
+        $("#searchGenre").change(function () {
+            $("#NovelManageSearch").submit();
+        });
+
+        $("#writeNewNovel").click(function () {
+            var url = "/Serial/NovelWrite?";
+
+            if ("@pageNum" != "1") {
+                url += "&searchPage=@pageNum";
+            }
+            if ("@searchValue" != "") {
+                url += "&searchValue=@searchValue";
+            }
+            if ("@searchGenre" != "") {
+                url += "&searchGenre=@searchGenre";
+            }
+
+            location.href = url;
+        });
+    </script>
+}
