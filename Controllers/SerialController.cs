@@ -93,6 +93,15 @@ namespace HWNovel.Controllers
                 }
                 else
                 {
+                    List<HWN021> genreList = new List<HWN021>();
+
+                    using (var db = new HWNovelEntities())
+                    {
+                        genreList = db.HWN021.Where(x => x.GROUPNO.Equals("03")).ToList();
+                    }
+
+                    ViewBag.GenreList = genreList;
+
                     return View();
                 }
             }

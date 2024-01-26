@@ -411,16 +411,16 @@ button, input, select, textarea {
                 padding-right: 4px;
             }
 
-                .genre_rank .genre_item .info_area .title_group .bullet_wrap .bullet_up {
-                    width: 24px;
-                    display: inline-block;
-                    vertical-align: top;
-                    background-color: #7030A0;
-                    color: #fff;
-                    font-size: 12px;
-                    border-radius: 40%;
-                    text-align: center;
-                }
+.bullet_up {
+    width: 24px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: #7030A0;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 40%;
+    text-align: center;
+}
 
             .genre_rank .genre_item .info_area .title_group .title {
                 overflow: hidden;
@@ -1006,3 +1006,210 @@ button, input, select, textarea {
                 color: #7030A0;
                 font-weight:bold;
             }
+
+.btn_new_write {
+    margin-left: 10px;
+}
+
+.component_head .right_area {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    float: right;
+    margin: -8px 0 -8px;
+}
+
+.novel_head {
+    padding-left:2em;
+}
+
+.right_area .input_box {
+    padding: 2px 45px 2px 14px;
+    border-radius: 28px;
+    border: 1px solid #d7d7d7;
+    position: relative;
+    margin-right: 10px;
+}
+
+    .right_area .input_box .input_text {
+        font-size: 14px;
+        width: 180px;
+        margin-right: 0.5rem !important;
+        display: block;
+        padding: 0.375rem 0.75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: var(--bs-body-color);
+        -moz-appearance: none;
+        appearance: none;
+        background-color: var(--bs-body-bg);
+        background-clip: padding-box;
+        border-radius: var(--bs-border-radius);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .right_area .input_box .btn_search {
+        border: 0;
+        outline: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        cursor: pointer;
+        width: 33px;
+        height: 30px;
+        background: 0;
+    }
+
+        .right_area .input_box .btn_search:before {
+            background-image: url(/Content/Icons/search.svg);
+            background-repeat: no-repeat;
+            content: '';
+            display: block;
+            position: absolute;
+            top: 22%;
+            left: 0;
+            width: 18px;
+            height: 18px;
+        }
+
+.card_list {
+    margin: -20px 0 0 -20px;
+    overflow: hidden;
+}
+
+    .card_list .item {
+        float: left;
+        margin: 20px 0 0 20px;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+
+    .card_list.type1 .item {
+        width: 299px;
+    }
+
+        .card_list.type1 .item + .item {
+            margin-left: 20px;
+        }
+
+    .card_list .link {
+        position: relative;
+        display: block;
+    }
+
+        .card_list .link::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            content: '';
+        }
+
+    .card_list .thumbnail {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card_list.type1 .info_area {
+        height: 134px;
+    }
+
+    .card_list .info_area {
+        padding: 18px 18px 0 18px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .card_list .title_group {
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        font-size: 16px;
+        line-height: 20px;
+        color: #000;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+    .card_list.type1 .info_group {
+        margin-top: 8px;
+    }
+
+    .card_list .info_group {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        font-size: 13px;
+        line-height: 17px;
+        color: #999;
+    }
+
+    .card_list .author {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .card_list .league, .card_list .genre, .card_list .count {
+        -webkit-box-flex: 0;
+        -ms-flex: none;
+        flex: none;
+        font-size: 13px;
+        line-height: 17px;
+        color: #999;
+    }
+
+    .card_list .info_group span + span::before {
+        display: inline-block;
+        vertical-align: top;
+        margin: 2px 6px 0;
+        width: 1px;
+        height: 12px;
+        background-color: #ebebeb;
+        content: '';
+    }
+
+    .card_list .count span {
+        margin-left: 4px;
+    }
+
+    .card_list.type1 .meta_data_group {
+        position: absolute;
+        left: 18px;
+        bottom: 18px;
+    }
+
+    .card_list .meta_data_group {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .card_list .score_area {
+        font-size: 13px;
+        line-height: 17px;
+        color: #999;
+    }
+
+        .card_list .score_area .ico_star {
+            margin: 1px 2px 0 0;
+            width: 14px;
+            height: 14px;
+        }
+
+    .card_list .meta_data_group span + span {
+        margin-left: 14px;
+    }

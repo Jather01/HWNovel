@@ -1,5 +1,113 @@
-﻿<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">NovelManage</h1>
-    </section>
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+@{ 
+    int pageNum = ViewBag.PageNum ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+
+}
+<main>
+    <div class="component_section">
+        <div class="component_head novel_head">
+            <button type="button" class="btn_new_write btn btn-outline-dark">신작 등록</button>
+            <div class="right_area">
+                <div class="input_box">
+                    <input placeholder="제목, 내용" name="topSearchValue" class="input_text" value="">
+                    <button type="submit" class="btn_search"><span class="blind">검색</span></button>
+                </div>
+                <select class="novel_select form-select" name="Genre" id="Genre" asp-for="Genre">
+                    <option value="all">전체</option>
+                    @foreach (var genre in ViewBag.GenreList)
+                    {
+                        <option value="@genre.CODENO">@genre.CODENAME</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <ul class="card_list type1">
+            @for (int i = 0; i < 20; i++)
+            {
+                <li class="item">
+                    <a href="#" class="link">
+                        <div class="thumbnail">
+                            <img src="~/Content/Images/img10.jpg" width="299" height="192">
+                        </div>
+                        <div class="info_area">
+                            <p class="title_group">
+                                <span class="bullet_wrap ">
+                                    <span class="bullet_up">UP</span>
+                                </span>
+                                <span class="title">소설 제목</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author">작가명</span>
+                                <span class="count">총<span>422회</span></span>
+                            </p>
+                            <p class="meta_data_group">
+                                <span class="score_area"><span class="ico_star">별점</span>9.98</span>
+                                <span class="count">관심<span>704</span></span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+        <div class="notice_paging">
+            <ul class="paging">
+                @if (startPageNum == 1)
+                {
+                    <li class="page_arrow prev page-item">
+                        <span class="blind">이전 페이지로 이동</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow prev page-item">
+                        <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
+                            <span class="blind">이전 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = startPageNum; i <= endPageNum; i++)
+                {
+                    if (i == pageNum)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">
+                                @i
+                                <span class="blind">(current)</span>
+                            </span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                        </li>
+                    }
+                }
+                @if (endPageNum == pageCount)
+                {
+                    <li class="page_arrow next page-item">
+                        <span class="blind">다음 페이지로 이동</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow next page-item">
+                        <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                            <span class="blind">다음 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
 </main>

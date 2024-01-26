@@ -186,6 +186,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HWNovelDataModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Novel.cs" />
     <Compile Include="ViewModels\Code.cs" />
     <Compile Include="ViewModels\Notice.cs" />
     <Compile Include="ViewModels\User.cs" />

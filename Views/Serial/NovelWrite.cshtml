@@ -13,7 +13,6 @@
                     <li class="novel_write_item">
                         <input type="text" class="novel_input" placeholder="제목" name="Noveltitle" id="Noveltitle" asp-for="Noveltitle" maxlength="50" />
                     </li>
-
                     <li class="novel_write_item">
                         <span class="novel_sub_title">장르</span>
                         <span class="novel_sub_genre">
@@ -146,8 +145,16 @@
 
                     $("#thumbnailPreview").append(image);
                 }
-            } else {
             }
+        });
+
+        $("#btnCancel").click(function () {
+            checkUnload = false;
+            location.href = "/Serial/NovelManage";
+        });
+
+        $("#btnSave").click(function () {
+
         });
     </script>
 }
