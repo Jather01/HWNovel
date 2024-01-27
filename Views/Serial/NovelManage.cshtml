@@ -36,27 +36,22 @@
             </div>
         </div>
         <ul class="card_list type1">
-            @for (int i = 0; i < 20; i++)
+            @foreach(var item in ViewBag.NovelList)
             {
                 <li class="item">
                     <a href="#" class="link">
                         <div class="thumbnail">
-                            <img src="~/Content/Images/img10.jpg" width="299" height="192">
+                            <img src="data:image/webp;base64, @item.ThumbnailBase64" width="299" height="192">
                         </div>
                         <div class="info_area">
                             <p class="title_group">
-                                <span class="bullet_wrap ">
-                                    <span class="bullet_up">UP</span>
-                                </span>
-                                <span class="title">소설 제목</span>
+                                <span class="bullet_wrap "></span>
+                                <span class="title">@item.Noveltitle</span>
                             </p>
                             <p class="info_group">
-                                <span class="author">작가명</span>
-                                <span class="count">총<span>422회</span></span>
+                                <span class="author">@item.Writer</span>
                             </p>
                             <p class="meta_data_group">
-                                <span class="score_area"><span class="ico_star">별점</span>9.98</span>
-                                <span class="count">관심<span>704</span></span>
                             </p>
                         </div>
                     </a>

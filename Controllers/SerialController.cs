@@ -117,26 +117,55 @@ namespace HWNovel.Controllers
                         List<HWN03> hwn03List = db.HWN03.ToList();
                         List<HWN031> hwn031List = db.HWN031.ToList();
 
-                        var List = (from h03 in hwn03List
+                        // 1. 두 테이블 조인
+                        novelList = (from h03 in hwn03List
                                    join h031 in hwn031List
                                    on h03.NOVELID equals h031.NOVELID into c
                                    from d in c.DefaultIfEmpty()
+                                   select new
+                                   {
+                                       NOVELID = h03.NOVELID,
+                                       NOVELTITLE = h03.NOVELTITLE,
+                                       WRITER = h03.WRITER,
+                                       GENRE = h03.GENRE,
+                                       THUMNAIL = h03.THUMNAIL,
+                                       OPENDT = d?.OPENDT ?? string.Empty
+                                   } into e
+                                   group e by new
+                                   {
+                                       e.NOVELID,
+                                       e.NOVELTITLE,
+                                       e.WRITER,
+                                       e.GENRE,
+                                       e.THUMNAIL
+                                   } into f
+                                   select new
+                                   {
+                                       NOVELID = f.Key.NOVELID,
+                                       NOVELTITLE = f.Key.NOVELTITLE,
+                                       WRITER = f.Key.WRITER,
+                                       GENRE = f.Key.GENRE,
+                                       THUMNAIL = f.Key.THUMNAIL,
+                                       OPENDT = f.Select(o => o.OPENDT).Min()
+                                   } into g
+                                   where g.OPENDT.Equals(string.Empty) || g.OPENDT.CompareTo(DateTime.Now.ToString("yyyyMMdd")) > 0
                                    select new Novel
                                    {
-                                       Hwn03 = h03,
-                                       Hwn031 = d
+                                       Novelid = g.NOVELID,
+                                       Noveltitle = g.NOVELTITLE,
+                                       Writer = g.WRITER,
+                                       Genre = g.GENRE,
+                                       Thumnail = g.THUMNAIL,
+                                       Opendt = g.OPENDT
                                    }).ToList();
-
-                        //novelList = List.ToList();
-                        novelList = List.Where(x => x.Hwn031 == null).ToList();
 
                         if (!string.IsNullOrWhiteSpace(model.searchValue))
                         {
-                            novelList = novelList.Where(x => x.Hwn03.WRITER.IndexOf(model.searchValue) >= 0 || x.Hwn03.NOVELTITLE.IndexOf(model.searchValue) >= 0).ToList();
+                            novelList = novelList.Where(x => x.Writer.IndexOf(model.searchValue) >= 0 || x.Noveltitle.IndexOf(model.searchValue) >= 0).ToList();
                         }
                         if (!string.IsNullOrWhiteSpace(model.searchGenre))
                         {
-                            novelList = novelList.Where(x => x.Hwn03.GENRE.Equals(model.searchGenre)).ToList();
+                            novelList = novelList.Where(x => x.Genre.Equals(model.searchGenre)).ToList();
                         }
                     }
 
@@ -157,11 +186,26 @@ namespace HWNovel.Controllers
                         endPageNum = totalPageCount; //보정해 준다. 
                     }
 
+                    foreach(var n in novelList)
+                    {
+                        string imgPath = n.Thumnail;
+                        string imgBase24 = "";
+
+                        if (System.IO.File.Exists(imgPath))
+                        {
+                            byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                            imgBase24 = Convert.ToBase64String(b);
+                        }
+
+                        n.ThumbnailBase64 = imgBase24;
+                    }
+
                     ViewBag.StartPageNum = startPageNum;
                     ViewBag.EndPageNum = endPageNum;
                     ViewBag.TotalCount = totalCount;
                     ViewBag.ListCount = listCount;
 
+                    ViewBag.NovelList = novelList;
                     ViewBag.GenreList = genreList;
 
                     ViewBag.searchValue = model.searchValue;
@@ -236,15 +280,15 @@ namespace HWNovel.Controllers
                 {
                     if (model != null)
                     {
-                        if (model.Hwn03.NOVELTITLE != "" && model.Hwn03.GENRE != "" && model.Hwn03.NOVELINFO != "" && model.ThumbnailFile != null)
+                        if (model.Noveltitle != "" && model.Genre != "" && model.Novelinfo != "" && model.ThumbnailFile != null)
                         {
-                            model.Hwn03.MON = model.Hwn03.MON != "1" ? "0" : model.Hwn03.MON;
-                            model.Hwn03.TUE = model.Hwn03.TUE != "1" ? "0" : model.Hwn03.TUE;
-                            model.Hwn03.WED = model.Hwn03.WED != "1" ? "0" : model.Hwn03.WED;
-                            model.Hwn03.THU = model.Hwn03.THU != "1" ? "0" : model.Hwn03.THU;
-                            model.Hwn03.FRI = model.Hwn03.FRI != "1" ? "0" : model.Hwn03.FRI;
-                            model.Hwn03.SAT = model.Hwn03.SAT != "1" ? "0" : model.Hwn03.SAT;
-                            model.Hwn03.SUN = model.Hwn03.SUN != "1" ? "0" : model.Hwn03.SUN;
+                            model.Mon = model.Mon != "1" ? "0" : model.Mon;
+                            model.Tue = model.Tue != "1" ? "0" : model.Tue;
+                            model.Wed = model.Wed != "1" ? "0" : model.Wed;
+                            model.Thu = model.Thu != "1" ? "0" : model.Thu;
+                            model.Fri = model.Fri != "1" ? "0" : model.Fri;
+                            model.Sat = model.Sat != "1" ? "0" : model.Sat;
+                            model.Sun = model.Sun != "1" ? "0" : model.Sun;
 
                             HttpPostedFileBase thumbnailFile = model.ThumbnailFile;
 
@@ -266,11 +310,11 @@ namespace HWNovel.Controllers
                                     
                                     thumbnailFile.SaveAs(fileFullPath);
 
-                                    model.Hwn03.NOVELID = k;
-                                    model.Hwn03.THUMNAIL = fileFullPath;
+                                    model.Novelid = k;
+                                    model.Thumnail = fileFullPath;
 
-                                    db.PRO_NOVEL_WRITE(model.Hwn03.NOVELID, model.Hwn03.NOVELTITLE, model.Hwn03.NOVELINFO, model.Hwn03.WRITER, model.Hwn03.GENRE, model.Hwn03.THUMNAIL,
-                                        model.Hwn03.MON, model.Hwn03.TUE, model.Hwn03.WED, model.Hwn03.THU, model.Hwn03.FRI, model.Hwn03.SAT, model.Hwn03.SUN);
+                                    db.PRO_NOVEL_WRITE(model.Novelid, model.Noveltitle, model.Novelinfo, model.Writer, model.Genre, model.Thumnail,
+                                        model.Mon, model.Tue, model.Wed, model.Thu, model.Fri, model.Sat, model.Sun);
                                     db.SaveChanges();
                                 }
                             }
