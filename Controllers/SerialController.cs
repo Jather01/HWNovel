@@ -117,7 +117,6 @@ namespace HWNovel.Controllers
                         List<HWN03> hwn03List = db.HWN03.ToList();
                         List<HWN031> hwn031List = db.HWN031.ToList();
 
-                        // 1. 두 테이블 조인
                         novelList = (from h03 in hwn03List
                                    join h031 in hwn031List
                                    on h03.NOVELID equals h031.NOVELID into c
@@ -165,6 +164,7 @@ namespace HWNovel.Controllers
                         }
                         if (!string.IsNullOrWhiteSpace(model.searchGenre))
                         {
+                            if(!model.searchGenre.Equals("all"))
                             novelList = novelList.Where(x => x.Genre.Equals(model.searchGenre)).ToList();
                         }
                     }
@@ -322,6 +322,27 @@ namespace HWNovel.Controllers
                     }
                     return RedirectToAction("NovelManage", "Serial", new { searchValue = model.searchValue, searchGenre = model.searchGenre, searchPage = model.searchPage });
                 }
+            }
+        }
+
+        public ActionResult NovelInfo()
+        {
+            string topmenu = Request.Params["topmenu"];
+            string novelId = Request.Params["novelid"];
+
+            ViewBag.topmenu = topmenu;
+            ViewBag.userinfo = Session["userinfo"];
+
+            if(novelId == null || novelId.Equals(""))
+            {
+                // 소설 아이디 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+
+
+                return View();
             }
         }
     }

@@ -39,17 +39,17 @@
             @foreach(var item in ViewBag.NovelList)
             {
                 <li class="item">
-                    <a href="#" class="link">
+                    <a href="/Serial/NovelInfo?novelid=@item.Novelid&topmenu=NovelManage" class="link">
                         <div class="thumbnail">
                             <img src="data:image/webp;base64, @item.ThumbnailBase64" width="299" height="192">
                         </div>
                         <div class="info_area">
                             <p class="title_group">
                                 <span class="bullet_wrap "></span>
-                                <span class="title">@item.Noveltitle</span>
+                                <span class="title" name="novelTitle">@item.Noveltitle</span>
                             </p>
                             <p class="info_group">
-                                <span class="author">@item.Writer</span>
+                                <span class="author" name="novelWriter">@item.Writer</span>
                             </p>
                             <p class="meta_data_group">
                             </p>
@@ -112,6 +112,29 @@
 </main>
 @section scripts{
     <script type="text/JavaScript">
+        $(function () {
+            if ("@userinfo[3]" != "1") {
+                location.href = "/Serial/Day";
+            }
+
+            var keyword = "@searchValue";
+            if (keyword.length > 0) {
+                var novelTitle = $("span[name=novelTitle]");
+                for (var i = 0; i < novelTitle.length; i++) {
+                    var text = novelTitle[i].innerHTML;
+                    text = text.replaceAll(keyword, '<font class="font_purple">' + keyword + '</font>');
+                    novelTitle[i].innerHTML = text;
+                }
+
+                var novelWriter = $("span[name=novelWriter]");
+                for (var i = 0; i < novelWriter.length; i++) {
+                    var text = novelWriter[i].innerHTML;
+                    text = text.replaceAll(keyword, '<font class="font_purple">' + keyword + '</font>');
+                    novelWriter[i].innerHTML = text;
+                }
+            }
+        });
+
         $("#searchGenre").change(function () {
             $("#NovelManageSearch").submit();
         });

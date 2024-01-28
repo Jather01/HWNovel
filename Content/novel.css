@@ -41,6 +41,11 @@ button, input, select, textarea {
     height: 44px
 }
 
+.font_purple {
+    color: #7030A0;
+    font-weight: bold;
+}
+
 .welcome-user {
     margin-right: 10px;
     display: flex;
