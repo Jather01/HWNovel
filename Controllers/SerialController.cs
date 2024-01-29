@@ -1,9 +1,11 @@
 ﻿using HWNovel.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Net.Configuration;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Razor.Tokenizer.Symbols;
@@ -330,17 +332,131 @@ namespace HWNovel.Controllers
             string topmenu = Request.Params["topmenu"];
             string novelId = Request.Params["novelid"];
 
-            ViewBag.topmenu = topmenu;
-            ViewBag.userinfo = Session["userinfo"];
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            string userid = userinfo[0];
 
-            if(novelId == null || novelId.Equals(""))
+            ViewBag.topmenu = topmenu;
+            ViewBag.userinfo = userinfo;
+
+            if(string.IsNullOrEmpty(novelId))
             {
                 // 소설 아이디 정보가 없으면 메인 홈 화면으로 이동
                 return RedirectToAction("Main", "Home");
             }
             else
             {
+                int listCount = 20;
+                int pageNum = 1;
+                int pageSize = 10;
+                int totalCount = 0;
+                string searchPage = Request.Params["pageNum"] ?? "0";
+                string order = Request.Params["order"] ?? "update";
 
+                if (Int32.Parse(searchPage) != 0)
+                {
+                    pageNum = Int32.Parse(searchPage);
+                }
+
+                HWN011 u = new HWN011();
+                HWN021 genreCode = new HWN021();
+                HWN03 hwn03 = new HWN03();
+                Novel n = new Novel();
+                List<HWN031> nList = new List<HWN031>();
+
+                using (var db = new HWNovelEntities())
+                {
+                    hwn03 = db.HWN03.Where(x => x.NOVELID.Equals(novelId)).SingleOrDefault();
+                    genreCode = db.HWN021.Where(x => x.GROUPNO.Equals("03") && x.CODENO.Equals(hwn03.GENRE)).SingleOrDefault();
+
+                    n.Novelid = hwn03.NOVELID;
+                    n.Noveltitle = hwn03.NOVELTITLE;
+                    n.Novelinfo = hwn03.NOVELINFO;
+                    n.Writer = hwn03.WRITER;
+                    n.Genre = genreCode.CODENAME;
+                    n.Thumnail = hwn03.THUMNAIL;
+                    n.Mon = hwn03.MON;
+                    n.Tue = hwn03.TUE;
+                    n.Wed = hwn03.WED;
+                    n.Thu = hwn03.THU;
+                    n.Fri = hwn03.FRI;
+                    n.Sat = hwn03.SAT;
+                    n.Sun = hwn03.SUN;
+
+                    if (!string.IsNullOrEmpty(userid))
+                    {
+                        List<HWN011> list = db.HWN011.ToList();
+                        u = (from a in list
+                            where a.NOVELID.Equals(novelId) && a.USERID.Equals(userid)
+                            select new HWN011 {
+                                USERID = a.USERID,
+                                NOVELID = a.NOVELID
+                            }).SingleOrDefault();
+                    }
+
+                    if (topmenu.Equals("NovelManage"))
+                    {
+                        nList = db.HWN031.Where(x => x.NOVELID.Equals(novelId)).ToList();
+                    }
+                    else
+                    {
+                        nList = db.HWN031.Where(x => x.NOVELID.Equals(novelId) && x.OPENDT.CompareTo(DateTime.Now.ToString("yyyyMMdd")) > 0).ToList();
+                    }
+                }
+
+                if (order.Equals("update"))
+                {
+                    nList = nList.OrderByDescending(x => x.VOLUMENO).ToList();
+                }
+                else if (order.Equals("oldest"))
+                {
+                    nList = nList.OrderBy(x => x.VOLUMENO).ToList();
+                }
+
+                string imgPath = n.Thumnail;
+                string imgBase24 = "";
+
+                if (System.IO.File.Exists(imgPath))
+                {
+                    byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                    imgBase24 = Convert.ToBase64String(b);
+                }
+
+                n.ThumbnailBase64 = imgBase24;
+
+                totalCount = nList.Count;
+
+                nList = nList.Skip((pageNum - 1) * listCount)
+                     .Take(listCount)
+                     .ToList();
+
+                //하단 시작 페이지 번호 
+                int startPageNum = 1 + ((pageNum - 1) / pageSize) * pageSize;
+                //하단 끝 페이지 번호
+                int endPageNum = startPageNum + pageSize - 1;
+
+                //전체 페이지의 갯수 구하기
+                int totalPageCount = (int)Math.Ceiling(totalCount / (double)listCount);
+                //끝 페이지 번호가 이미 전체 페이지 갯수보다 크게 계산되었다면 잘못된 값이다.
+                if (endPageNum > totalPageCount)
+                {
+                    endPageNum = totalPageCount; //보정해 준다. 
+                }
+
+                // 검색어
+                ViewBag.novelid = novelId;
+                ViewBag.topmenu = topmenu;
+                ViewBag.pageNum = pageNum;
+                ViewBag.order = order;
+
+                ViewBag.StartPageNum = startPageNum;
+                ViewBag.EndPageNum = endPageNum;
+                ViewBag.TotalCount = totalCount;
+                ViewBag.ListCount = listCount;
+
+                ViewBag.Novel = n;
+                ViewBag.UserFavorite = u;
+                ViewBag.NList = nList;
+                ViewBag.NCount = totalCount;
 
                 return View();
             }

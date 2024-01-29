@@ -211,6 +211,9 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Icons\check-circle-fill.svg" />
     <Content Include="Content\Icons\check-circle.svg" />
+    <Content Include="Content\Icons\plus-circle-fill.svg" />
+    <Content Include="Content\Icons\plus-circle.svg" />
+    <Content Include="Content\Icons\star-fill.svg" />
     <Content Include="Content\Images\img0.jpg" />
     <Content Include="Content\Images\img1.jpg" />
     <Content Include="Content\Images\img10.jpg" />
@@ -308,6 +311,7 @@
     <Content Include="Views\Mypage\UserDeleteForm.cshtml" />
     <Content Include="Views\Serial\NovelWrite.cshtml" />
     <Content Include="Views\Serial\NovelManage.cshtml" />
+    <Content Include="Views\Serial\NovelInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,8 +1,6 @@
 ﻿@{
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
-}
 
-@{
     string searchValue = ViewBag.searchValue ?? "";
     string searchGenre = ViewBag.searchGenre ?? "all";
     int pageNum = ViewBag.searchPage ?? 1;
@@ -16,6 +14,26 @@
 
 }
 <main>
+    <script type="text/JavaScript">
+        function pagingPrev(page) {
+            if (page - 1 > 0) {
+                $("#searchPage").val((page - 1));
+                $("#novelInfo").submit();
+            }
+        }
+
+        function paging(page) {
+            $("#searchPage").val((page));
+            $("#novelInfo").submit();
+        }
+
+        function pagingNext(page) {
+            if (page + 10 > @endPageNum) {
+                $("#searchPage").val((page + 10));
+                $("#novelInfo").submit();
+            }
+        }
+    </script>
     <div class="component_section">
         <div class="component_head novel_head">
             <button type="button" id="writeNewNovel" class="btn_new_write btn btn-outline-dark">신작 등록</button>
@@ -32,11 +50,12 @@
                             <option value="@genre.CODENO" @(searchGenre == genre.CODENO ? "selected" : "")>@genre.CODENAME</option>
                         }
                     </select>
+                    <input type="hidden" name="searchPage" id="searchPage" value="@pageNum" />
                 </form>
             </div>
         </div>
         <ul class="card_list type1">
-            @foreach(var item in ViewBag.NovelList)
+            @foreach (var item in ViewBag.NovelList)
             {
                 <li class="item">
                     <a href="/Serial/NovelInfo?novelid=@item.Novelid&topmenu=NovelManage" class="link">
