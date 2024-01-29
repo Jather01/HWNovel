@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Configuration;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Razor.Tokenizer.Symbols;
@@ -261,7 +262,7 @@ namespace HWNovel.Controllers
         [HttpPost]
         public ActionResult NovelWritePro(Novel model)
         {
-            ViewBag.topmenu = "NovelManage";
+            ViewBag.topmenu = "none";
             ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
@@ -329,7 +330,7 @@ namespace HWNovel.Controllers
 
         public ActionResult NovelInfo()
         {
-            string topmenu = Request.Params["topmenu"];
+            string topmenu = "none";
             string novelId = Request.Params["novelid"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
@@ -362,6 +363,8 @@ namespace HWNovel.Controllers
                 HWN03 hwn03 = new HWN03();
                 Novel n = new Novel();
                 List<HWN031> nList = new List<HWN031>();
+                List<HWN011> favorits = new List<HWN011>();
+                int favorit = 0;
 
                 using (var db = new HWNovelEntities())
                 {
@@ -399,8 +402,12 @@ namespace HWNovel.Controllers
                     }
                     else
                     {
-                        nList = db.HWN031.Where(x => x.NOVELID.Equals(novelId) && x.OPENDT.CompareTo(DateTime.Now.ToString("yyyyMMdd")) > 0).ToList();
+                        string nowdate = DateTime.Now.ToString("yyyyMMdd");
+                        nList = db.HWN031.Where(x => x.NOVELID.Equals(novelId) && x.OPENDT.CompareTo(nowdate) > 0).ToList();
                     }
+
+                    favorits = db.HWN011.Where(x => x.NOVELID.Equals(novelId)).ToList();
+                    favorit = favorits.Count;
                 }
 
                 if (order.Equals("update"))
@@ -457,8 +464,238 @@ namespace HWNovel.Controllers
                 ViewBag.UserFavorite = u;
                 ViewBag.NList = nList;
                 ViewBag.NCount = totalCount;
+                ViewBag.FavoritCnt = favorit;
 
                 return View();
+            }
+        }
+
+        public ActionResult NovelDelete()
+        {
+            ViewBag.topmenu = "none";
+            ViewBag.userinfo = Session["userinfo"];
+
+            string novelid = Request.Params["novelid"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    HWN03 h03 = new HWN03();
+                    List<HWN031> h031 = new List<HWN031>();
+
+                    using (var db = new HWNovelEntities())
+                    {
+                        h03 = db.HWN03.Where(x => x.NOVELID.Equals(novelid)).SingleOrDefault();
+                        db.HWN03.Remove(h03);
+
+                        h031 = db.HWN031.Where(x => x.NOVELID.Equals(novelid)).ToList();
+                        db.HWN031.RemoveRange(h031);
+                        db.SaveChanges();
+                    }
+
+                    return RedirectToAction("Day", "Serial");
+                }
+            }
+        }
+
+        public ActionResult NovelEnd()
+        {
+            ViewBag.topmenu = "none";
+            ViewBag.userinfo = Session["userinfo"];
+
+            string novelid = Request.Params["novelid"];
+            string pageNum = Request.Params["pageNum"];
+            string order = Request.Params["order"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    HWN03 h03 = new HWN03();
+                    List<HWN031> h031 = new List<HWN031>();
+
+                    using (var db = new HWNovelEntities())
+                    {
+                        h03 = db.HWN03.Where(x => x.NOVELID.Equals(novelid)).SingleOrDefault();
+                        h03.ENDYN = "2";
+                        db.SaveChanges();
+                    }
+
+                    return RedirectToAction("NovelInfo", "Serial", new { novelid = novelid, pageNum = pageNum, order = order });
+                }
+            }
+        }
+
+        public ActionResult NovelUpdate()
+        {
+            ViewBag.topmenu = "none";
+            ViewBag.userinfo = Session["userinfo"];
+
+            string novelid = Request.Params["novelid"];
+            string pageNum = Request.Params["pageNum"];
+            string order = Request.Params["order"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    List<HWN021> genreList = new List<HWN021>();
+                    Novel novel = new Novel();
+
+                    using (var db = new HWNovelEntities())
+                    {
+                        genreList = db.HWN021.Where(x => x.GROUPNO.Equals("03")).ToList();
+                        var h03 = db.HWN03.ToList();
+
+                        novel = (from a in h03
+                                 where a.NOVELID == novelid
+                                 select new Novel
+                                 {
+                                     Novelid = a.NOVELID,
+                                     Noveltitle = a.NOVELTITLE,
+                                     Novelinfo = a.NOVELINFO,
+                                     Writer = a.WRITER,
+                                     Genre = a.GENRE,
+                                     Thumnail = a.THUMNAIL,
+                                     Endyn = a.ENDYN,
+                                     Mon = a.MON,
+                                     Tue = a.TUE,
+                                     Wed = a.WED,
+                                     Thu = a.THU,
+                                     Fri = a.FRI,
+                                     Sat = a.SAT,
+                                     Sun = a.SUN
+                                 }).SingleOrDefault();
+                    }
+
+                    string imgPath = novel.Thumnail;
+                    string imgBase24 = "";
+
+                    if (System.IO.File.Exists(imgPath))
+                    {
+                        byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                        imgBase24 = Convert.ToBase64String(b);
+                    }
+
+                    novel.ThumbnailBase64 = imgBase24;
+
+                    ViewBag.GenreList = genreList;
+                    ViewBag.Novel = novel;
+
+                    ViewBag.novelid = novelid;
+                    ViewBag.pageNum = pageNum;
+                    ViewBag.order = order;
+
+                    return View();
+                }
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult NovelUpdatePro(Novel model)
+        {
+            ViewBag.topmenu = "none";
+            ViewBag.userinfo = Session["userinfo"];
+
+            string novelid = model.Novelid;
+            int pageNum = model.searchPage;
+            string order = model.searchOrder;
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 공지사항 목록 화면으로 이동
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    if (model != null)
+                    {
+                        if (model.Noveltitle != "" && model.Genre != "" && model.Novelinfo != "")
+                        {
+                            model.Mon = model.Mon != "1" ? "0" : model.Mon;
+                            model.Tue = model.Tue != "1" ? "0" : model.Tue;
+                            model.Wed = model.Wed != "1" ? "0" : model.Wed;
+                            model.Thu = model.Thu != "1" ? "0" : model.Thu;
+                            model.Fri = model.Fri != "1" ? "0" : model.Fri;
+                            model.Sat = model.Sat != "1" ? "0" : model.Sat;
+                            model.Sun = model.Sun != "1" ? "0" : model.Sun;
+
+                            HttpPostedFileBase thumbnailFile = model.ThumbnailFile;
+
+                            if (thumbnailFile != null && thumbnailFile.ContentLength > 0)
+                            {
+                                if(System.IO.File.Exists(model.Thumnail)) System.IO.File.Delete(model.Thumnail);
+
+                                string thumbnailPath = "E:\\HWNovel\\Thumnail\\";
+                                DirectoryInfo di = new DirectoryInfo(thumbnailPath);
+
+                                if (di.Exists == false) di.Create();
+
+                                string fileFullPath = thumbnailPath + model.Novelid + ".jpg";
+
+                                thumbnailFile.SaveAs(fileFullPath);
+
+                                model.Thumnail = fileFullPath;
+                            }
+
+                            using (var db = new HWNovelEntities())
+                            {
+                                db.PRO_NOVEL_UPDATE(model.Novelid, model.Noveltitle, model.Novelinfo, model.Writer, model.Genre, model.Thumnail,
+                                    model.Mon, model.Tue, model.Wed, model.Thu, model.Fri, model.Sat, model.Sun);
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+
+                    return RedirectToAction("NovelInfo", "Serial", new { novelid = novelid, pageNum = pageNum, order = order });
+                }
             }
         }
     }

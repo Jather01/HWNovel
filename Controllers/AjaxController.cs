@@ -182,5 +182,47 @@ namespace HWNovel.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public JsonResult NovelFavorite(string novelid)
+        {
+            string result = ""; // on: 관심 등록, off: 관심 해제
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+           if (userinfo != null && !string.IsNullOrEmpty(novelid))
+            {
+                string userid = userinfo[0];
+                HWN011 h011 = new HWN011();
+                int h011Cnt = 0;
+
+                using (var db = new HWNovelEntities())
+                {
+                    h011 = db.HWN011.Where(x => x.USERID.Equals(userid) && x.NOVELID.Equals(novelid)).SingleOrDefault();
+                    if(h011 == null)
+                    {
+                        HWN011 favoritNovel = new HWN011();
+                        favoritNovel.USERID = userid;
+                        favoritNovel.NOVELID = novelid;
+                        favoritNovel.DATE = DateTime.Now;
+
+                        db.HWN011.Add(favoritNovel);
+                        db.SaveChanges();
+                        result = "on";
+                    }
+                    else
+                    {
+                        db.HWN011.Remove(h011);
+                        db.SaveChanges();
+                        result = "off";
+                    }
+
+                    h011Cnt = db.HWN011.Where(x => x.NOVELID.Equals(novelid)).ToList().Count();
+                    result += ("/" + h011Cnt);
+                }
+            }
+
+            return Json(result);
+        }
     }
 }

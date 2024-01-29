@@ -1,23 +1,4 @@
 ﻿@{
-    string searchParams = "";
-
-    if (!string.IsNullOrEmpty(ViewBag.novelid))
-    {
-        searchParams += "&novelid=" + ViewBag.novelid;
-    }
-    if (!string.IsNullOrEmpty(ViewBag.topmenu))
-    {
-        searchParams += "&topmenu=" + ViewBag.topmenu;
-    }
-    if (!string.IsNullOrEmpty(ViewBag.pageNum))
-    {
-        searchParams += "&pageNum=" + ViewBag.pageNum;
-    }
-    if (!string.IsNullOrEmpty(ViewBag.order))
-    {
-        searchParams += "&order=" + ViewBag.order;
-    }
-
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
 
     int pageNum = ViewBag.pageNum ?? 1;
@@ -28,6 +9,21 @@
 
     int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
     endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+
+    string searchParams = "";
+
+    if (!string.IsNullOrEmpty(ViewBag.novelid))
+    {
+        searchParams += "&novelid=" + ViewBag.novelid;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.order))
+    {
+        searchParams += "&order=" + ViewBag.order;
+    }
+    if (pageNum != 1)
+    {
+        searchParams += "&pageNum=" + pageNum;
+    }
 
     string day = "";
     string day2 = "";
@@ -137,7 +133,7 @@
                 </div>
             </div>
             <ul class="section_function">
-                <li><a href="#" class="favorite @(ViewBag.UserFavorite == null ? "" : "check")" id="concernNovelIcon">관심 <span>605</span></a></li>
+                <li><a class="favorite @(ViewBag.UserFavorite == null ? "" : "check")" id="concernNovelIcon">관심 <span>@ViewBag.FavoritCnt</span></a></li>
             </ul>
         </div>
         <div class="cont_sub_wrap">
@@ -156,9 +152,9 @@
                     </div>
                 </div>
                 <ul class="list_type2 v3">
-                    @if (ViewBag.NList == null)
+                    @if (ViewBag.NList.Count == 0)
                     {
-                        <li class="volumeComment"><span class="volumeNull">회차가 없습니다.</span></li>
+                        <li class="volumeComment"><div class="volumeNull">회차가 없습니다.</div></li>
                     }
                     else
                     {
@@ -245,9 +241,11 @@
     </div>
     <form name="novelInfo" id="novelInfo" action="/Serial/NovelInfo" method="get">
         <input type="hidden" name="novelid" id="novelid" value="@ViewBag.novelid" />
-        <input type="hidden" name="topmenu" id="topmenu" value="@ViewBag.topmenu" />
         <input type="hidden" name="pageNum" id="pageNum" value="@ViewBag.pageNum" />
         <input type="hidden" name="order" id="order" value="@ViewBag.order" />
+    </form>
+    <form id="goLogin" name="goLogin" method="POST" action="/User/LoginForm">
+        <input type="hidden" id="PreUrl" name="PreUrl" asp-for="PreUrl" value="" />
     </form>
 </main>
 @section scripts{
@@ -268,7 +266,33 @@
 
         // 관심등록
         $("#concernNovelIcon").click(function () {
-
+            if ("@userinfo[0]" == "0") {
+                if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
+                    var url = window.location.pathname + window.location.search;
+                    $("#PreUrl").val(url);
+                    $("#goLogInAndOut").attr("action","/User/LoginForm");
+                    $("#goLogInAndOut").submit();
+                }
+            } else {
+                $.ajax({
+                    url: "/Ajax/NovelFavorite",
+                    type: "POST",
+                    data: { novelid : "@ViewBag.novelid"},
+                    success: function (r) {
+                        var arr = r.split('/');
+                        if (arr[0] == "on") {
+                            $("#concernNovelIcon").attr("class", "favorite check");
+                        } else if (arr[0] == "off") {
+                            $("#concernNovelIcon").attr("class", "favorite");
+                        }
+                        $("#concernNovelIcon").html("관심 <span>" + arr[1] + "</span>");
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
         });
     </script>
 }

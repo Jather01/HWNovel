@@ -312,6 +312,7 @@
     <Content Include="Views\Serial\NovelWrite.cshtml" />
     <Content Include="Views\Serial\NovelManage.cshtml" />
     <Content Include="Views\Serial\NovelInfo.cshtml" />
+    <Content Include="Views\Serial\NovelUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -181,6 +181,21 @@
           <Parameter Name="NOTICETITLE" Type="varchar" Mode="In" />
           <Parameter Name="NOTICETEXT" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="PRO_NOVEL_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELINFO" Type="varchar" Mode="In" />
+          <Parameter Name="WRITER" Type="varchar" Mode="In" />
+          <Parameter Name="GENRE" Type="varchar" Mode="In" />
+          <Parameter Name="THUMNAIL" Type="varchar" Mode="In" />
+          <Parameter Name="MON" Type="varchar" Mode="In" />
+          <Parameter Name="TUE" Type="varchar" Mode="In" />
+          <Parameter Name="WED" Type="varchar" Mode="In" />
+          <Parameter Name="THU" Type="varchar" Mode="In" />
+          <Parameter Name="FRI" Type="varchar" Mode="In" />
+          <Parameter Name="SAT" Type="varchar" Mode="In" />
+          <Parameter Name="SUN" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="PRO_NOVEL_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOVELID" Type="varchar" Mode="In" />
           <Parameter Name="NOVELTITLE" Type="varchar" Mode="In" />
@@ -434,6 +449,21 @@
             <Parameter Name="SAT" Mode="In" Type="String" />
             <Parameter Name="SUN" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PRO_NOVEL_UPDATE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="NOVELTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELINFO" Mode="In" Type="String" />
+            <Parameter Name="WRITER" Mode="In" Type="String" />
+            <Parameter Name="GENRE" Mode="In" Type="String" />
+            <Parameter Name="THUMNAIL" Mode="In" Type="String" />
+            <Parameter Name="MON" Mode="In" Type="String" />
+            <Parameter Name="TUE" Mode="In" Type="String" />
+            <Parameter Name="WED" Mode="In" Type="String" />
+            <Parameter Name="THU" Mode="In" Type="String" />
+            <Parameter Name="FRI" Mode="In" Type="String" />
+            <Parameter Name="SAT" Mode="In" Type="String" />
+            <Parameter Name="SUN" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -614,6 +644,7 @@
           <FunctionImportMapping FunctionImportName="PRO_NOTICE_EDIT" FunctionName="HWNovelModel.Store.PRO_NOTICE_EDIT" />
           <FunctionImportMapping FunctionImportName="PRO_USER_INFOUPDATE" FunctionName="HWNovelModel.Store.PRO_USER_INFOUPDATE" />
           <FunctionImportMapping FunctionImportName="PRO_NOVEL_WRITE" FunctionName="HWNovelModel.Store.PRO_NOVEL_WRITE" />
+          <FunctionImportMapping FunctionImportName="PRO_NOVEL_UPDATE" FunctionName="HWNovelModel.Store.PRO_NOVEL_UPDATE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -1558,6 +1558,11 @@ button, input, select, textarea {
     height: 120px;
 }
 
+.list_type2.v3 .volumeNull {
+    text-align: center;
+    font-size: 16px;
+}
+
     .list_type2.v3 .list_item .pic {
         width: 150px;
     }
@@ -1630,4 +1635,9 @@ button, input, select, textarea {
 
 .list_info.v6 .date {
     margin-left: 14px;
+}
+
+.novel_delete {
+    color: #999;
+    text-decoration: underline;
 }

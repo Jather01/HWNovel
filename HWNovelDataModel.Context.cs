@@ -153,5 +153,62 @@ namespace HWNovel
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_NOVEL_WRITE", nOVELIDParameter, nOVELTITLEParameter, nOVELINFOParameter, wRITERParameter, gENREParameter, tHUMNAILParameter, mONParameter, tUEParameter, wEDParameter, tHUParameter, fRIParameter, sATParameter, sUNParameter);
         }
+    
+        public virtual int PRO_NOVEL_UPDATE(string nOVELID, string nOVELTITLE, string nOVELINFO, string wRITER, string gENRE, string tHUMNAIL, string mON, string tUE, string wED, string tHU, string fRI, string sAT, string sUN)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var nOVELTITLEParameter = nOVELTITLE != null ?
+                new ObjectParameter("NOVELTITLE", nOVELTITLE) :
+                new ObjectParameter("NOVELTITLE", typeof(string));
+    
+            var nOVELINFOParameter = nOVELINFO != null ?
+                new ObjectParameter("NOVELINFO", nOVELINFO) :
+                new ObjectParameter("NOVELINFO", typeof(string));
+    
+            var wRITERParameter = wRITER != null ?
+                new ObjectParameter("WRITER", wRITER) :
+                new ObjectParameter("WRITER", typeof(string));
+    
+            var gENREParameter = gENRE != null ?
+                new ObjectParameter("GENRE", gENRE) :
+                new ObjectParameter("GENRE", typeof(string));
+    
+            var tHUMNAILParameter = tHUMNAIL != null ?
+                new ObjectParameter("THUMNAIL", tHUMNAIL) :
+                new ObjectParameter("THUMNAIL", typeof(string));
+    
+            var mONParameter = mON != null ?
+                new ObjectParameter("MON", mON) :
+                new ObjectParameter("MON", typeof(string));
+    
+            var tUEParameter = tUE != null ?
+                new ObjectParameter("TUE", tUE) :
+                new ObjectParameter("TUE", typeof(string));
+    
+            var wEDParameter = wED != null ?
+                new ObjectParameter("WED", wED) :
+                new ObjectParameter("WED", typeof(string));
+    
+            var tHUParameter = tHU != null ?
+                new ObjectParameter("THU", tHU) :
+                new ObjectParameter("THU", typeof(string));
+    
+            var fRIParameter = fRI != null ?
+                new ObjectParameter("FRI", fRI) :
+                new ObjectParameter("FRI", typeof(string));
+    
+            var sATParameter = sAT != null ?
+                new ObjectParameter("SAT", sAT) :
+                new ObjectParameter("SAT", typeof(string));
+    
+            var sUNParameter = sUN != null ?
+                new ObjectParameter("SUN", sUN) :
+                new ObjectParameter("SUN", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_NOVEL_UPDATE", nOVELIDParameter, nOVELTITLEParameter, nOVELINFOParameter, wRITERParameter, gENREParameter, tHUMNAILParameter, mONParameter, tUEParameter, wEDParameter, tHUParameter, fRIParameter, sATParameter, sUNParameter);
+        }
     }
 }

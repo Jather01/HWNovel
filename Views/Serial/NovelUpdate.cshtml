@@ -1,0 +1,261 @@
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+<main>
+    <div class="component_section">
+        <div>
+            <h2 class="noti_title">소설 정보 수정</h2>
+        </div>
+        <div class="novel_write">
+            <form id="updateSerialNovel" name="updateSerialNovel" method="POST" action="/Serial/NovelUpdatePro" enctype="multipart/form-data">
+                <input type="hidden" name="Novelid" asp-for="Novelid" value="@ViewBag.Novel.Novelid" />
+                <input type="hidden" name="searchPage" asp-for="searchPage" value="@ViewBag.pageNum" />
+                <input type="hidden" name="searchOrder" asp-for="searchOrder" value="@ViewBag.order" />
+                <ul class="novel_write_table">
+                    <li class="novel_write_item">
+                        <input type="text" class="novel_input" placeholder="제목" name="Noveltitle" id="Noveltitle" asp-for="Noveltitle" maxlength="1000" value="@ViewBag.Novel.Noveltitle" />
+                    </li>
+                    <li class="novel_write_item">
+                        <input type="text" class="novel_input" placeholder="작가명" name="Writer" id="Writer" asp-for="Writer" maxlength="20" value="@ViewBag.Novel.Writer" />
+                    </li>
+                    <li class="novel_write_item">
+                        <span class="novel_sub_title">장르</span>
+                        <span class="novel_sub_genre">
+                            <select class="novel_select form-select" name="Genre" id="Genre" asp-for="Genre">
+                                <option value="">장르선택</option>
+                                @foreach (var genre in ViewBag.GenreList)
+                                {
+                                    <option value="@genre.CODENO" @(ViewBag.Novel.Genre == @genre.CODENO ? "selected" : "")>@genre.CODENAME</option>
+                                }
+                            </select>
+                        </span>
+                        <span class="novel_sub_title">연재 주기</span>
+                        <table class="novel_day_slt" id="daySlt">
+                            <tbody>
+                                <tr>
+                                    <td class="@(ViewBag.Novel.Mon == "1" ? "on" : "off")">
+                                        <input type="checkbox" name="Mon" id="day1" asp-for="Mon" class="day_of_the_week" value="1" @(ViewBag.Novel.Mon == "1" ? "checked" : "")>
+                                        <label for="day1">월</label>
+                                    </td>
+                                    <td class="@(ViewBag.Novel.Tue == "1" ? "on" : "off")">
+                                        <input type="checkbox" name="Tue" id="day2" asp-for="Tue" class="day_of_the_week" value="1" @(ViewBag.Novel.Tue == "1" ? "checked" : "")>
+                                        <label for="day2">화</label>
+                                    </td>
+                                    <td class="@(ViewBag.Novel.Wed == "1" ? "on" : "off")">
+                                        <input type="checkbox" name="Wed" id="day3" asp-for="Wed" class="day_of_the_week" value="1" @(ViewBag.Novel.Wed == "1" ? "checked" : "")>
+                                        <label for="day3">수</label>
+                                    </td>
+                                    <td class="@(ViewBag.Novel.Thu == "1" ? "on" : "off")">
+                                        <input type="checkbox" name="Thu" id="day4" asp-for="Thu" class="day_of_the_week" value="1" @(ViewBag.Novel.Thu == "1" ? "checked" : "")>
+                                        <label for="day4">목</label>
+                                    </td>
+                                    <td class="@(ViewBag.Novel.Fri == "1" ? "on" : "off")">
+                                        <input type="checkbox" name="Fri" id="day5" asp-for="Fri" class="day_of_the_week" value="1" @(ViewBag.Novel.Fri == "1" ? "checked" : "")>
+                                        <label for="day5">금</label>
+                                    </td>
+                                    <td class="@(ViewBag.Novel.Sat == "1" ? "on" : "off")">
+                                        <input type="checkbox" name="Sat" id="day6" asp-for="Sat" class="day_of_the_week" value="1" @(ViewBag.Novel.Sat == "1" ? "checked" : "")>
+                                        <label for="day6">토</label>
+                                    </td>
+                                    <td class="@(ViewBag.Novel.Sun == "1" ? "on" : "off")">
+                                        <input type="checkbox" name="Sun" id="day7" asp-for="Sun" class="day_of_the_week" value="1" @(ViewBag.Novel.Sun == "1" ? "checked" : "")>
+                                        <label for="day7">일</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                    <li class="novel_write_item novel_li_thumbnail">
+                        <span class="novel_sub_title">썸네일</span>
+                        <span class="novel_sub_thumbnail">
+                            <input type="file" class="novel_input form-control" name="ThumbnailFile" id="ThumbnailFile" asp-for="ThumbnailFile" accept=".jpg" />
+                            <input type="hidden" name="Thumnail" id="Thumnail" value="@ViewBag.Novel.Thumnail" />
+                        </span>
+                        <div id="thumbnailPreview">
+                            <img src="data:image/webp;base64, @ViewBag.Novel.ThumbnailBase64" />
+                        </div>
+                    </li>
+                    <li class="novel_write_item" id="novelInfoArea">
+                        <textarea placeholder="작품 소개" class="novel_txtarea" id="Novelinfo" name="Novelinfo" asp-for="Novelinfo">@ViewBag.Novel.Novelinfo</textarea>
+                    </li>
+                    <li class="novel_write_item">
+                        <a class="novel_delete" id="novelDelete">작품 삭제하기</a>&nbsp;&nbsp;
+                        <a class="novel_delete" id="novelEnd">작품 완결</a>
+                    </li>
+                    <li class="notice-button-group">
+                        <button type="button" class="btn btn-outline-primary" id="btnSave">저장</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnCancel">취소</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        var checkUnload = true;
+
+        $(function () {
+            if ("@userinfo[3]" != "1") {
+                checkUnload = false;
+                location.href = "/Serial/Day";
+            }
+        });
+
+        $(window).on("beforeunload", function () {
+            if (checkUnload) return '페이지를 벗어나시겠습니까?';
+        });
+
+        $("#daySlt td input[type='checkbox']").change(function () {
+            var check = $(this);
+
+            if (check.is(":checked")) {
+                $(this).closest("td").attr('class', 'on');
+            } else {
+                $(this).closest("td").attr('class', 'off');
+            }
+        });
+
+        $('#novelInfoArea').each(function () {
+            var update = function () {
+                var input = $("#Novelinfo");
+                var before = 500;
+                var now = 500 - input.val().length;
+
+                if (now < 0) {
+                    var str = input.val();
+                    $("#Novelinfo").focus();
+
+                    var inputVal = str.substr(0, 500);
+                    alert('작품 소개는 500자까지 입력 가능합니다.');
+
+                    now = 0;
+
+                    input.val(inputVal);
+                }
+            };
+
+            $('#Novelinfo').bind('input keyup paste', function () {
+                setTimeout(update, 0);
+            });
+
+            update();
+        });
+
+        $("#ThumbnailFile").change(function () {
+            $("#thumbnailPreview").empty();
+            if ($("#ThumbnailFile").val() != "") {
+                var ext = $('#ThumbnailFile').val().split('.').pop().toLowerCase();
+                if (ext != "jpg") {
+                    alert("jpg 파일을 업로드 해주세요.");
+                } else {
+                    var file = this.files[0];
+
+                    var image = new Image();
+                    var ImageTempUrl = window.URL.createObjectURL(file);
+
+                    image.src = ImageTempUrl;
+
+                    $("#thumbnailPreview").append(image);
+                }
+            } else {
+                var image = new Image();
+
+                image.src = "data:image/webp;base64, @ViewBag.Novel.ThumbnailBase64";
+
+                $("#thumbnailPreview").append(image);
+            }
+        });
+
+        $("#btnCancel").click(function () {
+            checkUnload = false;
+            var url = "/Serial/NovelInfo?";
+
+            if ("@ViewBag.novelid" != "1") {
+                url += "&novelid=@ViewBag.novelid";
+            }
+            if ("@ViewBag.pageNum" != "") {
+                url += "&pageNum=@ViewBag.pageNum";
+            }
+            if ("@ViewBag.order" != "") {
+                url += "&order=@ViewBag.order";
+            }
+
+            location.href = url;
+        });
+
+        $("#btnSave").click(function () {
+            if ($("#Noveltitle").val() == "") {
+                alert("제목을 입력해주세요.");
+                $("#Noveltitle").focus();
+                return;
+            }
+            if ($("#Writer").val() == "") {
+                alert("작가를 입력해주세요.");
+                $("#Writer").focus();
+                return;
+            }
+
+            if ($("#Genre").val() == "") {
+                alert("장르를 선택해주세요.");
+                $("#Genre").focus();
+                return;
+            }
+
+            var daily = 0;
+            if ($("#day1").is(":checked")) {
+                daily++;
+            }
+            if ($("#day2").is(":checked")) {
+                daily++;
+            }
+            if ($("#day3").is(":checked")) {
+                daily++;
+            }
+            if ($("#day4").is(":checked")) {
+                daily++;
+            }
+            if ($("#day5").is(":checked")) {
+                daily++;
+            }
+            if ($("#day6").is(":checked")) {
+                daily++;
+            }
+            if ($("#day7").is(":checked")) {
+                daily++;
+            }
+
+            if (daily == 0) {
+                alert("연재주기를 선택해주세요.");
+                $("#Mon").focus();
+                return;
+            }
+
+            if ($("#Novelinfo").val() == "") {
+                alert("작품 소개를 입력해주세요.");
+                $("#Novelinfo").focus();
+                return;
+            }
+
+            if ("@userinfo[3]" == "1") {
+                checkUnload = false;
+                $("#updateSerialNovel").submit();
+            }
+        });
+
+        $("#novelDelete").click(function () {
+            checkUnload = false;
+            if (confirm("정말 삭제하시겠습니까?")) {
+                location.href = "/Serial/NovelDelete?novelid=@ViewBag.Novel.Novelid";
+            }
+        });
+
+        $("#novelEnd").click(function () {
+            checkUnload = false;
+            if (confirm("소설을 완결처리 하시겠습니까?")) {
+                location.href = "/Serial/NovelEnd?novelid=@ViewBag.Novel.Novelid&pageNum=@ViewBag.pageNum&order=@ViewBag.order";
+            }
+        });
+    </script>
+}

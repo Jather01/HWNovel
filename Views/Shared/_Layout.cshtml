@@ -26,11 +26,11 @@
                         </div>
                     </div>
                 </form>
+                <form id="goLogInAndOut" name="goLogInAndOut" method="POST" action="/User/LoginForm">
+                    <input type="hidden" id="PreUrl" name="PreUrl" asp-for="PreUrl" value="" />
+                </form>
                 @if (ViewBag.userinfo == null)
                 {
-                    <form id="goLogin" name="goLogin" method="POST" action="/User/LoginForm">
-                        <input type="hidden" id="PreUrl" name="PreUrl" asp-for="PreUrl" value="" />
-                    </form>
                     <button type="button" class="btn btn-outline-dark" id="btnLogin">로그인</button>
                 }
                 else
@@ -40,9 +40,6 @@
                             <font style="font-weight:bold">@ViewBag.userinfo[2]</font><font>님 환영합니다.</font>
                         </span>
                     </div>
-                    <form id="goLogout" name="goLogout" method="POST" action="/User/Logout">
-                        <input type="hidden" id="PreUrl" name="PreUrl" value="" />
-                    </form>
                     <button type="button" class="btn btn-outline-dark" id="btnLogout">로그아웃</button>
                 }
             </div>
@@ -81,7 +78,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    <script>
+<script>
         $(function () {
                 var menu1 = window.location.pathname.split('/')[1];
                 var html = "";
@@ -90,62 +87,74 @@
                 if (menu1 == "Home") {
                     $(".m1").addClass("on");
                 } else if (menu1 == "Serial") {
-                    $(".m2").addClass("on sub");
+                    $(".m2").addClass("on");
 
-                    html += "<ul class='snb'>"
-                    html += "    <li class='" + (pageName == "Day" ? "on" : "") + "'><a href='/Serial/Day' class='sub_link'><span class='sub_txt'>요일별</span></a></li>";
-                    html += "    <li class='" + (pageName == "New" ? "on" : "") + "'><a href='/Serial/New' class='sub_link'><span class='sub_txt'>이 달의 신작</span></a></li>";
-                    html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Serial/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
-                    html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Serial/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
-                    html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Serial/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
-                    html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Serial/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
-                    html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Serial/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
-                    html += "    <li class='" + (pageName == "Fin" ? "on" : "") + "'><a href='/Serial/Fin' class='sub_link'><span class='sub_txt'>완결</span></a></li>";
-                    if (@userPowerLayout == 1) {
-                        html += "    <li class='" + (pageName == "NovelManage" ? "on" : "") + "'><a href='/Serial/NovelManage' class='sub_link'><span class='sub_txt'>신작 소설 관리</span></a></li>";
-                    }
-
-                            html += "</ul>";
-
-                    $(".m2").append(html);
-                        } else if (menu1 == "Challenge") {
-                    $(".m3").addClass("on sub");
+                    if (pageName != "none") {
+                        $(".m2").addClass("sub");
 
                         html += "<ul class='snb'>"
-                    html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Challenge/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
-                    html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Challenge/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
-                    html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Challenge/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
-                    html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Challenge/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
-                    html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Challenge/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
-                    html += "</ul>";
+                        html += "    <li class='" + (pageName == "Day" ? "on" : "") + "'><a href='/Serial/Day' class='sub_link'><span class='sub_txt'>요일별</span></a></li>";
+                        html += "    <li class='" + (pageName == "New" ? "on" : "") + "'><a href='/Serial/New' class='sub_link'><span class='sub_txt'>이 달의 신작</span></a></li>";
+                        html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Serial/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
+                        html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Serial/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
+                        html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Serial/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
+                        html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Serial/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
+                        html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Serial/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
+                        html += "    <li class='" + (pageName == "Fin" ? "on" : "") + "'><a href='/Serial/Fin' class='sub_link'><span class='sub_txt'>완결</span></a></li>";
+                        if (@userPowerLayout == 1) {
+                            html += "    <li class='" + (pageName == "NovelManage" ? "on" : "") + "'><a href='/Serial/NovelManage' class='sub_link'><span class='sub_txt'>신작 소설 관리</span></a></li>";
+                        }
+                        html += "</ul>";
 
-                    $(".m3").append(html);
-                    } else if (menu1 == "Mypage") {
-                    $(".m4").addClass("on sub");
+                        $(".m2").append(html);
+                    }
+                } else if (menu1 == "Challenge") {
+                    $(".m3").addClass("on");
 
-                    html += "<ul class='snb'>"
-                    html += "    <li class='" + (pageName == "Rec" ? "on" : "") + "'><a href='/Mypage/Rec' class='sub_link'><span class='sub_txt'>최근 본 작품</span></a></li>";
-                    html += "    <li class='" + (pageName == "Wis" ? "on" : "") + "'><a href='/Mypage/Wis' class='sub_link'><span class='sub_txt'>관심작품</span></a></li>";
-                    html += "    <li class='" + (pageName == "Cha" ? "on" : "") + "'><a href='/Mypage/Cha' class='sub_link'><span class='sub_txt'>도전 웹소설</span></a></li>";
-                    html += "    <li class='" + (pageName == "Min" ? "on" : "") + "'><a href='/Mypage/Min' class='sub_link'><span class='sub_txt'>내 정보</span></a></li>";
-                    html += "</ul>";
+                    if (pageName != "none") {
+                        $(".m3").addClass("sub");
 
-                    $(".m4").append(html);
+                        html += "<ul class='snb'>"
+                        html += "    <li class='" + (pageName == "Rom" ? "on" : "") + "'><a href='/Challenge/Gen?genre=1' class='sub_link'><span class='sub_txt'>로맨스</span></a></li>";
+                        html += "    <li class='" + (pageName == "Rof" ? "on" : "") + "'><a href='/Challenge/Gen?genre=2' class='sub_link'><span class='sub_txt'>로판</span></a></li>";
+                        html += "    <li class='" + (pageName == "Fan" ? "on" : "") + "'><a href='/Challenge/Gen?genre=3' class='sub_link'><span class='sub_txt'>판타지</span></a></li>";
+                        html += "    <li class='" + (pageName == "Hro" ? "on" : "") + "'><a href='/Challenge/Gen?genre=4' class='sub_link'><span class='sub_txt'>무협</span></a></li>";
+                        html += "    <li class='" + (pageName == "Mys" ? "on" : "") + "'><a href='/Challenge/Gen?genre=5' class='sub_link'><span class='sub_txt'>미스터리</span></a></li>";
+                        html += "</ul>";
+
+                        $(".m3").append(html);
+                    }
+                } else if (menu1 == "Mypage") {
+                    $(".m4").addClass("on");
+
+                    if (pageName != "none") {
+                        $(".m4").addClass("sub");
+                        html += "<ul class='snb'>"
+                        html += "    <li class='" + (pageName == "Rec" ? "on" : "") + "'><a href='/Mypage/Rec' class='sub_link'><span class='sub_txt'>최근 본 작품</span></a></li>";
+                        html += "    <li class='" + (pageName == "Wis" ? "on" : "") + "'><a href='/Mypage/Wis' class='sub_link'><span class='sub_txt'>관심작품</span></a></li>";
+                        html += "    <li class='" + (pageName == "Cha" ? "on" : "") + "'><a href='/Mypage/Cha' class='sub_link'><span class='sub_txt'>도전 웹소설</span></a></li>";
+                        html += "    <li class='" + (pageName == "Min" ? "on" : "") + "'><a href='/Mypage/Min' class='sub_link'><span class='sub_txt'>내 정보</span></a></li>";
+                        html += "</ul>";
+
+                        $(".m4").append(html);
+                    }
                 }
         });
 
         $("#btnLogin").click(function () {
             var url = window.location.pathname + window.location.search;
             $("#PreUrl").val(url);
-            $("#goLogin").submit();
+            $("#goLogInAndOut").attr("action", "/User/LoginForm");
+            $("#goLogInAndOut").submit();
         });
 
         $("#btnLogout").click(function () {
             var url = window.location.pathname + window.location.search;
             $("#PreUrl").val(url);
-            $("#goLogout").submit();
+            $("#goLogInAndOut").attr("action", "/User/Logout");
+            $("#goLogInAndOut").submit();
         });
-    </script>
+</script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
