@@ -22,13 +22,16 @@ namespace HWNovel.ViewModels
         public string Sat { get; set; }
         public string Sun { get; set; }
 
-        public string Volumeno { get; set; }
+        public decimal Volumeno { get; set; }
         public string Volumtitle { get; set; }
         public string Noveltext { get; set; }
         public string Writercomment { get; set; }
         public decimal Viewcnt { get; set; }
         public string Opendt { get; set; }
         public DateTime Insertdt { get; set; }
+
+        public int Commentcnt { get; set; }
+        public decimal StarPointAvg { get; set; }
 
         public HttpPostedFileBase ThumbnailFile { get; set; }
         public string ThumbnailBase64 { get; set; }

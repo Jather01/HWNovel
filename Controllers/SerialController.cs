@@ -363,6 +363,7 @@ namespace HWNovel.Controllers
                 HWN03 hwn03 = new HWN03();
                 Novel n = new Novel();
                 List<HWN031> nList = new List<HWN031>();
+                List<Novel> novleList = new List<Novel>();
                 List<HWN011> favorits = new List<HWN011>();
                 int favorit = 0;
 
@@ -406,17 +407,52 @@ namespace HWNovel.Controllers
                         nList = db.HWN031.Where(x => x.NOVELID.Equals(novelId) && x.OPENDT.CompareTo(nowdate) > 0).ToList();
                     }
 
+                    var n032List = db.HWN032.Where(x => x.NOVELID.Equals(novelId))
+                                            .GroupBy(x => new { x.NOVELID, x.VOLUMENO })
+                                            .Select(x => new {
+                                                NOVELID = x.Key.NOVELID,
+                                                VOLUMENO = x.Key.VOLUMENO,
+                                                COMMENTCNT = x.Count()
+                                            })
+                                            .ToList();
+
+                    var n033List = db.HWN033.Where(x => x.NOVELID.Equals(novelId))
+                                            .GroupBy(x => new { x.NOVELID, x.VOLUMENO })
+                                            .Select(x => new {
+                                                NOVELID = x.Key.NOVELID,
+                                                VOLUMENO = x.Key.VOLUMENO,
+                                                STARPOINTAVG = x.Average(a => a.STARPOINT)
+                                            })
+                                            .ToList();
+
+                    novleList = (from a in nList
+                                 from b in n032List
+                                 from c in n033List
+                                 where (a.NOVELID == b.NOVELID)
+                                    && (a.NOVELID == c.NOVELID)
+                                    && (a.VOLUMENO == b.VOLUMENO)
+                                    && (a.VOLUMENO == c.VOLUMENO)
+                                 select new Novel
+                                 {
+                                     Novelid = a.NOVELID,
+                                     Volumeno = a.VOLUMENO,
+                                     Volumtitle = a.VOLUMTITLE,
+                                     Opendt = a.OPENDT,
+                                     Commentcnt = b.COMMENTCNT,
+                                     StarPointAvg = Math.Round(c.STARPOINTAVG, 2)
+                                 }).ToList();
+
                     favorits = db.HWN011.Where(x => x.NOVELID.Equals(novelId)).ToList();
                     favorit = favorits.Count;
                 }
 
                 if (order.Equals("update"))
                 {
-                    nList = nList.OrderByDescending(x => x.VOLUMENO).ToList();
+                    novleList = novleList.OrderByDescending(x => x.Volumeno).ToList();
                 }
                 else if (order.Equals("oldest"))
                 {
-                    nList = nList.OrderBy(x => x.VOLUMENO).ToList();
+                    novleList = novleList.OrderBy(x => x.Volumeno).ToList();
                 }
 
                 string imgPath = n.Thumnail;
@@ -430,9 +466,9 @@ namespace HWNovel.Controllers
 
                 n.ThumbnailBase64 = imgBase24;
 
-                totalCount = nList.Count;
+                totalCount = novleList.Count;
 
-                nList = nList.Skip((pageNum - 1) * listCount)
+                novleList = novleList.Skip((pageNum - 1) * listCount)
                      .Take(listCount)
                      .ToList();
 
@@ -462,7 +498,7 @@ namespace HWNovel.Controllers
 
                 ViewBag.Novel = n;
                 ViewBag.UserFavorite = u;
-                ViewBag.NList = nList;
+                ViewBag.NList = novleList;
                 ViewBag.NCount = totalCount;
                 ViewBag.FavoritCnt = favorit;
 
