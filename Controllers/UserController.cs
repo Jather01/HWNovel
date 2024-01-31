@@ -65,7 +65,7 @@ namespace HWNovel.Controllers
                 });
 
                 Session["userinfo"] = userinfo;
-                if(model.CookyId == "true")
+                if (model.CookyId == "true")
                 {
                     HttpCookie cookie = new HttpCookie("HWNovel")
                     {

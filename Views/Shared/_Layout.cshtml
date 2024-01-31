@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HW Novel</title>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -78,7 +79,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-<script>
+    <script>
         $(function () {
                 var menu1 = window.location.pathname.split('/')[1];
                 var html = "";
@@ -154,7 +155,8 @@
             $("#goLogInAndOut").attr("action", "/User/Logout");
             $("#goLogInAndOut").submit();
         });
-</script>
+    </script>
+    @RenderSection("include", required: false)
     @RenderSection("scripts", required: false)
 </body>
 </html>

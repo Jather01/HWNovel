@@ -210,5 +210,30 @@ namespace HWNovel
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_NOVEL_UPDATE", nOVELIDParameter, nOVELTITLEParameter, nOVELINFOParameter, wRITERParameter, gENREParameter, tHUMNAILParameter, mONParameter, tUEParameter, wEDParameter, tHUParameter, fRIParameter, sATParameter, sUNParameter);
         }
+    
+        public virtual int PRO_VOLUME_WRITE(string nOVELID, string vOLUMTITLE, string nOVELTEXT, string wRITERCOMMENT, string oPENDT)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var vOLUMTITLEParameter = vOLUMTITLE != null ?
+                new ObjectParameter("VOLUMTITLE", vOLUMTITLE) :
+                new ObjectParameter("VOLUMTITLE", typeof(string));
+    
+            var nOVELTEXTParameter = nOVELTEXT != null ?
+                new ObjectParameter("NOVELTEXT", nOVELTEXT) :
+                new ObjectParameter("NOVELTEXT", typeof(string));
+    
+            var wRITERCOMMENTParameter = wRITERCOMMENT != null ?
+                new ObjectParameter("WRITERCOMMENT", wRITERCOMMENT) :
+                new ObjectParameter("WRITERCOMMENT", typeof(string));
+    
+            var oPENDTParameter = oPENDT != null ?
+                new ObjectParameter("OPENDT", oPENDT) :
+                new ObjectParameter("OPENDT", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_VOLUME_WRITE", nOVELIDParameter, vOLUMTITLEParameter, nOVELTEXTParameter, wRITERCOMMENTParameter, oPENDTParameter);
+        }
     }
 }

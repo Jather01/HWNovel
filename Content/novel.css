@@ -960,6 +960,34 @@ button, input, select, textarea {
     resize: none;
 }
 
+.volume_txtarea {
+    height: 612px;
+    line-height: 26px;
+    width: 100%;
+    padding: 19px 0;
+    font-size: 15px;
+    resize: none;
+}
+
+.volume_text_length_check {
+    color: #666;
+    text-align: right;
+}
+
+.comment_txtarea {
+    height: 153px;
+    line-height: 26px;
+    width: 100%;
+    padding: 19px 0;
+    font-size: 15px;
+    resize: none;
+}
+
+.input_date {
+    font-size: 15px;
+    vertical-align: middle;
+}
+
 .novel_sub_title {
     font-size: 18px;
     font-weight: bold;

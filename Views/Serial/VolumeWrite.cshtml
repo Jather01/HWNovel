@@ -1,0 +1,179 @@
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+<main>
+    <div class="component_section">
+        <div>
+            <h2 class="noti_title">회차 쓰기</h2>
+        </div>
+        <div class="novel_write">
+            <form id="writeVolume" name="writeVolume" method="POST" action="/Serial/VolumeWritePro">
+                <input type="hidden" name="searchPage" asp-for="searchPage" value="@ViewBag.pageNum" />
+                <input type="hidden" name="searchOrder" asp-for="searchOrder" value="@ViewBag.order" />
+                <input type="hidden" name="Novelid" asp-for="Novelid" value="@ViewBag.novelid" />
+                <ul class="novel_write_table">
+                    <li class="novel_write_item">
+                        <input type="text" class="novel_input" placeholder="제목" name="Volumtitle" id="Volumtitle" asp-for="Volumtitle" maxlength="1000" />
+                    </li>
+                    <li class="novel_write_item" id="volumeInfoArea">
+                        <textarea placeholder="내용" class="volume_txtarea" id="Noveltext" name="Noveltext" asp-for="Noveltext"></textarea>
+                        <div class="volume_text_length_check">
+                            <span><span id="textLengthCheck">0</span>/20,000자</span>
+                        </div>
+                    </li>
+                    <li class="novel_write_item" id="writerInfoArea">
+                        <textarea placeholder="작가의 말" class="comment_txtarea" id="Writercomment" name="Writercomment" asp-for="Writercomment"></textarea>
+                    </li>
+                    <li class="novel_write_item">
+                        <span class="novel_sub_title">공개일</span>
+                        <input type="text" class="input_date" id="Opendt" name="Opendt" asp-for="Opendt" maxlength="10" placeholder="YYYY.MM.DD" size="12" readonly />
+                    </li>
+                    <li class="notice-button-group">
+                        <button type="button" class="btn btn-outline-primary" id="btnSave">저장</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnCancel">취소</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</main>
+@section include{
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+}
+@section scripts{
+    <script type="text/JavaScript">
+        var checkUnload = true;
+
+        $.datepicker.setDefaults({
+            dateFormat: 'yy.mm.dd',
+            prevText: '이전 달',
+            nextText: '다음 달',
+            monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+            dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+            dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+            showMonthAfterYear: true,
+            yearSuffix: '년',
+            minDate: 0
+        });
+
+        $(function () {
+            if ("@userinfo[3]" != "1") {
+                checkUnload = false;
+                location.href = "/Serial/Day";
+            }
+
+            $("#Opendt").datepicker();
+        });
+
+        $(window).on("beforeunload", function () {
+            if (checkUnload) return '페이지를 벗어나시겠습니까?';
+        });
+
+        $("#daySlt td input[type='checkbox']").change(function () {
+            var check = $(this);
+
+            if (check.is(":checked")) {
+                $(this).closest("td").attr('class', 'on');
+            } else {
+                $(this).closest("td").attr('class', 'off');
+            }
+        });
+
+        $('#volumeInfoArea').each(function () {
+            var update = function () {
+                var input = $("#Noveltext");
+                var before = 20000;
+                var now = 20000 - input.val().length;
+
+                if (now < 0) {
+                    var str = input.val();
+                    $("#Noveltext").focus();
+
+                    var inputVal = str.substr(0, 20000);
+                    alert('내용은 20,000자까지 입력 가능합니다.');
+                    now = 0;
+
+                    input.val(inputVal);
+                }
+                $("#textLengthCheck").text(input.val().length);
+            };
+
+            $('#Noveltext').bind('input keyup paste', function () {
+                setTimeout(update, 0);
+            });
+
+            update();
+        });
+
+        $('#writerInfoArea').each(function () {
+            var update = function () {
+                var input = $("#Writercomment");
+                var before = 500;
+                var now = 500 - input.val().length;
+
+                if (now < 0) {
+                    var str = input.val();
+                    $("#Writercomment").focus();
+
+                    var inputVal = str.substr(0, 500);
+                    alert('작가의 말은 500자까지 입력 가능합니다.');
+
+                    now = 0;
+
+                    input.val(inputVal);
+                }
+            };
+
+            $('#Writercomment').bind('input keyup paste', function () {
+                setTimeout(update, 0);
+            });
+
+            update();
+        });
+
+        $("#btnCancel").click(function () {
+            checkUnload = false;
+            var url = "/Serial/NovelInfo?";
+
+            if ("@ViewBag.novelId" != "1") {
+                url += "&novelId=@ViewBag.novelId";
+            }
+            if ("@ViewBag.pageNum" != "") {
+                url += "&pageNum=@ViewBag.pageNum";
+            }
+            if ("@ViewBag.order" != "") {
+                url += "&order=@ViewBag.order";
+            }
+
+            location.href = url;
+        });
+
+        $("#btnSave").click(function () {
+            if ($("#Volumtitle").val() == "") {
+                alert("제목을 입력해주세요.");
+                $("#Volumtitle").focus();
+                return;
+            }
+            if ($("#Noveltext").val() == "") {
+                alert("내용을 입력해주세요.");
+                $("#Noveltext").focus();
+                return;
+            }
+
+            if ($("#Opendt").val() == "") {
+                alert("공개일을 입력해주세요.");
+                $("#Opendt").focus();
+                return;
+            }
+
+            if ("@userinfo[3]" == "1") {
+                checkUnload = false;
+                $("#writeVolume").submit();
+            }
+        });
+    </script>
+}

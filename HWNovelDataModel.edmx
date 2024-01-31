@@ -219,6 +219,13 @@
           <Parameter Name="BIRTHDAY" Type="varchar" Mode="In" />
           <Parameter Name="NICKNAME" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PRO_VOLUME_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTEXT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="WRITERCOMMENT" Type="text" Mode="In" />
+          <Parameter Name="OPENDT" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="HWNovelModelStoreContainer">
           <EntitySet Name="HWN01" EntityType="Self.HWN01" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HWN011" EntityType="Self.HWN011" Schema="dbo" store:Type="Tables" />
@@ -468,6 +475,13 @@
             <Parameter Name="SAT" Mode="In" Type="String" />
             <Parameter Name="SUN" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PRO_VOLUME_WRITE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELTEXT" Mode="In" Type="String" />
+            <Parameter Name="WRITERCOMMENT" Mode="In" Type="String" />
+            <Parameter Name="OPENDT" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -649,6 +663,7 @@
           <FunctionImportMapping FunctionImportName="PRO_USER_INFOUPDATE" FunctionName="HWNovelModel.Store.PRO_USER_INFOUPDATE" />
           <FunctionImportMapping FunctionImportName="PRO_NOVEL_WRITE" FunctionName="HWNovelModel.Store.PRO_NOVEL_WRITE" />
           <FunctionImportMapping FunctionImportName="PRO_NOVEL_UPDATE" FunctionName="HWNovelModel.Store.PRO_NOVEL_UPDATE" />
+          <FunctionImportMapping FunctionImportName="PRO_VOLUME_WRITE" FunctionName="HWNovelModel.Store.PRO_VOLUME_WRITE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
