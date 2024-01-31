@@ -25,6 +25,7 @@
           </Key>
           <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="NOVELKIND" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="DATE" Type="smalldatetime" Nullable="false" />
         </EntityType>
         <EntityType Name="HWN012">
@@ -35,6 +36,7 @@
           <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="VOLUMENO" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="NOVELKIND" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="DATE" Type="smalldatetime" Nullable="false" />
         </EntityType>
         <EntityType Name="HWN02">
@@ -219,6 +221,12 @@
           <Parameter Name="BIRTHDAY" Type="varchar" Mode="In" />
           <Parameter Name="NICKNAME" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PRO_USER_RECENT_NOVEL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="USERID" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
+          <Parameter Name="NOVELKIND" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="PRO_VOLUME_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOVELID" Type="varchar" Mode="In" />
           <Parameter Name="VOLUMTITLE" Type="varchar" Mode="In" />
@@ -266,6 +274,7 @@
           </Key>
           <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOVELKIND" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="DATE" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityType Name="HWN012">
@@ -276,6 +285,7 @@
           <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="VOLUMENO" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="NOVELKIND" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="DATE" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityType Name="HWN02">
@@ -482,6 +492,12 @@
             <Parameter Name="WRITERCOMMENT" Mode="In" Type="String" />
             <Parameter Name="OPENDT" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PRO_USER_RECENT_NOVEL">
+            <Parameter Name="USERID" Mode="In" Type="String" />
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
+            <Parameter Name="NOVELKIND" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -506,6 +522,7 @@
           <EntitySetMapping Name="HWN011">
             <EntityTypeMapping TypeName="HWNovelModel.HWN011">
               <MappingFragment StoreEntitySet="HWN011">
+                <ScalarProperty Name="NOVELKIND" ColumnName="NOVELKIND" />
                 <ScalarProperty Name="USERID" ColumnName="USERID" />
                 <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
                 <ScalarProperty Name="DATE" ColumnName="DATE" />
@@ -515,6 +532,7 @@
           <EntitySetMapping Name="HWN012">
             <EntityTypeMapping TypeName="HWNovelModel.HWN012">
               <MappingFragment StoreEntitySet="HWN012">
+                <ScalarProperty Name="NOVELKIND" ColumnName="NOVELKIND" />
                 <ScalarProperty Name="USERID" ColumnName="USERID" />
                 <ScalarProperty Name="NOVELID" ColumnName="NOVELID" />
                 <ScalarProperty Name="VOLUMENO" ColumnName="VOLUMENO" />
@@ -664,6 +682,7 @@
           <FunctionImportMapping FunctionImportName="PRO_NOVEL_WRITE" FunctionName="HWNovelModel.Store.PRO_NOVEL_WRITE" />
           <FunctionImportMapping FunctionImportName="PRO_NOVEL_UPDATE" FunctionName="HWNovelModel.Store.PRO_NOVEL_UPDATE" />
           <FunctionImportMapping FunctionImportName="PRO_VOLUME_WRITE" FunctionName="HWNovelModel.Store.PRO_VOLUME_WRITE" />
+          <FunctionImportMapping FunctionImportName="PRO_USER_RECENT_NOVEL" FunctionName="HWNovelModel.Store.PRO_USER_RECENT_NOVEL" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

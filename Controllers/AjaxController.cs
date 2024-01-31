@@ -184,7 +184,7 @@ namespace HWNovel.Controllers
         }
 
         [HttpPost]
-        public JsonResult NovelFavorite(string novelid)
+        public JsonResult NovelFavorite(string novelid, string novelkind)
         {
             string result = ""; // on: 관심 등록, off: 관심 해제
 
@@ -204,6 +204,7 @@ namespace HWNovel.Controllers
                         HWN011 favoritNovel = new HWN011();
                         favoritNovel.USERID = userid;
                         favoritNovel.NOVELID = novelid;
+                        favoritNovel.NOVELKIND = novelkind;
                         favoritNovel.DATE = DateTime.Now;
 
                         db.HWN011.Add(favoritNovel);

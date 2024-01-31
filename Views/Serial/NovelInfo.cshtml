@@ -124,7 +124,10 @@
                         </span>
                     </p>
                     <div class="link_group">
-                        <a href="#" class="link type1"><strong>첫회보기</strong></a>
+                        @if (ViewBag.NList.Count > 0)
+                        {
+                            <a href="/Serial/NovelView?volumeno=1@(searchParams)" class="link type1"><strong>첫회보기</strong></a>
+                        }
                         @if (userinfo[3] == "1")
                         {
                             <a href="/Serial/NovelUpdate?@searchParams" class="link type1"><strong>소설정보수정</strong></a>
@@ -162,7 +165,7 @@
                         foreach (var item in ViewBag.NList)
                         {
                             <li class="volumeComment">
-                                <a href="#" class="list_item">
+                                <a href="/Serial/NovelView?volumeno=@(item.Volumeno)@(searchParams)" class="list_item">
                                     <div class="pic">
                                         <img src="data:image/webp;base64, @ViewBag.Novel.ThumbnailBase64" width="100%">
                                     </div>
@@ -278,7 +281,7 @@
                 $.ajax({
                     url: "/Ajax/NovelFavorite",
                     type: "POST",
-                    data: { novelid : "@ViewBag.novelid"},
+                    data: { novelid: "@ViewBag.novelid", novelkind: "1" },
                     success: function (r) {
                         var arr = r.split('/');
                         if (arr[0] == "on") {

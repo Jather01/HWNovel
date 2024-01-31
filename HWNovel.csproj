@@ -259,8 +259,12 @@
     <Content Include="Content\ChallengeThumbnail\508.jpg" />
     <Content Include="Content\ChallengeThumbnail\509.jpg" />
     <Content Include="Content\ChallengeThumbnail\510.jpg" />
+    <Content Include="Content\Icons\caret-up-square.svg" />
     <Content Include="Content\Icons\check-circle-fill.svg" />
     <Content Include="Content\Icons\check-circle.svg" />
+    <Content Include="Content\Icons\chevron-compact-down.svg" />
+    <Content Include="Content\Icons\novel-left.svg" />
+    <Content Include="Content\Icons\novel-right.svg" />
     <Content Include="Content\Icons\plus-circle-fill.svg" />
     <Content Include="Content\Icons\plus-circle.svg" />
     <Content Include="Content\Icons\star-fill.svg" />
@@ -284,6 +288,8 @@
     <Content Include="Content\Icons\paging-left.svg" />
     <Content Include="Content\Icons\paging-right.svg" />
     <Content Include="Content\Icons\search.svg" />
+    <Content Include="Content\Images\star_bg01.png" />
+    <Content Include="Content\Images\star_bg02.png" />
     <Content Include="Content\jquery-ui.datepicker.css" />
     <Content Include="Content\novel.css" />
     <Content Include="Content\user.css" />

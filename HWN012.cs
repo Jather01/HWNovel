@@ -17,6 +17,7 @@ namespace HWNovel
         public string USERID { get; set; }
         public string NOVELID { get; set; }
         public decimal VOLUMENO { get; set; }
+        public string NOVELKIND { get; set; }
         public System.DateTime DATE { get; set; }
     }
 }

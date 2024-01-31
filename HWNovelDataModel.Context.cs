@@ -235,5 +235,26 @@ namespace HWNovel
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_VOLUME_WRITE", nOVELIDParameter, vOLUMTITLEParameter, nOVELTEXTParameter, wRITERCOMMENTParameter, oPENDTParameter);
         }
+    
+        public virtual int PRO_USER_RECENT_NOVEL(string uSERID, string nOVELID, Nullable<decimal> vOLUMENO, string nOVELKIND)
+        {
+            var uSERIDParameter = uSERID != null ?
+                new ObjectParameter("USERID", uSERID) :
+                new ObjectParameter("USERID", typeof(string));
+    
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var vOLUMENOParameter = vOLUMENO.HasValue ?
+                new ObjectParameter("VOLUMENO", vOLUMENO) :
+                new ObjectParameter("VOLUMENO", typeof(decimal));
+    
+            var nOVELKINDParameter = nOVELKIND != null ?
+                new ObjectParameter("NOVELKIND", nOVELKIND) :
+                new ObjectParameter("NOVELKIND", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_USER_RECENT_NOVEL", uSERIDParameter, nOVELIDParameter, vOLUMENOParameter, nOVELKINDParameter);
+        }
     }
 }

@@ -390,7 +390,7 @@ namespace HWNovel.Controllers
                 {
                     List<HWN011> list = db.HWN011.ToList();
                     u = (from a in list
-                        where a.NOVELID.Equals(novelId) && a.USERID.Equals(userid)
+                        where a.NOVELID.Equals(novelId) && a.USERID.Equals(userid) && a.NOVELKIND.Equals("1")
                         select new HWN011 {
                             USERID = a.USERID,
                             NOVELID = a.NOVELID
@@ -453,8 +453,13 @@ namespace HWNovel.Controllers
                                 })
                                 .ToList();
 
-                favorits = db.HWN011.Where(x => x.NOVELID.Equals(novelId)).ToList();
+                favorits = db.HWN011.Where(x => x.NOVELID.Equals(novelId) && x.NOVELKIND.Equals("1")).ToList();
                 favorit = favorits.Count;
+            }
+
+            if(n == null)
+            {
+                return RedirectToAction("NovelInfo", "Serial", new { novelid = novelId, pageNum = searchPage, order = order });
             }
 
             if (order.Equals("update"))
@@ -860,20 +865,33 @@ namespace HWNovel.Controllers
                          Novelid = a.NOVELID,
                          Noveltitle = b.NOVELTITLE,
                          Volumtitle = a.VOLUMTITLE,
+                         Noveltext = a.NOVELTEXT,
                          Volumeno = a.VOLUMENO,
                          Writercomment = a.WRITERCOMMENT,
                          Writer = b.WRITER,
-                         Opendt = a.OPENDT
+                         Opendt = a.OPENDT,
+                         Thumnail = b.THUMNAIL
                      }).SingleOrDefault();
-            }
 
-            string nowdate = DateTime.Now.ToString("yyyyMMdd");
-
-            if (!userPower.Equals("1"))
-            {
-                if (n.Opendt.CompareTo(nowdate) > 0)
+                if (n == null)
                 {
                     return RedirectToAction("NovelInfo", "Serial", new { novelid = novelId, pageNum = searchPage, order = order });
+                }
+
+                string nowdate = DateTime.Now.ToString("yyyyMMdd");
+
+                if (!userPower.Equals("1"))
+                {
+                    if (n.Opendt.CompareTo(nowdate) > 0)
+                    {
+                        return RedirectToAction("NovelInfo", "Serial", new { novelid = novelId, pageNum = searchPage, order = order });
+                    }
+                }
+
+                if (userinfo != null)
+                {
+                    db.PRO_USER_RECENT_NOVEL(userid, n.Novelid, n.Volumeno, "1");
+                    db.SaveChanges();
                 }
             }
 
