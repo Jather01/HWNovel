@@ -288,6 +288,10 @@
     <Content Include="Content\Icons\paging-left.svg" />
     <Content Include="Content\Icons\paging-right.svg" />
     <Content Include="Content\Icons\search.svg" />
+    <Content Include="Content\Images\star2_bg01.png" />
+    <Content Include="Content\Images\star2_bg02.png" />
+    <Content Include="Content\Images\star2_left_half.png" />
+    <Content Include="Content\Images\star2_right_half.png" />
     <Content Include="Content\Images\star_bg01.png" />
     <Content Include="Content\Images\star_bg02.png" />
     <Content Include="Content\jquery-ui.datepicker.css" />

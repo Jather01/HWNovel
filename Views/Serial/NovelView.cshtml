@@ -41,16 +41,27 @@
                     <span class="stargrade"><span style="width:99.7%" id="currentStarScorePercent">별점</span></span>
                     <em id="currentStarScore">9.97</em>
                     <span class="num" id="currentStarScoreCount">349명</span>
-                    <button class="dropdown-toggle starpoint_dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="starpoint_dropdown" type="button" id="btnSPdown">
                         별점주기
                     </button>
-                    <ul class="dropdown-menu">
-                        <li>
-
-                        </li>
-                        <li><a class="dropdown-item" id="inertStarPoint">확인</a></li>
-                            
-                    </ul>
+                    <div class="rate_wrap" id="divRateWrap" style="display: none;">
+                        <div id="spText" class="spText_area">10</div>
+                        <span class="starpoint_bg">
+                            <span class="rate" style="width:100%" id="rate_starbgfull">
+                                <a name="starpointA" data-rate="1" id="starpointA1">1점</a>
+                                <a name="starpointA" data-rate="2" id="starpointA2" class="half mid">2점</a>
+                                <a name="starpointA" data-rate="3" id="starpointA3">3점</a>
+                                <a name="starpointA" data-rate="4" id="starpointA4" class="half mid">4점</a>
+                                <a name="starpointA" data-rate="5" id="starpointA5">5점</a>
+                                <a name="starpointA" data-rate="6" id="starpointA6" class="half mid">6점</a>
+                                <a name="starpointA" data-rate="7" id="starpointA7">7점</a>
+                                <a name="starpointA" data-rate="8" id="starpointA8" class="half mid">8점</a>
+                                <a name="starpointA" data-rate="9" id="starpointA9">9점</a>
+                                <a name="starpointA" data-rate="10" id="starpointA10" class="half">10점</a>
+                            </span>
+                        </span>
+                        <button type="button" id="btnSPsubmit" class="btn_area">확인</button>
+                    </div>
                 </div>
                 <dl class="editor">
                     <dt>작가의 말 </dt>
@@ -68,5 +79,35 @@
 @section scripts{
     <script type="text/JavaScript">
         $(function () { });
+
+
+        $("a[name=starpointA]").click(function () {
+            var rate = $(this).data("rate");
+            $("#spText").text(rate);
+            for (var i = 10; i >= 1; i--) {
+                var item = $("#starpointA" + i);
+                if (i > rate) item.addClass("bgnone");
+                else item.removeClass("bgnone");
+            }
+        });
+
+        $("#btnSPdown").click(function () {
+            var dis = $("#divRateWrap").css("display");
+            if (dis == "block") {
+                $("#divRateWrap").css("display", "none");
+            } else if (dis == "none") {
+                $("#divRateWrap").css("display", "block");
+            }
+        });
+
+        $("html").click(function (e) {
+            if ($(e.target).parents('.rate_wrap').length < 1 && !$(e.target).hasClass('rate_wrap') && !$(e.target).hasClass('starpoint_dropdown')) {
+                $("#divRateWrap").css("display", "none");
+            }
+        });
+
+        $("#btnSPsubmit").click(function () {
+
+        });
     </script>
 }

@@ -1682,7 +1682,6 @@ button, input, select, textarea {
     overflow: visible;
     width: 1320px;
     margin: 0 auto;
-    padding: 0 52px 1px;
     z-index: 30;
 }
 }
@@ -1710,6 +1709,7 @@ button, input, select, textarea {
     line-height: 65px;
     position: sticky;
     top: 0px;
+    z-index:100;
 }
 
     .viewer_header .tit_book {
@@ -2023,9 +2023,90 @@ button, input, select, textarea {
     height: 35px;
     font-size: 14px;
     text-align: center;
-    padding: 0 11px;
 }
 
 .starpoint_dropdown::after {
     border: none;
 }
+
+.rate_wrap {
+    position: absolute;
+    top: 38px;
+    right: 0;
+    border: 1px solid #8c8c8c;
+    background: #fff;
+    width: 220px;
+    height: 150px;
+    text-align: center;
+    padding-top: 10px;
+    z-index: 30;
+}
+
+    .rate_wrap .starpoint_bg {
+        background-image: url(/Content/Images/star2_bg02.png);
+        background-repeat: no-repeat;
+        width: 160px;
+        height: 26px;
+        display: inline-block;
+        vertical-align: top;
+        text-align: left;
+    }
+
+        .rate_wrap .starpoint_bg > span {
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            display: block;
+            height: 100%;
+        }
+
+    .rate_wrap .rate {
+        display: inline-block;
+        border: 0;
+    }
+
+        .rate_wrap .rate > a {
+            background-image: url(/Content/Images/star2_left_half.png);
+            background-repeat: no-repeat;
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: top;
+            float: left;
+            width: 14px;
+            height: 26px;
+            cursor: pointer;
+        }
+
+            .rate_wrap .rate > a.half {
+                background-image: url(/Content/Images/star2_right_half.png);
+                background-repeat: no-repeat;
+            }
+
+            .rate_wrap .rate > a.mid {
+                margin-right: 5px;
+            }
+
+            .rate_wrap .rate > a.bgnone {
+                background: none;
+            }
+
+    .rate_wrap .btn_area {
+        background-color: #7030A0;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        vertical-align: middle;
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .rate_wrap .spText_area {
+        height: 50px;
+        font-size: 30px;
+        color: #ff222e;
+    }
