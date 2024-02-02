@@ -1001,5 +1001,16 @@ namespace HWNovel.Controllers
 
             return View();
         }
+
+        public ActionResult CommentInclude(string novelId, string volumeNo)
+        {
+            ViewBag.novelid = novelId;
+            ViewBag.volumeNo = volumeNo;
+            ViewBag.userid = "qwer1234";
+            ViewBag.nickname = "nickname";
+
+
+            return View();
+        }
     }
 }

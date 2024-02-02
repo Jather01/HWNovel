@@ -380,6 +380,7 @@
     <Content Include="Views\Serial\NovelUpdate.cshtml" />
     <Content Include="Views\Serial\VolumeWrite.cshtml" />
     <Content Include="Views\Serial\NovelView.cshtml" />
+    <Content Include="Views\Serial\CommentInclude.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

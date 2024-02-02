@@ -541,12 +541,7 @@
         </div>
     </div>
     <div class="component_section">
-        <div class="comments_area">
-            <div class="cbox_head">
-                <h5 class="cbox_title">댓글</h5>
-                <span class="cbox_count">0</span>
-            </div>
-        </div>
+        @Html.Action("CommentInclude", "Serial", new { novelid = "소설 아이디", volumeNo = "회차 번호" })
     </div>
     <div class="component_section">
         <div class="component_head">
@@ -588,6 +583,5 @@
 </main>
 @section scripts{
     <script type="text/JavaScript">
-
     </script>
 }

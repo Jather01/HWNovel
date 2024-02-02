@@ -110,7 +110,7 @@ button, input, select, textarea {
             height: 18px;
         }
 
-.menu_area {
+.menarea {
     position: relative;
 }
 
@@ -2145,13 +2145,24 @@ span.but_label_next {
 
 .comments_area {
     border: 1px solid #dadbdc;
+    background-color: #fff;
     height: auto;
     margin-top: 42px;
+    font-size: 12px;
+    line-height: 1.7em;
+    padding: 0 30px;
+    padding-bottom: 30px;
+    font-family: '돋움', dotum, Helvetica, sans-serif;
 }
+
+    .comments_area strong {
+        font-weight: 400;
+    }
 
     .comments_area .cbox_head {
         padding: 0 0 2px;
         height: 38px;
+        margin-top: 20px;
     }
 
         .comments_area .cbox_head .cbox_title {
@@ -2170,3 +2181,201 @@ span.but_label_next {
             font-family: tahoma, helvetica, sans-serif;
             color: #000;
         }
+
+    .comments_area .cbox_write_box {
+        position: relative;
+    }
+
+        .comments_area .cbox_write_box .cbox_write_inner {
+            position: relative;
+            background-color: #fff;
+            border: 1px solid #b3b3b3;
+        }
+    .comments_area .cbox_profile_area {
+        overflow: hidden;
+        height: 30px;
+        padding: 11px 82px 0 14px;
+        background-color: #fff;
+    }
+
+        .comments_area .cbox_profile_area .cbox_box_name {
+            display: block;
+            overflow: hidden;
+            position: absolute;
+            top: 11px;
+            right: 82px;
+            bottom: 0;
+            left: 15px;
+            height: 23px;
+            font-size: 12px;
+            color: #000;
+            font-weight: 700;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+    .comments_area .cbox_profile .cbox_write_name {
+        font-weight: 700;
+    }
+
+    .comments_area .cbox_write_area {
+        max-width: 100%;
+        padding-bottom: 8px;
+    }
+
+        .comments_area .cbox_write_area .cbox_inbox {
+            position: relative;
+            padding: 0 15px;
+            background-color: #fff;
+        }
+
+            .comments_area .cbox_write_area .cbox_inbox .cbox_text {
+                display: block;
+                overflow-x: hidden;
+                overflow-y: auto;
+                position: relative;
+                z-index: 1;
+                float: left;
+                width: 100%;
+                height: 56px;
+                padding: 3px 16px 0 2px;
+                margin: 0;
+                border: none;
+                color: #333;
+                font-size: 12px;
+                -webkit-appearance: none;
+                vertical-align: top;
+                resize: none;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+            .comments_area .cbox_write_area .cbox_inbox .cbox_text:focus {
+                border: 2px solid #000;
+                border-radius: 5px;
+            }
+
+    .comments_area .cbox_write_count {
+        margin: -3px 16px 10px;
+        font-size: 13px;
+        font-family: tahoma, helvetica, sans-serif;
+        color: #999;
+        line-height: 22px;
+        text-align: right;
+    }
+
+    .comments_area .cbox_write_count {
+        margin: -3px 16px 10px;
+        font-size: 13px;
+        font-family: tahoma, helvetica, sans-serif;
+        color: #999;
+        line-height: 22px;
+        text-align: right;
+    }
+
+    .comments_area .cbox_upload {
+        height: 43px;
+        padding-right: 68px;
+        border-top: 1px solid #ededed;
+    }
+
+        .comments_area .cbox_upload .cbox_btn_upload {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            z-index: 10;
+            width: 68px;
+            height: 43px;
+            border: 1px solid #6b2e9a;
+            background: #7030A0;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+    .comments_area .cbox_content_wrap {
+        position: relative;
+    }
+
+        .comments_area .cbox_content_wrap .cbox_list {
+            padding:0;
+        }
+
+    .comments_area .cbox_comment_box {
+        position: relative;
+        border-bottom: 1px solid #e2e2e2;
+    }
+
+.comments_area .cbox_comment_box .cbox_area {
+    padding: 15px 0;
+}
+
+.comments_area .cbox_comment_box .cbox_info {
+    padding-bottom: 1px;
+}
+
+    .comments_area .cbox_comment_box .cbox_info:after {
+        display: block;
+        clear: both;
+        content: '';
+    }
+
+.comments_area .cbox_name_area {
+    font-size: 13px;
+    color: #2a2a2a;
+    line-height: 25px;
+    vertical-align: top;
+}
+
+.comments_area .cbox_name .cbox_nick_area {
+    display: inline-block;
+    overflow: hidden;
+    float: left;
+    max-width: 50%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.comments_area .cbox_name .cbox_id_area {
+    display: inline-block;
+    float: left;
+}
+
+.comments_area .cbox_info_base {
+    position: relative;
+    padding: 2px 0 0 0;
+}
+
+    .comments_area .cbox_info_base:after {
+        display: block;
+        clear: both;
+        content: '';
+    }
+
+.comments_area .cbox_date {
+    display: inline-block;
+    float: left;
+    font-size: 12px;
+    font-family: tahoma, helvetica, sans-serif;
+    color: #999;
+}
+
+.comments_area .cbox_comment .cbox_text_wrap {
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 18px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+    .comments_area .cbox_comment .cbox_text_wrap:after {
+        display: block;
+        clear: both;
+        content: '';
+    }
+
+.comments_area .cbox_info_base {
+    position: relative;
+    padding: 2px 0 0 0;
+}
+
