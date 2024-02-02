@@ -225,5 +225,53 @@ namespace HWNovel.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public JsonResult StarPointSubmit(string novelid, int volumeno, int starpoint)
+        {
+            string result = "0/0"; // 별점참여인원수/별점평균
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo != null && !string.IsNullOrEmpty(novelid))
+            {
+                string userid = userinfo[0];
+                HWN033 h033 = new HWN033();
+
+                using (var db = new HWNovelEntities())
+                {
+                    h033.USERID = userid;
+                    h033.NOVELID = novelid;
+                    h033.VOLUMENO = volumeno;
+                    h033.INSERTDT = DateTime.Now;
+                    h033.STARPOINT = starpoint;
+
+                    db.HWN033.Add(h033);
+                    db.SaveChanges();
+
+                    Novel spResult = db.HWN033.Where(x => x.NOVELID.Equals(novelid) && x.VOLUMENO == volumeno)
+                                        .GroupBy(x => new { x.NOVELID, x.VOLUMENO })
+                                        .Select(x => new Novel
+                                        {
+                                            Novelid = x.Key.NOVELID,
+                                            Volumeno = x.Key.VOLUMENO,
+                                            StarPointAvg = x.Average(a => a.STARPOINT),
+                                            Commentcnt = x.Count()
+                                        }).SingleOrDefault();
+
+                    result = spResult.Commentcnt.ToString() + "/";
+                    if (spResult.StarPointAvg == 10)
+                    {
+                        result += Math.Round(spResult.StarPointAvg, 1).ToString();
+                    }
+                    else
+                    {
+                        result += Math.Round(spResult.StarPointAvg, 2).ToString();
+                    }
+                }
+            }
+
+            return Json(result);
+        }
     }
 }

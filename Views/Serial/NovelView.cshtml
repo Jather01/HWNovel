@@ -1,5 +1,9 @@
 ﻿@{
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    decimal starText = ViewBag.SpText[0];
+    decimal starPointVal = ViewBag.SpText[1];
+    decimal starPointPer = ViewBag.SpText[1] * 10;
 }
 <main>
     <div id="content">
@@ -38,29 +42,38 @@
             </div>
             <div class="viewer_footer">
                 <div class="section_grade">
-                    <span class="stargrade"><span style="width:99.7%" id="currentStarScorePercent">별점</span></span>
-                    <em id="currentStarScore">9.97</em>
-                    <span class="num" id="currentStarScoreCount">349명</span>
-                    <button class="starpoint_dropdown" type="button" id="btnSPdown">
-                        별점주기
-                    </button>
-                    <div class="rate_wrap" id="divRateWrap" style="display: none;">
-                        <div id="spText" class="spText_area">10</div>
-                        <span class="starpoint_bg">
-                            <span class="rate" style="width:100%" id="rate_starbgfull">
-                                <a name="starpointA" data-rate="1" id="starpointA1">1점</a>
-                                <a name="starpointA" data-rate="2" id="starpointA2" class="half mid">2점</a>
-                                <a name="starpointA" data-rate="3" id="starpointA3">3점</a>
-                                <a name="starpointA" data-rate="4" id="starpointA4" class="half mid">4점</a>
-                                <a name="starpointA" data-rate="5" id="starpointA5">5점</a>
-                                <a name="starpointA" data-rate="6" id="starpointA6" class="half mid">6점</a>
-                                <a name="starpointA" data-rate="7" id="starpointA7">7점</a>
-                                <a name="starpointA" data-rate="8" id="starpointA8" class="half mid">8점</a>
-                                <a name="starpointA" data-rate="9" id="starpointA9">9점</a>
-                                <a name="starpointA" data-rate="10" id="starpointA10" class="half">10점</a>
-                            </span>
-                        </span>
-                        <button type="button" id="btnSPsubmit" class="btn_area">확인</button>
+                    <span class="stargrade"><span style="width:@(starPointPer)%" id="currentStarScorePercent">별점</span></span>
+                    <em id="currentStarScore">@starPointVal</em>
+                    <span class="num" id="currentStarScoreCount">@(starText)명</span>
+                    <div class="grade_insert" id="gradeInsert">
+                        @if (ViewBag.StarYn > 0)
+                        {
+                            <button class="starpoint_complete" type="button">참여완료</button>
+                        }
+                        else
+                        {
+                            <button class="starpoint_dropdown" type="button" id="btnSPdown">
+                                별점주기
+                            </button>
+                            <div class="rate_wrap" id="divRateWrap" style="display: none;">
+                                <div id="spText" class="spText_area">10</div>
+                                <span class="starpoint_bg">
+                                    <span class="rate" style="width:100%" id="rate_starbgfull">
+                                        <a name="starpointA" data-rate="1" id="starpointA1">1점</a>
+                                        <a name="starpointA" data-rate="2" id="starpointA2" class="half mid">2점</a>
+                                        <a name="starpointA" data-rate="3" id="starpointA3">3점</a>
+                                        <a name="starpointA" data-rate="4" id="starpointA4" class="half mid">4점</a>
+                                        <a name="starpointA" data-rate="5" id="starpointA5">5점</a>
+                                        <a name="starpointA" data-rate="6" id="starpointA6" class="half mid">6점</a>
+                                        <a name="starpointA" data-rate="7" id="starpointA7">7점</a>
+                                        <a name="starpointA" data-rate="8" id="starpointA8" class="half mid">8점</a>
+                                        <a name="starpointA" data-rate="9" id="starpointA9">9점</a>
+                                        <a name="starpointA" data-rate="10" id="starpointA10" class="half">10점</a>
+                                    </span>
+                                </span>
+                                <button type="button" id="btnSPsubmit" class="btn_area">확인</button>
+                            </div>
+                        }
                     </div>
                 </div>
                 <dl class="editor">
@@ -79,7 +92,6 @@
 @section scripts{
     <script type="text/JavaScript">
         $(function () { });
-
 
         $("a[name=starpointA]").click(function () {
             var rate = $(this).data("rate");
@@ -107,7 +119,42 @@
         });
 
         $("#btnSPsubmit").click(function () {
+            if (userinfo[0] == "0") {
+                if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
+                    var url = window.location.pathname + window.location.search;
+                    $("#PreUrl").val(url);
+                    $("#goLogInAndOut").attr("action", "/User/LoginForm");
+                    $("#goLogInAndOut").submit();
+                }
+            }
+            else
+            {
+                $("#divRateWrap").css("display", "none");
 
+                var starPoint = $("#spText").text()*1;
+                $.ajax({
+                    url: "/Ajax/StarPointSubmit",
+                    type: "POST",
+                    data: {
+                        novelid: "@ViewBag.novelid",
+                        volumeno: @ViewBag.Novel.Volumeno,
+                        starpoint: starPoint
+                    },
+                    success: function (r) {
+                        var html = "<button class='starpoint_complete' type='button'>참여완료</button>";
+                        $("#gradeInsert").html(html);
+
+                        var result = r.split("/");
+                        $("#currentStarScorePercent").css("width", (result[1] * 10) + "%");
+                        $("#currentStarScore").text(result[1]);
+                        $("#currentStarScoreCount").text(result[0] + "명");
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
         });
     </script>
 }

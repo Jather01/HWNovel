@@ -851,6 +851,8 @@ namespace HWNovel.Controllers
             ViewBag.userinfo = userinfo;
 
             Novel n = new Novel();
+            int starYn = 0;
+            decimal[] spText = { 0, 0 };
 
             using (var db = new HWNovelEntities())
             {
@@ -892,6 +894,28 @@ namespace HWNovel.Controllers
                 {
                     db.PRO_USER_RECENT_NOVEL(userid, n.Novelid, n.Volumeno, "1");
                     db.SaveChanges();
+
+                    starYn = db.HWN033.Where(x => x.NOVELID.Equals(novelId) && x.VOLUMENO.ToString().Equals(volumeNo) && x.USERID.Equals(userid)).ToList().Count;
+                }
+
+                Novel spResult = db.HWN033.Where(x => x.NOVELID.Equals(novelId) && x.VOLUMENO.ToString().Equals(volumeNo))
+                                        .GroupBy(x => new { x.NOVELID, x.VOLUMENO })
+                                        .Select(x => new Novel
+                                        {
+                                            Novelid = x.Key.NOVELID,
+                                            Volumeno = x.Key.VOLUMENO,
+                                            StarPointAvg = x.Average(a => a.STARPOINT),
+                                            Commentcnt = x.Count()
+                                        }).SingleOrDefault();
+
+                spText[0] = spResult.Commentcnt;
+                if (spResult.StarPointAvg == 10)
+                {
+                    spText[1] = Math.Round(spResult.StarPointAvg, 1);
+                }
+                else
+                {
+                    spText[1] = Math.Round(spResult.StarPointAvg, 2);
                 }
             }
 
@@ -913,6 +937,8 @@ namespace HWNovel.Controllers
             ViewBag.order = order;
 
             ViewBag.Novel = n;
+            ViewBag.StarYn = starYn;
+            ViewBag.SpText = spText;
 
             return View();
         }

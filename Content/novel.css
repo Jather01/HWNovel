@@ -2015,6 +2015,23 @@ button, input, select, textarea {
     height: 108px;
 }
 
+.grade_insert {
+    position: absolute;
+    top: 7px;
+    right: 0;
+}
+
+.starpoint_complete {
+    right: 0;
+    position: absolute;
+    width: 79px;
+    height: 100%;
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    cursor: default !important;
+}
+
 .starpoint_dropdown {
     right: 0;
     position: absolute;
