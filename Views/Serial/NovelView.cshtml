@@ -4,6 +4,21 @@
     decimal starText = ViewBag.SpText[0];
     decimal starPointVal = ViewBag.SpText[1];
     decimal starPointPer = ViewBag.SpText[1] * 10;
+
+    string searchParams = "";
+
+    if (!string.IsNullOrEmpty(ViewBag.novelid))
+    {
+        searchParams += "&novelid=" + ViewBag.novelid;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.order))
+    {
+        searchParams += "&order=" + ViewBag.order;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.pageNum))
+    {
+        searchParams += "&pageNum=" + ViewBag.pageNum;
+    }
 }
 <main>
     <div id="content">
@@ -20,19 +35,28 @@
                         </a>
                         <div class="dropdown">
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                @foreach (var item in ViewBag.NList)
+                                {
+                                    <li><a class="dropdown-item @(item.Volumeno == @ViewBag.Novel.Volumeno ? "slt" : "")" href="/Serial/NovelView?volumeno=@(item.Volumeno)@(searchParams)">@item.Volumtitle</a></li>
+                                }
                             </ul>
                         </div>
-                        <a class="but_label_prev">이전회</a>
-                        <span class="but_label_next">다음회</span>
+                        @if (ViewBag.PrevN != null && ViewBag.PrevN.Opendt.CompareTo(DateTime.Now.ToString("yyyyMMdd")) > 0)
+                        {
+                            <a href="/Serial/NovelView?volumeno=@(ViewBag.PrevN.Volumeno)@(searchParams)" class="but_label_prev">이전회</a>
+                        }
+                        else
+                        {
+                            <span class="but_label_prev">이전회</span>
+                        }
+                        @if (ViewBag.NextN != null && ViewBag.NextN.Opendt.CompareTo(DateTime.Now.ToString("yyyyMMdd")) > 0)
+                        {
+                            <a href="/Serial/NovelView?volumeno=@(ViewBag.NextN.Volumeno)@(searchParams)" class="but_label_next">다음회</a>
+                        }
+                        else
+                        {
+                            <span class="but_label_next">다음회</span>
+                        }
                     </div>
                 </div>
             </div>
@@ -84,8 +108,11 @@
         </div>
         <a href="#" class="but_top" id="topButton"></a>
         <!-- comments_area -->
-        <div style="border: 1px solid #dadbdc; height: 1000px; margin-top:42px;">
-
+        <div class="comments_area">
+            <div class="cbox_head">
+                <h5 class="cbox_title">댓글</h5>
+                <span class="cbox_count">0</span>
+            </div>
         </div>
     </div>
 </main>

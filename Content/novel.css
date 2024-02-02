@@ -1790,8 +1790,7 @@ button, input, select, textarea {
     display: inline-block;
     vertical-align: top;
 }
-
-.viewer_header .select_label .but_label_prev, .viewer_header .select_label .but_label_next {
+    .viewer_header .select_label .but_label_prev, .viewer_header .select_label .but_label_next {
     position: absolute;
     top: 18px;
     border: solid 1px #ddd;
@@ -1815,6 +1814,14 @@ button, input, select, textarea {
     vertical-align: top;
 }
 
+span.but_label_prev {
+    background-image: url(/Content/Icons/novel-left-gray.svg);
+}
+
+span.but_label_next {
+    background-image: url(/Content/Icons/novel-right-gray.svg);
+}
+
 .viewer_header .select_label .but_label_prev, .viewer_header .select_label .but_label_next {
     position: absolute;
     top: 18px;
@@ -1824,6 +1831,10 @@ button, input, select, textarea {
 
 .viewer_header .select_label .but_label_next {
     right: 0;
+}
+
+.viewer_header .select_label a.but_label_prev:hover, .viewer_header .select_label a.but_label_next:hover {
+    border: solid 1px #000;
 }
 
 .viewer_header .slt_box {
@@ -2127,3 +2138,35 @@ button, input, select, textarea {
         font-size: 30px;
         color: #ff222e;
     }
+
+.dropdown-menu .slt a {
+    text-decoration: underline;
+}
+
+.comments_area {
+    border: 1px solid #dadbdc;
+    height: auto;
+    margin-top: 42px;
+}
+
+    .comments_area .cbox_head {
+        padding: 0 0 2px;
+        height: 38px;
+    }
+
+        .comments_area .cbox_head .cbox_title {
+            float: left;
+            margin-top: 14px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .comments_area .cbox_head .cbox_count {
+            overflow: hidden;
+            float: left;
+            margin-top: 13px;
+            padding-left: 6px;
+            font-size: 17px;
+            font-family: tahoma, helvetica, sans-serif;
+            color: #000;
+        }

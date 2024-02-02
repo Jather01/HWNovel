@@ -835,6 +835,7 @@ namespace HWNovel.Controllers
             string topmenu = "none";
             string novelId = Request.Params["novelid"];
             string volumeNo = Request.Params["volumeno"];
+            int volumeNoNum = Int32.Parse(volumeNo);
             string searchPage = Request.Params["pageNum"] ?? "0";
             string order = Request.Params["order"] ?? "update";
 
@@ -851,6 +852,9 @@ namespace HWNovel.Controllers
             ViewBag.userinfo = userinfo;
 
             Novel n = new Novel();
+            Novel nextN = new Novel();
+            Novel prevN = new Novel();
+            List<Novel> nList = new List<Novel>();
             int starYn = 0;
             decimal[] spText = { 0, 0 };
 
@@ -875,6 +879,53 @@ namespace HWNovel.Controllers
                          Thumnail = b.THUMNAIL
                      }).SingleOrDefault();
 
+                nextN = (from a in db.HWN031
+                             where (a.NOVELID == novelId &&
+                                    a.VOLUMENO > volumeNoNum)
+                             group a by a.NOVELID into b
+                             select new {
+                                Novelid = b.Key,
+                                Volumeno = b.Min(x => x.VOLUMENO)
+                             } into c
+                             from d in db.HWN031
+                             where (c.Novelid == d.NOVELID &&
+                                    c.Volumeno == d.VOLUMENO)
+                             select new Novel
+                             {
+                                 Novelid = d.NOVELID,
+                                 Volumeno = d.VOLUMENO,
+                                 Opendt = d.OPENDT
+                             }).SingleOrDefault();
+
+                prevN = (from a in db.HWN031
+                         where (a.NOVELID == novelId &&
+                                a.VOLUMENO < volumeNoNum)
+                         group a by a.NOVELID into b
+                         select new
+                         {
+                             Novelid = b.Key,
+                             Volumeno = b.Max(x => x.VOLUMENO)
+                         } into c
+                         from d in db.HWN031
+                         where (c.Novelid == d.NOVELID &&
+                                c.Volumeno == d.VOLUMENO)
+                         select new Novel
+                         {
+                             Novelid = d.NOVELID,
+                             Volumeno = d.VOLUMENO,
+                             Opendt = d.OPENDT
+                         }).SingleOrDefault();
+
+                nList = (from a in db.HWN031
+                         where (a.NOVELID == novelId)
+                         orderby a.VOLUMENO descending
+                         select new Novel
+                         {
+                             Novelid = a.NOVELID,
+                             Volumtitle = a.VOLUMTITLE,
+                             Volumeno = a.VOLUMENO
+                         }).ToList();
+
                 if (n == null)
                 {
                     return RedirectToAction("NovelInfo", "Serial", new { novelid = novelId, pageNum = searchPage, order = order });
@@ -888,6 +939,8 @@ namespace HWNovel.Controllers
                     {
                         return RedirectToAction("NovelInfo", "Serial", new { novelid = novelId, pageNum = searchPage, order = order });
                     }
+
+                    nList = nList.Where(x => x.Opendt.CompareTo(nowdate) < 0).ToList();
                 }
 
                 if (userinfo != null)
@@ -908,14 +961,17 @@ namespace HWNovel.Controllers
                                             Commentcnt = x.Count()
                                         }).SingleOrDefault();
 
-                spText[0] = spResult.Commentcnt;
-                if (spResult.StarPointAvg == 10)
+                if(spResult != null)
                 {
-                    spText[1] = Math.Round(spResult.StarPointAvg, 1);
-                }
-                else
-                {
-                    spText[1] = Math.Round(spResult.StarPointAvg, 2);
+                    spText[0] = spResult.Commentcnt;
+                    if (spResult.StarPointAvg == 10)
+                    {
+                        spText[1] = Math.Round(spResult.StarPointAvg, 1);
+                    }
+                    else
+                    {
+                        spText[1] = Math.Round(spResult.StarPointAvg, 2);
+                    }
                 }
             }
 
@@ -937,8 +993,11 @@ namespace HWNovel.Controllers
             ViewBag.order = order;
 
             ViewBag.Novel = n;
+            ViewBag.NList = nList;
             ViewBag.StarYn = starYn;
             ViewBag.SpText = spText;
+            ViewBag.NextN = nextN;
+            ViewBag.PrevN = prevN;
 
             return View();
         }

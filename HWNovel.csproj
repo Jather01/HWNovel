@@ -263,7 +263,9 @@
     <Content Include="Content\Icons\check-circle-fill.svg" />
     <Content Include="Content\Icons\check-circle.svg" />
     <Content Include="Content\Icons\chevron-compact-down.svg" />
+    <Content Include="Content\Icons\novel-left-gray.svg" />
     <Content Include="Content\Icons\novel-left.svg" />
+    <Content Include="Content\Icons\novel-right-gray.svg" />
     <Content Include="Content\Icons\novel-right.svg" />
     <Content Include="Content\Icons\plus-circle-fill.svg" />
     <Content Include="Content\Icons\plus-circle.svg" />
