@@ -59,6 +59,12 @@
                         }
                     </div>
                 </div>
+                @if (userinfo[3] == "1")
+                {
+                    <div class="button_area">
+                        <button type="button" id="volumeUpdate">회차 수정</button>
+                    </div>
+                }
             </div>
             <div class="viewer_container dotum ">
                 <h2 class="detail_view_header">@ViewBag.Novel.Volumtitle<span class="date">@(ViewBag.Novel.Opendt.Substring(0, 4)).@(ViewBag.Novel.Opendt.Substring(4, 2)).@(ViewBag.Novel.Opendt.Substring(6, 2))</span></h2>
@@ -107,7 +113,6 @@
             </div>
         </div>
         <a href="#" class="but_top" id="topButton"></a>
-        <!-- comments_area -->
         <div class="cbox_wrap" id="cbox_wrap">
             @Html.Action("CommentInclude", "Serial", new { Novelid = ViewBag.novelid, Volumeno = ViewBag.Novel.Volumeno })
         </div>
@@ -143,7 +148,7 @@
         });
 
         $("#btnSPsubmit").click(function () {
-            if ("userinfo[0]" == "0") {
+            if ("@userinfo[0]" == "0") {
                 if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
                     var url = window.location.pathname + window.location.search;
                     $("#PreUrl").val(url);
@@ -178,6 +183,14 @@
                         alert("Error");
                     }
                 });
+            }
+        });
+
+        $("#volumeUpdate").click(function () {
+            if ("@userinfo[3]" == "1") {
+                var params = "@searchParams".replaceAll("&amp;", "&");
+                console.log(params);
+                location.href = "/Serial/VolumeUpdate?volumeno=@(ViewBag.Novel.Volumeno)" + params;
             }
         });
     </script>

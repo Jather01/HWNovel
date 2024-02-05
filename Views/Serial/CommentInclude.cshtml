@@ -22,17 +22,59 @@
     <script type="text/JavaScript">
         function pagingPrev(page) {
             if (page - 1 > 0) {
-                $("#searchPage").val((page - 1));
+                pageChange(page - 1);
             }
         }
 
         function paging(page) {
-            $("#searchPage").val((page));
+            pageChange(page);
         }
 
         function pagingNext(page) {
             if (page + 10 > @endPageNum) {
-                $("#searchPage").val((page + 10));
+                pageChange(page + 10);
+            }
+        }
+
+        function pageChange(page) {
+            $.ajax({
+                url: "/Serial/CommentInclude",
+                type: "POST",
+                data: {
+                    Novelid: "@ViewBag.novelid",
+                    Volumeno: @ViewBag.Volumeno,
+                    searchPage: page
+                },
+                success: function (r) {
+                    $("#cbox_wrap").html(r);
+                },
+                failure: function () { alert("fail"); },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+
+        function deleteComment(usercommentno) {
+            if (confirm("댓글을 삭제하시겠습니까?")) {
+                if ("@userinfo[0]" != "0") {
+                    $.ajax({
+                        url: "/Ajax/deleteSerialNovelComment",
+                        type: "POST",
+                        data: {
+                            novelid: "@ViewBag.novelid",
+                            volumeno: @ViewBag.Volumeno,
+                            usercommentno: usercommentno
+                        },
+                        success: function (r) {
+                            $("#cbox_wrap").html(r);
+                        },
+                        failure: function () { alert("fail"); },
+                        error: function () {
+                            alert("Error");
+                        }
+                    });
+                }
             }
         }
     </script>
@@ -63,7 +105,7 @@
                         </div>
                         <div class="cbox_upload">
                             <button type="button" class="cbox_btn_upload">
-                                <span class="cbox_txt_upload">등록</span>
+                                <span class="cbox_txt_upload" id="cbox_txt_upload">등록</span>
                             </button>
                         </div>
                     </div>
@@ -97,11 +139,22 @@
                                                     <span class="cbox_nick">@item.Nickname</span>
                                                 </span>
                                                 <span class="cbox_id_area">
-                                                    <span class="cbox_id">(@(item.Novelid.Substring(0,4))****)</span>
+                                                    <span class="cbox_id">(@(item.Userid.Substring(0,4))****)</span>
                                                 </span>
                                             </span>
                                         </span>
                                     </span>
+                                    @if (userinfo[0] != "0")
+                                    {
+                                        if (userinfo[0] == item.Userid || userinfo[3] == "1")
+                                        {
+                                            <span class="cbox_info_sub">
+                                                <span class="cbox_work_sub">
+                                                    <a class="cbox_btn_delete" href="javascript:deleteComment(@item.Usercommentno)">삭제</a>
+                                                </span>
+                                            </span>
+                                        }
+                                    }
                                 </div>
                                 <div class="cbox_text_wrap">
                                     <span class="cbox_contents">@item.Usercomment</span>
@@ -202,6 +255,27 @@
             });
 
             update();
+        });
+
+        $("#cbox_txt_upload").click(function(){
+            if ("@userinfo[0]" != "0") {
+                $.ajax({
+                    url: "/Ajax/writeSerialNovelComment",
+                    type: "POST",
+                    data: {
+                        novelid: "@ViewBag.novelid",
+                        volumeno: @ViewBag.Volumeno,
+                        comment: $("#cbox_write_textarea").val()
+                    },
+                    success: function (r) {
+                        $("#cbox_wrap").html(r);
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
         });
     </script>
 </body>

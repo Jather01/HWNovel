@@ -215,6 +215,12 @@
           <Parameter Name="SAT" Type="varchar" Mode="In" />
           <Parameter Name="SUN" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PRO_SERIAL_NOVEL_COMMENT_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
+          <Parameter Name="USERCOMMENT" Type="text" Mode="In" />
+          <Parameter Name="USERID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="PRO_USER_INFOUPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="USERID" Type="varchar" Mode="In" />
           <Parameter Name="NAME" Type="varchar" Mode="In" />
@@ -226,6 +232,14 @@
           <Parameter Name="NOVELID" Type="varchar" Mode="In" />
           <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
           <Parameter Name="NOVELKIND" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PRO_VOLUME_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
+          <Parameter Name="VOLUMTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTEXT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="WRITERCOMMENT" Type="text" Mode="In" />
+          <Parameter Name="OPENDT" Type="varchar" Mode="In" />
         </Function>
         <Function Name="PRO_VOLUME_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOVELID" Type="varchar" Mode="In" />
@@ -498,6 +512,20 @@
             <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
             <Parameter Name="NOVELKIND" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PRO_SERIAL_NOVEL_COMMENT_WRITE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
+            <Parameter Name="USERCOMMENT" Mode="In" Type="String" />
+            <Parameter Name="USERID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_VOLUME_UPDATE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
+            <Parameter Name="VOLUMTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELTEXT" Mode="In" Type="String" />
+            <Parameter Name="WRITERCOMMENT" Mode="In" Type="String" />
+            <Parameter Name="OPENDT" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -683,6 +711,8 @@
           <FunctionImportMapping FunctionImportName="PRO_NOVEL_UPDATE" FunctionName="HWNovelModel.Store.PRO_NOVEL_UPDATE" />
           <FunctionImportMapping FunctionImportName="PRO_VOLUME_WRITE" FunctionName="HWNovelModel.Store.PRO_VOLUME_WRITE" />
           <FunctionImportMapping FunctionImportName="PRO_USER_RECENT_NOVEL" FunctionName="HWNovelModel.Store.PRO_USER_RECENT_NOVEL" />
+          <FunctionImportMapping FunctionImportName="PRO_SERIAL_NOVEL_COMMENT_WRITE" FunctionName="HWNovelModel.Store.PRO_SERIAL_NOVEL_COMMENT_WRITE" />
+          <FunctionImportMapping FunctionImportName="PRO_VOLUME_UPDATE" FunctionName="HWNovelModel.Store.PRO_VOLUME_UPDATE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

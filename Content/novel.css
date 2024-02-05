@@ -1767,6 +1767,27 @@ button, input, select, textarea {
             height: 19px;
         }
 
+    .viewer_header .button_area {
+        position: absolute;
+        right: 30px;
+        display: inline-block;
+        width: auto;
+        vertical-align: top;
+    }
+
+        .viewer_header .button_area > button {
+            width: 150px;
+            background-color: #7030A0;
+            color: #fff;
+
+            line-height: 40px;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 4px;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
 .dropdown-menu {
     width:100%;
     max-height: 250px;
@@ -2353,6 +2374,16 @@ span.but_label_next {
     display: inline-block;
     float: left;
 }
+
+    .comments_area .cbox_work_sub {
+        position: absolute;
+        top: 15px;
+        right: 10px;
+    }
+
+        .comments_area .cbox_work_sub .cbox_btn_delete {
+            color: #8e8e8e;
+        }
 
 .comments_area .cbox_info_base {
     position: relative;

@@ -273,5 +273,51 @@ namespace HWNovel.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public ActionResult writeSerialNovelComment(string novelid, int volumeno, string comment)
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo != null && !string.IsNullOrEmpty(novelid))
+            {
+                string userid = userinfo[0];
+
+                using (var db = new HWNovelEntities())
+                {
+                    db.PRO_SERIAL_NOVEL_COMMENT_WRITE(novelid, volumeno, comment, userid);
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("CommentInclude", "Serial", new { Novelid = novelid, Volumeno = volumeno });
+        }
+
+        [HttpPost]
+        public ActionResult deleteSerialNovelComment(string novelid, int volumeno, int usercommentno)
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo != null && !string.IsNullOrEmpty(novelid))
+            {
+                string userid = userinfo[0];
+                HWN032 h032 = new HWN032();
+
+                using (var db = new HWNovelEntities())
+                {
+                    h032 = db.HWN032.Where(x => x.NOVELID.Equals(novelid) && x.VOLUMENO == volumeno && x.USERCOMMENTNO == usercommentno).SingleOrDefault();
+                    if(h032 != null)
+                    {
+                        if (userid.Equals(h032.USERID) || userinfo[3].Equals("1"))
+                        {
+                            db.HWN032.Remove(h032);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("CommentInclude", "Serial", new { Novelid = novelid, Volumeno = volumeno });
+        }
     }
 }

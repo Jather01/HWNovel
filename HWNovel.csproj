@@ -382,6 +382,7 @@
     <Content Include="Views\Serial\VolumeWrite.cshtml" />
     <Content Include="Views\Serial\NovelView.cshtml" />
     <Content Include="Views\Serial\CommentInclude.cshtml" />
+    <Content Include="Views\Serial\VolumeUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

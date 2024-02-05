@@ -787,7 +787,6 @@ namespace HWNovel.Controllers
             }
         }
 
-
         [HttpPost]
         public ActionResult VolumeWritePro(Novel model)
         {
@@ -816,7 +815,7 @@ namespace HWNovel.Controllers
                 {
                     if (model != null)
                     {
-                        if (!string.IsNullOrEmpty(model.Volumtitle) && !string.IsNullOrEmpty(model.Noveltext) && !string.IsNullOrEmpty(model.Writercomment) && !string.IsNullOrEmpty(model.Opendt))
+                        if (!string.IsNullOrEmpty(model.Volumtitle) && !string.IsNullOrEmpty(model.Noveltext) && !string.IsNullOrEmpty(model.Opendt))
                         {
                             string opendt = model.Opendt.Replace(".", "");
                             string writerComment = model.Writercomment ?? ".";
@@ -1071,8 +1070,101 @@ namespace HWNovel.Controllers
             ViewBag.cList = cList;
             ViewBag.cCount = totalCount;
             ViewBag.userinfo = userinfo;
+            ViewBag.novelid = model.Novelid;
+            ViewBag.Volumeno = model.Volumeno;
 
             return View();
+        }
+
+        public ActionResult VolumeUpdate()
+        {
+            ViewBag.topmenu = "none";
+
+            string novelid = Request.Params["novelid"];
+            string volumeno = Request.Params["volumeno"];
+
+            string pageNum = Request.Params["pageNum"];
+            string order = Request.Params["order"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 메인 홈 화면으로 이동
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    HWN031 n = new HWN031();
+
+                    using (var db = new HWNovelEntities())
+                    {
+                        n = db.HWN031.Where(x => x.NOVELID.Equals(novelid) && x.VOLUMENO.ToString().Equals(volumeno)).SingleOrDefault();
+                    }
+
+                    ViewBag.Novel = n;
+
+                    ViewBag.novelid = novelid;
+                    ViewBag.volumeno = volumeno;
+                    ViewBag.pageNum = pageNum;
+                    ViewBag.order = order;
+
+                    return View();
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult VolumeUpdatePro(Novel model)
+        {
+            ViewBag.topmenu = "none";
+            ViewBag.userinfo = Session["userinfo"];
+
+            string novelid = model.Novelid;
+            int pageNum = model.searchPage;
+            string order = model.searchOrder;
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (userinfo[3] != "1")
+                {
+                    // 로그인 정보가 있는데 관리자 계정이 아니면 메인 홈 화면으로 이동
+                    return RedirectToAction("Main", "Home");
+                }
+                else
+                {
+                    if (model != null)
+                    {
+                        if (!string.IsNullOrEmpty(model.Volumtitle) && !string.IsNullOrEmpty(model.Noveltext) && !string.IsNullOrEmpty(model.Opendt))
+                        {
+                            string opendt = model.Opendt.Replace(".", "");
+                            string writerComment = model.Writercomment ?? ".";
+                            using (var db = new HWNovelEntities())
+                            {
+                                db.PRO_VOLUME_UPDATE(model.Novelid, model.Volumeno, model.Volumtitle, model.Noveltext, writerComment, opendt);
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+
+                    return RedirectToAction("NovelInfo", "Serial", new { novelid = novelid, pageNum = pageNum, order = order });
+                }
+            }
         }
     }
 }
