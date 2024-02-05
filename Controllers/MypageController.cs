@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 
 namespace HWNovel.Controllers
 {
@@ -143,6 +144,15 @@ namespace HWNovel.Controllers
                 }
                 else
                 {
+                    User u = new User();
+                    string userid = userinfo[0];
+                    using (var db = new HWNovelEntities())
+                    {
+                        u = db.HWN01.Where(x => x.USERID.Equals(userid) && x.USEYN.Equals("1")).Select(x => new User { Userid = x.USERID, Name = x.NAME, Birthday = x.BIRTHDAY, Nickname = x.NICKNAME}).SingleOrDefault();
+                    }
+
+                    ViewBag.User = u;
+
                     return View();
                 }
             }
@@ -169,7 +179,7 @@ namespace HWNovel.Controllers
                 }
                 else
                 {
-                    string name = user.Userid;
+                    string name = user.Name;
                     string birthday = user.Birthday;
                     string nickname = user.Nickname;
 
@@ -181,6 +191,12 @@ namespace HWNovel.Controllers
                             db.SaveChanges();
                         }
                     }
+
+                    // 세션에 있는 로그인 정보 수정
+                    userinfo[1] = name;
+                    userinfo[2] = nickname;
+
+                    Session["userinfo"] = userinfo;
 
                     return RedirectToAction("Min", "Mypage");
                 }

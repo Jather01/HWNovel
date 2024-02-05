@@ -59,6 +59,28 @@ namespace HWNovel.Controllers
         }
 
         [HttpPost]
+        public JsonResult NicknameOverlapInfoUpdate(string nickname, string id)
+        {
+            string result = "1"; // 0: 중복 있음, 1: 중복 없음
+            int totalCount = 0;
+
+            var nicknames = new List<HWN01>();
+
+            if (!string.IsNullOrEmpty(nickname))
+            {
+                using (var db = new HWNovelEntities())
+                {
+                    nicknames = db.HWN01.Where(x => x.NICKNAME == nickname && !x.USERID.Equals(id)).ToList();
+                    totalCount = nicknames.Count();
+                }
+            }
+
+            if (totalCount > 0) result = "0";
+            else result = "1";
+            return Json(result);
+        }
+
+        [HttpPost]
         public JsonResult FindId(string name, string birthday)
         {
             string result = "";

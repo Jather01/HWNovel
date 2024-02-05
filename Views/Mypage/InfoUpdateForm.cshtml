@@ -1,7 +1,6 @@
 ﻿@model HWNovel.HWN01
 
 @{
-    HWNNOTICE view = ViewBag.noticeView;
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
 }
 
@@ -19,19 +18,19 @@
                 <li class="myinfo_item">
                     <span class="myinfo_item_title">이름</span>
                     <span class="pwcheck_item_input" id="nameLi">
-                        <input type="text" id="name" name="name" placeholder="이름" class="input" value="" maxlength="40">
+                        <input type="text" id="name" name="name" placeholder="이름" class="input" value="@ViewBag.User.Name" maxlength="40">
                     </span>
                 </li>
                 <li class="myinfo_item">
                     <span class="myinfo_item_title">생년월일</span>
                     <span class="pwcheck_item_input" id="birthLi">
-                        <input type="text" id="birthdayInput" placeholder="생년월일 8자리" class="input" value="" maxlength="8">
+                        <input type="text" id="birthdayInput" placeholder="생년월일 8자리" class="input" value="@ViewBag.User.Birthday" maxlength="8">
                     </span>
                 </li>
                 <li class="myinfo_item">
                     <span class="myinfo_item_title">닉네임</span>
                     <span class="pwcheck_item_input" id="nicknameLi">
-                        <input type="text" id="nickname" name="nickname" placeholder="닉네임" class="input" value="" maxlength="20">
+                        <input type="text" id="nickname" name="nickname" placeholder="닉네임" class="input" value="@ViewBag.User.Nickname" maxlength="20">
                         <input type="hidden" id="nicknameCheck" name="nicknameCheck">
                     </span>
                     <button type="button" class="btn btn-outline-dark btnButton" id="nicknameOverlap">중복확인</button>
@@ -76,9 +75,9 @@
                 return;
             } else {
                 $.ajax({
-                    url: "/Ajax/NicknameOverlap",
+                    url: "/Ajax/NicknameOverlapInfoUpdate",
                     type: "POST",
-                    data: { nickname: $("#nickname").val() },
+                    data: { nickname: $("#nickname").val(), id: "@ViewBag.userinfo[0]" },
                     success: function (r) {
                         if (r == "0") {
                             $("#nicknameMsg").text("닉네임 : 중복된 닉네임입니다.");
