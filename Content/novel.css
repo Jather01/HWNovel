@@ -1684,7 +1684,6 @@ button, input, select, textarea {
     margin: 0 auto;
     z-index: 30;
 }
-}
 
     #content:before {
         display: block;
@@ -2218,10 +2217,24 @@ span.but_label_next {
         font-weight: 700;
     }
 
+    .comments_area .cbox_type_logged_out .cbox_write_area {
+        padding-top: 11px;
+    }
+
     .comments_area .cbox_write_area {
         max-width: 100%;
         padding-bottom: 8px;
     }
+
+    .comments_area .cbox_type_logged_out #cbox_logout {
+        color: #a1a1a1;
+        cursor: pointer;
+    }
+
+        .comments_area .cbox_type_logged_out #cbox_logout .cbox_guide {
+            color: #a1a1a1;
+            cursor: pointer;
+        }
 
         .comments_area .cbox_write_area .cbox_inbox {
             position: relative;

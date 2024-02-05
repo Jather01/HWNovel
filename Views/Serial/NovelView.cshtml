@@ -109,7 +109,7 @@
         <a href="#" class="but_top" id="topButton"></a>
         <!-- comments_area -->
         <div class="cbox_wrap" id="cbox_wrap">
-            @Html.Action("CommentInclude", "Serial", new { novelid = "소설 아이디", volumeNo = "회차 번호" })
+            @Html.Action("CommentInclude", "Serial", new { Novelid = ViewBag.novelid, Volumeno = ViewBag.Novel.Volumeno })
         </div>
     </div>
 </main>
@@ -143,7 +143,7 @@
         });
 
         $("#btnSPsubmit").click(function () {
-            if (userinfo[0] == "0") {
+            if ("userinfo[0]" == "0") {
                 if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
                     var url = window.location.pathname + window.location.search;
                     $("#PreUrl").val(url);

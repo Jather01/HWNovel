@@ -2,6 +2,15 @@
     Layout = null;
 
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    int pageNum = ViewBag.searchPage ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
 }
 
 <!DOCTYPE html>
@@ -10,68 +19,103 @@
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
+    <script type="text/JavaScript">
+        function pagingPrev(page) {
+            if (page - 1 > 0) {
+                $("#searchPage").val((page - 1));
+            }
+        }
+
+        function paging(page) {
+            $("#searchPage").val((page));
+        }
+
+        function pagingNext(page) {
+            if (page + 10 > @endPageNum) {
+                $("#searchPage").val((page + 10));
+            }
+        }
+    </script>
     <div class="comments_area">
         <div class="cbox_head">
             <h5 class="cbox_title">댓글</h5>
-            <span class="cbox_count">0</span>
+            <span class="cbox_count">@ViewBag.cCount</span>
         </div>
         <div class="cbox_write_wrap">
-            <div class="cbox_write_box">
-                <div class="cbox_write_inner">
-                    <div class="cbox_profile_area">
-                        <div class="cbox_profile">
-                            <div class="cbox_box_name">
-                                <span class="cbox_write_name">Jather</span>
+            @if (userinfo[0] != "0")
+            {
+                <div class="cbox_write_box">
+                    <div class="cbox_write_inner">
+                        <div class="cbox_profile_area">
+                            <div class="cbox_profile">
+                                <div class="cbox_box_name">
+                                    <span class="cbox_write_name">@userinfo[2]</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cbox_write_area">
+                            <div class="cbox_inbox" id="cbox_inbox">
+                                <textarea title="댓글" id="cbox_write_textarea" class="cbox_text" rows="3" cols="30"></textarea>
+                            </div>
+                        </div>
+                        <div class="cbox_write_count">
+                            <strong class="cbox_count_num" id="cbox_count_num">0</strong>/<span class="cbox_write_total">500</span>
+                        </div>
+                        <div class="cbox_upload">
+                            <button type="button" class="cbox_btn_upload">
+                                <span class="cbox_txt_upload">등록</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="cbox_write_box cbox_type_logged_out">
+                    <div class="cbox_write_inner">
+                        <div class="cbox_write_area" id="cbox_logout">
+                            <div class="cbox_inbox">
+                                <label class="cbox_guide">댓글을 작성하려면 <font style="font-weight:bold;">로그인</font> 해주세요.</label>
                             </div>
                         </div>
                     </div>
-                    <div class="cbox_write_area">
-                        <div class="cbox_inbox" id="cbox_inbox">
-                            <textarea title="댓글" id="cbox_write_textarea" class="cbox_text" rows="3" cols="30"></textarea>
-                        </div>
-                    </div>
-                    <div class="cbox_write_count">
-                        <strong class="cbox_count_num" id="cbox_count_num">0</strong>/<span class="cbox_write_total">500</span>
-                    </div>
-                    <div class="cbox_upload">
-                        <button type="button" class="cbox_btn_upload">
-                            <span class="cbox_txt_upload">등록</span>
-                        </button>
-                    </div>
                 </div>
-            </div>
+            }
         </div>
         <div tabindex="0" class="cbox_content_wrap" style="outline: 0">
             <ul class="cbox_list">
-                <li class="cbox_comment">
-                    <div class="cbox_comment_box">
-                        <div class="cbox_area">
-                            <div class="cbox_info">
-                                <span class="cbox_info_main">
-                                    <span class="cbox_name">
-                                        <span class="cbox_name_area">
-                                            <span class="cbox_nick_area">
-                                                <span class="cbox_nick">@ViewBag.nickname</span>
-                                            </span>
-                                            <span class="cbox_id_area">
-                                                <span class="cbox_id">(@(ViewBag.userid.Substring(0,4))****)</span>
+                @foreach (var item in ViewBag.cList)
+                {
+                    <li class="cbox_comment">
+                        <div class="cbox_comment_box">
+                            <div class="cbox_area">
+                                <div class="cbox_info">
+                                    <span class="cbox_info_main">
+                                        <span class="cbox_name">
+                                            <span class="cbox_name_area">
+                                                <span class="cbox_nick_area">
+                                                    <span class="cbox_nick">@item.Nickname</span>
+                                                </span>
+                                                <span class="cbox_id_area">
+                                                    <span class="cbox_id">(@(item.Novelid.Substring(0,4))****)</span>
+                                                </span>
                                             </span>
                                         </span>
                                     </span>
-                                </span>
-                            </div>
-                            <div class="cbox_text_wrap">
-                                <span class="cbox_contents">@(ViewBag.novelId), @(ViewBag.volumeNo)</span>
-                            </div>
-                            <div class="cbox_info_base">
-                                <span class="cbox_date">2024.02.02</span>
+                                </div>
+                                <div class="cbox_text_wrap">
+                                    <span class="cbox_contents">@item.Usercomment</span>
+                                </div>
+                                <div class="cbox_info_base">
+                                    <span class="cbox_date">@(item.Insertdt.ToString("yyyyMMdd").Substring(0,4)).@(item.Insertdt.ToString("yyyyMMdd").Substring(4,2)).@(item.Insertdt.ToString("yyyyMMdd").Substring(6,2))</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                }
             </ul>
         </div>
-        @*<div class="notice_paging">
+        <div class="notice_paging">
             <ul class="paging">
                 @if (startPageNum == 1)
                 {
@@ -120,35 +164,45 @@
                     </li>
                 }
             </ul>
-        </div>*@
+        </div>
+    </div>
+    <script type="text/JavaScript">
+        $("#cbox_logout").click(function () {
+            if ("@userinfo[0]" == "0") {
+                if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
+                    var url = window.location.pathname + window.location.search;
+                    $("#PreUrl").val(url);
+                    $("#goLogInAndOut").attr("action", "/User/LoginForm");
+                    $("#goLogInAndOut").submit();
+                }
+            }
+        });
 
-                                                    <script type="text/JavaScript">
-                                                        $('#cbox_inbox').each(function () {
-                                                            var update = function () {
-                                                                var input = $("#cbox_write_textarea");
-                                                                var before = 500;
-                                                                var now = 500 - input.val().length;
+        $('#cbox_inbox').each(function () {
+            var update = function () {
+                var input = $("#cbox_write_textarea");
+                var before = 500;
+                var now = 500 - input.val().length;
 
-                                                                if (now < 0) {
-                                                                    var str = input.val();
-                                                                    $("#cbox_write_textarea").focus();
+                if (now < 0) {
+                    var str = input.val();
+                    $("#cbox_write_textarea").focus();
 
-                                                                    var inputVal = str.substr(0, 500);
-                                                                    alert('내용은 500자까지 입력 가능합니다.');
-                                                                    now = 0;
+                    var inputVal = str.substr(0, 500);
+                    alert('내용은 500자까지 입력 가능합니다.');
+                    now = 0;
 
-                                                                    input.val(inputVal);
-                                                                }
-                                                                $("#cbox_count_num").text(input.val().length);
-                                                            };
+                    input.val(inputVal);
+                }
+                $("#cbox_count_num").text(input.val().length);
+            };
 
-                                                            $('#cbox_write_textarea').bind('input keyup paste', function () {
-                                                                setTimeout(update, 0);
-                                                            });
+            $('#cbox_write_textarea').bind('input keyup paste', function () {
+                setTimeout(update, 0);
+            });
 
-                                                            update();
-                                                        });
-                                                    </script>
-</div>
+            update();
+        });
+    </script>
 </body>
 </html>

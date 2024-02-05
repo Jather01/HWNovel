@@ -12,6 +12,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Razor.Tokenizer.Symbols;
+using System.Web.UI.WebControls;
 
 namespace HWNovel.Controllers
 {
@@ -172,6 +173,8 @@ namespace HWNovel.Controllers
                             if(!model.searchGenre.Equals("all"))
                             novelList = novelList.Where(x => x.Genre.Equals(model.searchGenre)).ToList();
                         }
+
+                        totalCount = novelList.Count;
                     }
 
                     novelList = novelList.Skip((pageNum - 1) * listCount)
@@ -1002,13 +1005,72 @@ namespace HWNovel.Controllers
             return View();
         }
 
-        public ActionResult CommentInclude(string novelId, string volumeNo)
+        public ActionResult CommentInclude(Comment model)
         {
-            ViewBag.novelid = novelId;
-            ViewBag.volumeNo = volumeNo;
-            ViewBag.userid = "qwer1234";
-            ViewBag.nickname = "nickname";
+            List<string> userinfo = (List<string>)Session["userinfo"];
 
+            int listCount = 10;
+            int pageNum = 1;
+            int pageSize = 10;
+            int totalCount = 0;
+
+            if (model.searchPage != 0)
+            {
+                pageNum = model.searchPage;
+            }
+
+            List<Comment> cList = new List<Comment>();
+
+            if (!string.IsNullOrEmpty(model.Novelid))
+            {
+                using (var db = new HWNovelEntities())
+                {
+                    cList = (from a in db.HWN032
+                             from b in db.HWN01
+                             where (a.NOVELID == model.Novelid
+                                 && a.VOLUMENO == model.Volumeno
+                                 && a.USERID == b.USERID)
+                             orderby a.USERCOMMENTNO descending
+                             select new Comment
+                             {
+                                 Novelid = a.NOVELID,
+                                 Volumeno = a.VOLUMENO,
+                                 Usercommentno = a.USERCOMMENTNO,
+                                 Usercomment = a.USERCOMMENT,
+                                 Userid = a.USERID,
+                                 Nickname = b.NICKNAME,
+                                 Insertdt = a.INSERTDT
+                             }).ToList();
+                    totalCount = cList.Count;
+                }
+            }
+
+            cList = cList.Skip((pageNum - 1) * listCount)
+                    .Take(listCount)
+                    .ToList();
+
+            //하단 시작 페이지 번호 
+            int startPageNum = 1 + ((pageNum - 1) / pageSize) * pageSize;
+            //하단 끝 페이지 번호
+            int endPageNum = startPageNum + pageSize - 1;
+
+            //전체 페이지의 갯수 구하기
+            int totalPageCount = (int)Math.Ceiling(totalCount / (double)listCount);
+            //끝 페이지 번호가 이미 전체 페이지 갯수보다 크게 계산되었다면 잘못된 값이다.
+            if (endPageNum > totalPageCount)
+            {
+                endPageNum = totalPageCount; //보정해 준다. 
+            }
+
+            ViewBag.StartPageNum = startPageNum;
+            ViewBag.EndPageNum = endPageNum;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.ListCount = listCount;
+            ViewBag.searchPage = pageNum;
+
+            ViewBag.cList = cList;
+            ViewBag.cCount = totalCount;
+            ViewBag.userinfo = userinfo;
 
             return View();
         }

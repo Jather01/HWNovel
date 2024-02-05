@@ -189,6 +189,7 @@
     <Compile Include="ViewModels\Novel.cs" />
     <Compile Include="ViewModels\Code.cs" />
     <Compile Include="ViewModels\Notice.cs" />
+    <Compile Include="ViewModels\Comment.cs" />
     <Compile Include="ViewModels\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
