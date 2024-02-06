@@ -114,7 +114,7 @@
                         <span class="item">@day2 연재</span>
                     </div>
                     <div class="info_group">
-                        <span class="score_area"><span class="ico_star">별점</span>9.98</span>
+                        <span class="score_area"><span class="ico_star">별점</span>@ViewBag.Novel.StarPointAvg.ToString("0.0#")</span>
                     </div>
                 </div>
                 <div class="info_bottom">
@@ -137,7 +137,7 @@
                 </div>
             </div>
             <ul class="section_function">
-                <li><a class="favorite @(ViewBag.UserFavorite == null ? "" : "check")" id="concernNovelIcon">관심 <span>@ViewBag.FavoritCnt</span></a></li>
+                <li><a class="favorite @(ViewBag.UserFavorite.USERID == null ? "" : "check")" id="concernNovelIcon">관심 <span>@ViewBag.FavoritCnt</span></a></li>
             </ul>
         </div>
         <div class="cont_sub_wrap">
@@ -180,7 +180,7 @@
                                             @item.Volumtitle
                                         </p>
                                         <p class="rating">
-                                            <span class="score_area"><span class="ico_star">별점</span><em>@item.StarPointAvg</em></span>
+                                            <span class="score_area"><span class="ico_star">별점</span><em>@item.StarPointAvg.ToString("0.0#")</em></span>
                                             <span class="count">댓글 <span class="num">@item.Commentcnt</span></span>
                                             <span class="date">@(item.Opendt.Substring(0,4)).@(item.Opendt.Substring(4,2)).@(item.Opendt.Substring(6,2))</span>
                                         </p>

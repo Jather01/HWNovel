@@ -306,5 +306,18 @@ namespace HWNovel
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_VOLUME_UPDATE", nOVELIDParameter, vOLUMENOParameter, vOLUMTITLEParameter, nOVELTEXTParameter, wRITERCOMMENTParameter, oPENDTParameter);
         }
+    
+        public virtual int PRO_VIEWCNT_UPDATE(string nOVELID, Nullable<decimal> vOLUMENO)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var vOLUMENOParameter = vOLUMENO.HasValue ?
+                new ObjectParameter("VOLUMENO", vOLUMENO) :
+                new ObjectParameter("VOLUMENO", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_VIEWCNT_UPDATE", nOVELIDParameter, vOLUMENOParameter);
+        }
     }
 }

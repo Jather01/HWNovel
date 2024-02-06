@@ -233,6 +233,10 @@
           <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
           <Parameter Name="NOVELKIND" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PRO_VIEWCNT_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
+        </Function>
         <Function Name="PRO_VOLUME_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOVELID" Type="varchar" Mode="In" />
           <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
@@ -526,6 +530,10 @@
             <Parameter Name="WRITERCOMMENT" Mode="In" Type="String" />
             <Parameter Name="OPENDT" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PRO_VIEWCNT_UPDATE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -713,6 +721,7 @@
           <FunctionImportMapping FunctionImportName="PRO_USER_RECENT_NOVEL" FunctionName="HWNovelModel.Store.PRO_USER_RECENT_NOVEL" />
           <FunctionImportMapping FunctionImportName="PRO_SERIAL_NOVEL_COMMENT_WRITE" FunctionName="HWNovelModel.Store.PRO_SERIAL_NOVEL_COMMENT_WRITE" />
           <FunctionImportMapping FunctionImportName="PRO_VOLUME_UPDATE" FunctionName="HWNovelModel.Store.PRO_VOLUME_UPDATE" />
+          <FunctionImportMapping FunctionImportName="PRO_VIEWCNT_UPDATE" FunctionName="HWNovelModel.Store.PRO_VIEWCNT_UPDATE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

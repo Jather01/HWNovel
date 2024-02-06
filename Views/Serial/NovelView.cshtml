@@ -41,7 +41,7 @@
                                 }
                             </ul>
                         </div>
-                        @if (ViewBag.PrevN != null && ViewBag.PrevN.Opendt.CompareTo(DateTime.Now.ToString("yyyyMMdd")) > 0)
+                        @if (ViewBag.PrevN != null)
                         {
                             <a href="/Serial/NovelView?volumeno=@(ViewBag.PrevN.Volumeno)@(searchParams)" class="but_label_prev">이전회</a>
                         }
@@ -49,7 +49,7 @@
                         {
                             <span class="but_label_prev">이전회</span>
                         }
-                        @if (ViewBag.NextN != null && ViewBag.NextN.Opendt.CompareTo(DateTime.Now.ToString("yyyyMMdd")) > 0)
+                        @if (ViewBag.NextN != null)
                         {
                             <a href="/Serial/NovelView?volumeno=@(ViewBag.NextN.Volumeno)@(searchParams)" class="but_label_next">다음회</a>
                         }
@@ -73,7 +73,7 @@
             <div class="viewer_footer">
                 <div class="section_grade">
                     <span class="stargrade"><span style="width:@(starPointPer)%" id="currentStarScorePercent">별점</span></span>
-                    <em id="currentStarScore">@starPointVal</em>
+                    <em id="currentStarScore">@starPointVal.ToString("0.0#")</em>
                     <span class="num" id="currentStarScoreCount">@(starText)명</span>
                     <div class="grade_insert" id="gradeInsert">
                         @if (ViewBag.StarYn > 0)

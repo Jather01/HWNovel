@@ -31,6 +31,8 @@ namespace HWNovel.ViewModels
         public DateTime Insertdt { get; set; }
 
         public int Commentcnt { get; set; }
+        public int Volumecnt { get; set; }
+        public int Favoritecnt { get; set; }
         public decimal StarPointAvg { get; set; }
 
         public HttpPostedFileBase ThumbnailFile { get; set; }
@@ -40,5 +42,6 @@ namespace HWNovel.ViewModels
         public int searchPage { get; set; } = 0;                // 목록 페이지
         public string searchOrder { get; set; }                 // 검색 정렬
         public string searchGenre { get; set; }                 // 검색 장르
+        public string searchDay { get; set; }                   // 검색 요일(0: 전체, 1: 월요일, 2: 화요일, 3: 수요일, 4: 목요일, 5: 금요일, 6: 토요일, 7: 일요일)
     }
 }

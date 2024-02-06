@@ -18,19 +18,19 @@
         function pagingPrev(page) {
             if (page - 1 > 0) {
                 $("#searchPage").val((page - 1));
-                $("#novelInfo").submit();
+                $("#NovelManageSearch").submit();
             }
         }
 
         function paging(page) {
             $("#searchPage").val((page));
-            $("#novelInfo").submit();
+            $("#NovelManageSearch").submit();
         }
 
         function pagingNext(page) {
             if (page + 10 > @endPageNum) {
                 $("#searchPage").val((page + 10));
-                $("#novelInfo").submit();
+                $("#NovelManageSearch").submit();
             }
         }
     </script>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="info_area">
                             <p class="title_group">
-                                <span class="bullet_wrap "></span>
+                                <span class="bullet_wrap"></span>
                                 <span class="title" name="novelTitle">@item.Noveltitle</span>
                             </p>
                             <p class="info_group">

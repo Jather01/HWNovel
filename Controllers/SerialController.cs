@@ -18,19 +18,260 @@ namespace HWNovel.Controllers
 {
     public class SerialController : Controller
     {
-        public ActionResult Day()
+        public ActionResult Day(Novel model)
         {
             ViewBag.topmenu = "Day";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            DayOfWeek today = DateTime.Today.DayOfWeek;
+            string dow = model.searchDay; // 오늘 요일(0: 전체, 1: 월요일, 2: 화요일, 3: 수요일, 4: 목요일, 5: 금요일, 6: 토요일, 7: 일요일)
+
+            if (string.IsNullOrWhiteSpace(dow) || !dow.Equals("0"))
+            {
+                switch (today)
+                {
+                    case DayOfWeek.Monday:
+                        dow = "1";
+                        break;
+
+                    case DayOfWeek.Tuesday:
+                        dow = "2";
+                        break;
+
+                    case DayOfWeek.Wednesday:
+                        dow = "3";
+                        break;
+
+                    case DayOfWeek.Thursday:
+                        dow = "4";
+                        break;
+
+                    case DayOfWeek.Friday:
+                        dow = "5";
+                        break;
+
+                    case DayOfWeek.Saturday:
+                        dow = "6";
+                        break;
+
+                    case DayOfWeek.Sunday:
+                        dow = "7";
+                        break;
+                }
+            }
+
+            int listCount = 20;
+            int pageNum = 1;
+            int pageSize = 10;
+            int totalCount = 0;
+
+            if (model.searchPage != 0)
+            {
+                pageNum = model.searchPage;
+            }
+            string searchDay = model.searchDay ?? "0";
+            string searchGenre = model.searchGenre ?? "1";
+            string searchOrder = model.searchOrder ?? "view";
 
             List<HWN021> genreList = new List<HWN021>();
+            List<Novel> novelList = new List<Novel>();
+
+            string nowDate = DateTime.Now.ToString("yyyyMMdd");
 
             using (var db = new HWNovelEntities())
             {
-                genreList = db.HWN021.Where(x => x.GROUPNO.Equals("03")).ToList();
+                genreList = db.HWN021.Where(x => x.GROUPNO.Equals("03")).OrderBy(x => x.CODENO).ToList();
+
+                List<HWN03> hwn03List = db.HWN03.ToList();
+
+                List<HWN031> hwn031List = (from a in db.HWN031.ToList()
+                                           where a.OPENDT.CompareTo(nowDate) <= 0
+                                           group a by new
+                                           {
+                                               a.NOVELID
+                                           } into b
+                                           select new HWN031
+                                           {
+                                               NOVELID = b.Key.NOVELID,
+                                               VOLUMENO = b.Count(),
+                                               OPENDT = b.Max(x => x.OPENDT),
+                                               VIEWCNT = b.Sum(x => x.VIEWCNT)
+                                           }).ToList();
+
+                List<HWN033> hwn033List = (from a in db.HWN033.ToList()
+                                           from b in (from c in db.HWN031.ToList()
+                                                      where c.OPENDT.CompareTo(nowDate) <= 0
+                                                      select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                           where a.NOVELID == b.NOVELID
+                                              && a.VOLUMENO == b.VOLUMENO
+                                           group a by new
+                                           {
+                                               a.NOVELID
+                                           } into d
+                                           select new HWN033
+                                           {
+                                               NOVELID = d.Key.NOVELID,
+                                               STARPOINT = d.Average(x => x.STARPOINT)
+                                           }).ToList();
+
+                var hwn011List = (from a in db.HWN011.ToList()
+                                  group a by new
+                                  {
+                                      a.NOVELID
+                                  } into b
+                                  select new
+                                  {
+                                      NOVELID = b.Key.NOVELID,
+                                      FAVORITECNT = b.Count()
+                                  }).ToList();
+
+
+                novelList = (from a in hwn03List
+                             join b in hwn031List
+                             on a.NOVELID equals b.NOVELID into table1
+                             from b in table1.ToList().DefaultIfEmpty()
+                             join c in hwn033List
+                             on a.NOVELID equals c.NOVELID into table2
+                             from c in table2.ToList().DefaultIfEmpty()
+                             join d in hwn011List
+                             on a.NOVELID equals d.NOVELID into table3
+                             from d in table3.ToList().DefaultIfEmpty()
+                             select new Novel
+                             {
+                                 Novelid = a.NOVELID,
+                                 Noveltitle = a.NOVELTITLE,
+                                 Writer = a.WRITER,
+                                 Genre = a.GENRE,
+                                 Thumnail = a.THUMNAIL,
+                                 Mon = a.MON,
+                                 Tue = a.TUE,
+                                 Wed = a.WED,
+                                 Thu = a.THU,
+                                 Fri = a.FRI,
+                                 Sat = a.SAT,
+                                 Sun = a.SUN,
+                                 Opendt = b.OPENDT,
+                                 Viewcnt = b?.VIEWCNT ?? 0,
+                                 Volumecnt = Decimal.ToInt32(b?.VOLUMENO ?? 0),
+                                 StarPointAvg = Math.Round(c?.STARPOINT ?? 0, 2),
+                                 Favoritecnt = d?.FAVORITECNT ?? 0
+
+                             }).ToList();
+
+                if (!string.IsNullOrWhiteSpace(model.searchGenre))
+                {
+                    if (!model.searchGenre.Equals("all"))
+                        novelList = novelList.Where(x => x.Genre.Equals(model.searchGenre)).ToList();
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.searchDay))
+                {
+                    if (!model.searchDay.Equals("0"))
+                    {
+                        switch (model.searchDay)
+                        {
+                            case "1":
+                                novelList = novelList.Where(x => x.Mon.Equals("1")).ToList();
+                                break;
+
+                            case "2":
+                                novelList = novelList.Where(x => x.Tue.Equals("1")).ToList();
+                                break;
+
+                            case "3":
+                                novelList = novelList.Where(x => x.Wed.Equals("1")).ToList();
+                                break;
+
+                            case "4":
+                                novelList = novelList.Where(x => x.Thu.Equals("1")).ToList();
+                                break;
+
+                            case "5":
+                                novelList = novelList.Where(x => x.Fri.Equals("1")).ToList();
+                                break;
+
+                            case "6":
+                                novelList = novelList.Where(x => x.Sat.Equals("1")).ToList();
+                                break;
+
+                            case "7":
+                                novelList = novelList.Where(x => x.Sun.Equals("1")).ToList();
+                                break;
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.searchOrder))
+                {
+                    switch (model.searchOrder)
+                    {
+                        case "view":
+                            novelList = novelList.OrderByDescending(x => x.Viewcnt).ToList();
+                            break;
+
+                        case "star":
+                            novelList = novelList.OrderByDescending(x => x.StarPointAvg).ToList();
+                            break;
+
+                        case "title":
+                            novelList = novelList.OrderBy(x => x.Noveltitle).ToList();
+                            break;
+
+                        case "favorite":
+                            novelList = novelList.OrderByDescending(x => x.Favoritecnt).ToList();
+                            break;
+                    }
+                }
+
+                totalCount = novelList.Count;
             }
 
+            novelList = novelList.Skip((pageNum - 1) * listCount)
+                 .Take(listCount)
+                 .ToList();
+
+            //하단 시작 페이지 번호 
+            int startPageNum = 1 + ((pageNum - 1) / pageSize) * pageSize;
+            //하단 끝 페이지 번호
+            int endPageNum = startPageNum + pageSize - 1;
+
+            //전체 페이지의 갯수 구하기
+            int totalPageCount = (int)Math.Ceiling(totalCount / (double)listCount);
+            //끝 페이지 번호가 이미 전체 페이지 갯수보다 크게 계산되었다면 잘못된 값이다.
+            if (endPageNum > totalPageCount)
+            {
+                endPageNum = totalPageCount; //보정해 준다. 
+            }
+
+            foreach (var n in novelList)
+            {
+                string imgPath = n.Thumnail;
+                string imgBase24 = "";
+
+                if (System.IO.File.Exists(imgPath))
+                {
+                    byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                    imgBase24 = Convert.ToBase64String(b);
+                }
+
+                n.ThumbnailBase64 = imgBase24;
+            }
+
+            ViewBag.StartPageNum = startPageNum;
+            ViewBag.EndPageNum = endPageNum;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.ListCount = listCount;
+            ViewBag.NowDate = nowDate;
+
+            ViewBag.NovelList = novelList;
             ViewBag.GenreList = genreList;
+
+            ViewBag.searchDay = model.searchDay;
+            ViewBag.searchPage = pageNum;
+            ViewBag.searchGenre = model.searchGenre;
+            ViewBag.searchOrder = model.searchOrder;
 
             return View();
         }
@@ -69,7 +310,9 @@ namespace HWNovel.Controllers
             }
 
             ViewBag.topmenu = genName;
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             return View();
         }
@@ -77,16 +320,19 @@ namespace HWNovel.Controllers
         public ActionResult Fin()
         {
             ViewBag.topmenu = "Fin";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
             return View();
         }
 
         public ActionResult NovelManage(Novel model)
         {
             ViewBag.topmenu = "NovelManage";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -228,9 +474,9 @@ namespace HWNovel.Controllers
         public ActionResult NovelWrite(Novel model)
         {
             ViewBag.topmenu = "NovelManage";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -268,9 +514,9 @@ namespace HWNovel.Controllers
         public ActionResult NovelWritePro(Novel model)
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -288,7 +534,7 @@ namespace HWNovel.Controllers
                 {
                     if (model != null)
                     {
-                        if (!string.IsNullOrEmpty(model.Noveltitle) && !string.IsNullOrEmpty(model.Genre) && !string.IsNullOrEmpty(model.Novelinfo) && model.ThumbnailFile != null)
+                        if (!string.IsNullOrWhiteSpace(model.Noveltitle) && !string.IsNullOrWhiteSpace(model.Genre) && !string.IsNullOrWhiteSpace(model.Novelinfo) && model.ThumbnailFile != null)
                         {
                             model.Mon = model.Mon != "1" ? "0" : model.Mon;
                             model.Tue = model.Tue != "1" ? "0" : model.Tue;
@@ -363,33 +609,60 @@ namespace HWNovel.Controllers
 
             HWN011 u = new HWN011();
             HWN021 genreCode = new HWN021();
-            HWN03 hwn03 = new HWN03();
             Novel n = new Novel();
             List<HWN031> nList = new List<HWN031>();
             List<Novel> novleList = new List<Novel>();
             List<HWN011> favorits = new List<HWN011>();
             int favorit = 0;
+            string nowDate = DateTime.Now.ToString("yyyyMMdd");
 
             using (var db = new HWNovelEntities())
             {
-                hwn03 = db.HWN03.Where(x => x.NOVELID.Equals(novelId)).SingleOrDefault();
-                genreCode = db.HWN021.Where(x => x.GROUPNO.Equals("03") && x.CODENO.Equals(hwn03.GENRE)).SingleOrDefault();
+                var n03 = db.HWN03.Where(x => x.NOVELID.Equals(novelId)).ToList();
 
-                n.Novelid = hwn03.NOVELID;
-                n.Noveltitle = hwn03.NOVELTITLE;
-                n.Novelinfo = hwn03.NOVELINFO;
-                n.Writer = hwn03.WRITER;
+                var hwn033List = (from a in db.HWN033.ToList()
+                                  from b in (from c in db.HWN031.ToList()
+                                              where c.OPENDT.CompareTo(nowDate) <= 0
+                                              select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                  where a.NOVELID == b.NOVELID
+                                      && a.VOLUMENO == b.VOLUMENO
+                                  group a by new
+                                  {
+                                      a.NOVELID
+                                  } into d
+                                  select new HWN033
+                                  {
+                                      NOVELID = d.Key.NOVELID,
+                                      STARPOINT = d.Average(x => x.STARPOINT)
+                                  }).ToList();
+
+                n = (from a in n03
+                     join b in hwn033List
+                     on a.NOVELID equals b.NOVELID into table2
+                     from b in table2.ToList().DefaultIfEmpty()
+                     select new Novel
+                     {
+                         Novelid = a.NOVELID,
+                         Noveltitle = a.NOVELTITLE,
+                         Novelinfo = a.NOVELINFO,
+                         Writer = a.WRITER,
+                         searchGenre = a.GENRE,
+                         Thumnail = a.THUMNAIL,
+                         Mon = a.MON,
+                         Tue = a.TUE,
+                         Wed = a.WED,
+                         Thu = a.THU,
+                         Fri = a.FRI,
+                         Sat = a.SAT,
+                         Sun = a.SUN,
+                         StarPointAvg = Math.Round(b?.STARPOINT ?? 0, 2)
+                     }).SingleOrDefault();
+
+                genreCode = db.HWN021.Where(x => x.GROUPNO.Equals("03") && x.CODENO.Equals(n.searchGenre)).SingleOrDefault();
+
                 n.Genre = genreCode.CODENAME;
-                n.Thumnail = hwn03.THUMNAIL;
-                n.Mon = hwn03.MON;
-                n.Tue = hwn03.TUE;
-                n.Wed = hwn03.WED;
-                n.Thu = hwn03.THU;
-                n.Fri = hwn03.FRI;
-                n.Sat = hwn03.SAT;
-                n.Sun = hwn03.SUN;
 
-                if (!string.IsNullOrEmpty(userid))
+                if (!string.IsNullOrWhiteSpace(userid))
                 {
                     List<HWN011> list = db.HWN011.ToList();
                     u = (from a in list
@@ -407,7 +680,7 @@ namespace HWNovel.Controllers
                 else
                 {
                     string nowdate = DateTime.Now.ToString("yyyyMMdd");
-                    nList = db.HWN031.Where(x => x.NOVELID.Equals(novelId) && x.OPENDT.CompareTo(nowdate) > 0).ToList();
+                    nList = db.HWN031.Where(x => x.NOVELID.Equals(novelId) && x.OPENDT.CompareTo(nowdate) <= 0).ToList();
                 }
 
                 var n032List = db.HWN032.Where(x => x.NOVELID.Equals(novelId))
@@ -711,7 +984,7 @@ namespace HWNovel.Controllers
                 {
                     if (model != null)
                     {
-                        if (!string.IsNullOrEmpty(model.Noveltitle) && !string.IsNullOrEmpty(model.Genre) && !string.IsNullOrEmpty(model.Novelinfo))
+                        if (!string.IsNullOrWhiteSpace(model.Noveltitle) && !string.IsNullOrWhiteSpace(model.Genre) && !string.IsNullOrWhiteSpace(model.Novelinfo))
                         {
                             model.Mon = model.Mon != "1" ? "0" : model.Mon;
                             model.Tue = model.Tue != "1" ? "0" : model.Tue;
@@ -815,7 +1088,7 @@ namespace HWNovel.Controllers
                 {
                     if (model != null)
                     {
-                        if (!string.IsNullOrEmpty(model.Volumtitle) && !string.IsNullOrEmpty(model.Noveltext) && !string.IsNullOrEmpty(model.Opendt))
+                        if (!string.IsNullOrWhiteSpace(model.Volumtitle) && !string.IsNullOrWhiteSpace(model.Noveltext) && !string.IsNullOrWhiteSpace(model.Opendt))
                         {
                             string opendt = model.Opendt.Replace(".", "");
                             string writerComment = model.Writercomment ?? ".";
@@ -881,43 +1154,6 @@ namespace HWNovel.Controllers
                          Thumnail = b.THUMNAIL
                      }).SingleOrDefault();
 
-                nextN = (from a in db.HWN031
-                             where (a.NOVELID == novelId &&
-                                    a.VOLUMENO > volumeNoNum)
-                             group a by a.NOVELID into b
-                             select new {
-                                Novelid = b.Key,
-                                Volumeno = b.Min(x => x.VOLUMENO)
-                             } into c
-                             from d in db.HWN031
-                             where (c.Novelid == d.NOVELID &&
-                                    c.Volumeno == d.VOLUMENO)
-                             select new Novel
-                             {
-                                 Novelid = d.NOVELID,
-                                 Volumeno = d.VOLUMENO,
-                                 Opendt = d.OPENDT
-                             }).SingleOrDefault();
-
-                prevN = (from a in db.HWN031
-                         where (a.NOVELID == novelId &&
-                                a.VOLUMENO < volumeNoNum)
-                         group a by a.NOVELID into b
-                         select new
-                         {
-                             Novelid = b.Key,
-                             Volumeno = b.Max(x => x.VOLUMENO)
-                         } into c
-                         from d in db.HWN031
-                         where (c.Novelid == d.NOVELID &&
-                                c.Volumeno == d.VOLUMENO)
-                         select new Novel
-                         {
-                             Novelid = d.NOVELID,
-                             Volumeno = d.VOLUMENO,
-                             Opendt = d.OPENDT
-                         }).SingleOrDefault();
-
                 nList = (from a in db.HWN031
                          where (a.NOVELID == novelId)
                          orderby a.VOLUMENO descending
@@ -925,7 +1161,8 @@ namespace HWNovel.Controllers
                          {
                              Novelid = a.NOVELID,
                              Volumtitle = a.VOLUMTITLE,
-                             Volumeno = a.VOLUMENO
+                             Volumeno = a.VOLUMENO,
+                             Opendt = a.OPENDT
                          }).ToList();
 
                 if (n == null)
@@ -942,16 +1179,54 @@ namespace HWNovel.Controllers
                         return RedirectToAction("NovelInfo", "Serial", new { novelid = novelId, pageNum = searchPage, order = order });
                     }
 
-                    nList = nList.Where(x => x.Opendt.CompareTo(nowdate) < 0).ToList();
+                    nList = nList.Where(x => x.Opendt.CompareTo(nowdate) <= 0).ToList();
                 }
+
+                nextN = (from a in nList
+                         where (a.Volumeno > volumeNoNum)
+                         group a by a.Novelid into b
+                         select new
+                         {
+                             Novelid = b.Key,
+                             Volumeno = b.Min(x => x.Volumeno)
+                         } into c
+                         from d in db.HWN031
+                         where (c.Novelid == d.NOVELID &&
+                             c.Volumeno == d.VOLUMENO)
+                         select new Novel
+                         {
+                             Novelid = d.NOVELID,
+                             Volumeno = d.VOLUMENO,
+                             Opendt = d.OPENDT
+                         }).SingleOrDefault();
+
+                prevN = (from a in nList
+                         where (a.Volumeno < volumeNoNum)
+                         group a by a.Novelid into b
+                         select new
+                         {
+                             Novelid = b.Key,
+                             Volumeno = b.Max(x => x.Volumeno)
+                         } into c
+                         from d in db.HWN031
+                         where (c.Novelid == d.NOVELID &&
+                             c.Volumeno == d.VOLUMENO)
+                         select new Novel
+                         {
+                             Novelid = d.NOVELID,
+                             Volumeno = d.VOLUMENO,
+                             Opendt = d.OPENDT
+                         }).SingleOrDefault();
 
                 if (userinfo != null)
                 {
                     db.PRO_USER_RECENT_NOVEL(userid, n.Novelid, n.Volumeno, "1");
-                    db.SaveChanges();
 
                     starYn = db.HWN033.Where(x => x.NOVELID.Equals(novelId) && x.VOLUMENO.ToString().Equals(volumeNo) && x.USERID.Equals(userid)).ToList().Count;
                 }
+
+                db.PRO_VIEWCNT_UPDATE(n.Novelid, n.Volumeno);
+                db.SaveChanges();
 
                 Novel spResult = db.HWN033.Where(x => x.NOVELID.Equals(novelId) && x.VOLUMENO.ToString().Equals(volumeNo))
                                         .GroupBy(x => new { x.NOVELID, x.VOLUMENO })
@@ -966,14 +1241,7 @@ namespace HWNovel.Controllers
                 if(spResult != null)
                 {
                     spText[0] = spResult.Commentcnt;
-                    if (spResult.StarPointAvg == 10)
-                    {
-                        spText[1] = Math.Round(spResult.StarPointAvg, 1);
-                    }
-                    else
-                    {
-                        spText[1] = Math.Round(spResult.StarPointAvg, 2);
-                    }
+                    spText[1] = Math.Round(spResult.StarPointAvg, 2);
                 }
             }
 
@@ -1020,7 +1288,7 @@ namespace HWNovel.Controllers
 
             List<Comment> cList = new List<Comment>();
 
-            if (!string.IsNullOrEmpty(model.Novelid))
+            if (!string.IsNullOrWhiteSpace(model.Novelid))
             {
                 using (var db = new HWNovelEntities())
                 {
@@ -1150,7 +1418,7 @@ namespace HWNovel.Controllers
                 {
                     if (model != null)
                     {
-                        if (!string.IsNullOrEmpty(model.Volumtitle) && !string.IsNullOrEmpty(model.Noveltext) && !string.IsNullOrEmpty(model.Opendt))
+                        if (!string.IsNullOrWhiteSpace(model.Volumtitle) && !string.IsNullOrWhiteSpace(model.Noveltext) && !string.IsNullOrWhiteSpace(model.Opendt))
                         {
                             string opendt = model.Opendt.Replace(".", "");
                             string writerComment = model.Writercomment ?? ".";
