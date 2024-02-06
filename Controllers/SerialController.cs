@@ -26,41 +26,11 @@ namespace HWNovel.Controllers
             ViewBag.userinfo = userinfo;
 
             DayOfWeek today = DateTime.Today.DayOfWeek;
-            string dow = model.searchDay; // 오늘 요일(0: 전체, 1: 월요일, 2: 화요일, 3: 수요일, 4: 목요일, 5: 금요일, 6: 토요일, 7: 일요일)
+            int todayint = (int)today;
 
-            if (string.IsNullOrWhiteSpace(dow) || !dow.Equals("0"))
-            {
-                switch (today)
-                {
-                    case DayOfWeek.Monday:
-                        dow = "1";
-                        break;
-
-                    case DayOfWeek.Tuesday:
-                        dow = "2";
-                        break;
-
-                    case DayOfWeek.Wednesday:
-                        dow = "3";
-                        break;
-
-                    case DayOfWeek.Thursday:
-                        dow = "4";
-                        break;
-
-                    case DayOfWeek.Friday:
-                        dow = "5";
-                        break;
-
-                    case DayOfWeek.Saturday:
-                        dow = "6";
-                        break;
-
-                    case DayOfWeek.Sunday:
-                        dow = "7";
-                        break;
-                }
-            }
+            string searchDay = model.searchDay ?? todayint.ToString();
+            string searchGenre = model.searchGenre ?? "all";
+            string searchOrder = model.searchOrder ?? "view";
 
             int listCount = 20;
             int pageNum = 1;
@@ -71,9 +41,6 @@ namespace HWNovel.Controllers
             {
                 pageNum = model.searchPage;
             }
-            string searchDay = model.searchDay ?? "0";
-            string searchGenre = model.searchGenre ?? "1";
-            string searchOrder = model.searchOrder ?? "view";
 
             List<HWN021> genreList = new List<HWN021>();
             List<Novel> novelList = new List<Novel>();
@@ -166,11 +133,11 @@ namespace HWNovel.Controllers
                         novelList = novelList.Where(x => x.Genre.Equals(model.searchGenre)).ToList();
                 }
 
-                if (!string.IsNullOrWhiteSpace(model.searchDay))
+                if (!string.IsNullOrWhiteSpace(searchDay))
                 {
-                    if (!model.searchDay.Equals("0"))
+                    if (!searchDay.Equals("7"))
                     {
-                        switch (model.searchDay)
+                        switch (searchDay)
                         {
                             case "1":
                                 novelList = novelList.Where(x => x.Mon.Equals("1")).ToList();
@@ -196,7 +163,7 @@ namespace HWNovel.Controllers
                                 novelList = novelList.Where(x => x.Sat.Equals("1")).ToList();
                                 break;
 
-                            case "7":
+                            case "0":
                                 novelList = novelList.Where(x => x.Sun.Equals("1")).ToList();
                                 break;
                         }
@@ -268,10 +235,10 @@ namespace HWNovel.Controllers
             ViewBag.NovelList = novelList;
             ViewBag.GenreList = genreList;
 
-            ViewBag.searchDay = model.searchDay;
+            ViewBag.searchDay = searchDay;
             ViewBag.searchPage = pageNum;
-            ViewBag.searchGenre = model.searchGenre;
-            ViewBag.searchOrder = model.searchOrder;
+            ViewBag.searchGenre = searchGenre;
+            ViewBag.searchOrder = searchOrder;
 
             return View();
         }
