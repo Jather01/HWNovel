@@ -2335,6 +2335,14 @@ span.but_label_next {
             padding:0;
         }
 
+    .comments_area .cbox_comment_none {
+        min-height: 101px;
+        padding: 30px 0 0;
+        color: #999;
+        line-height: 101px;
+        text-align: center;
+    }
+
     .comments_area .cbox_comment_box {
         position: relative;
         border-bottom: 1px solid #e2e2e2;

@@ -125,99 +125,113 @@
             }
         </div>
         <div tabindex="0" class="cbox_content_wrap" style="outline: 0">
-            <ul class="cbox_list">
-                @foreach (var item in ViewBag.cList)
-                {
-                    <li class="cbox_comment">
-                        <div class="cbox_comment_box">
-                            <div class="cbox_area">
-                                <div class="cbox_info">
-                                    <span class="cbox_info_main">
-                                        <span class="cbox_name">
-                                            <span class="cbox_name_area">
-                                                <span class="cbox_nick_area">
-                                                    <span class="cbox_nick">@item.Nickname</span>
-                                                </span>
-                                                <span class="cbox_id_area">
-                                                    <span class="cbox_id">(@(item.Userid.Substring(0,4))****)</span>
+            @if (totalCount == 0)
+            {
+                <div class="cbox_comment_none">
+                    <div class="cbox_con_inform">
+                        <span class="cbox_contents_none">등록된 댓글이 없습니다.</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <ul class="cbox_list">
+                    @foreach (var item in ViewBag.cList)
+                    {
+                        <li class="cbox_comment">
+                            <div class="cbox_comment_box">
+                                <div class="cbox_area">
+                                    <div class="cbox_info">
+                                        <span class="cbox_info_main">
+                                            <span class="cbox_name">
+                                                <span class="cbox_name_area">
+                                                    <span class="cbox_nick_area">
+                                                        <span class="cbox_nick">@item.Nickname</span>
+                                                    </span>
+                                                    <span class="cbox_id_area">
+                                                        <span class="cbox_id">(@(item.Userid.Substring(0,4))****)</span>
+                                                    </span>
                                                 </span>
                                             </span>
                                         </span>
-                                    </span>
-                                    @if (userinfo[0] != "0")
-                                    {
-                                        if (userinfo[0] == item.Userid || userinfo[3] == "1")
+                                        @if (userinfo[0] != "0")
                                         {
-                                            <span class="cbox_info_sub">
-                                                <span class="cbox_work_sub">
-                                                    <a class="cbox_btn_delete" href="javascript:deleteComment(@item.Usercommentno)">삭제</a>
+                                            if (userinfo[0] == item.Userid || userinfo[3] == "1")
+                                            {
+                                                <span class="cbox_info_sub">
+                                                    <span class="cbox_work_sub">
+                                                        <a class="cbox_btn_delete" href="javascript:deleteComment(@item.Usercommentno)">삭제</a>
+                                                    </span>
                                                 </span>
-                                            </span>
+                                            }
                                         }
-                                    }
-                                </div>
-                                <div class="cbox_text_wrap">
-                                    <span class="cbox_contents">@item.Usercomment</span>
-                                </div>
-                                <div class="cbox_info_base">
-                                    <span class="cbox_date">@(item.Insertdt.ToString("yyyyMMdd").Substring(0,4)).@(item.Insertdt.ToString("yyyyMMdd").Substring(4,2)).@(item.Insertdt.ToString("yyyyMMdd").Substring(6,2))</span>
+                                    </div>
+                                    <div class="cbox_text_wrap">
+                                        <span class="cbox_contents">@item.Usercomment</span>
+                                    </div>
+                                    <div class="cbox_info_base">
+                                        <span class="cbox_date">@(item.Insertdt.ToString("yyyyMMdd").Substring(0,4)).@(item.Insertdt.ToString("yyyyMMdd").Substring(4,2)).@(item.Insertdt.ToString("yyyyMMdd").Substring(6,2))</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                }
-            </ul>
+                        </li>
+                    }
+                </ul>
+            }
         </div>
-        <div class="notice_paging">
-            <ul class="paging">
-                @if (startPageNum == 1)
-                {
-                    <li class="page_arrow prev page-item">
-                        <span class="blind">이전 페이지로 이동</span>
-                    </li>
-                }
-                else
-                {
-                    <li class="page_arrow prev page-item">
-                        <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
-                            <span class="blind">이전 페이지로 이동</span>
-                        </a>
-                    </li>
-                }
-                @for (int i = startPageNum; i <= endPageNum; i++)
-                {
-                    if (i == pageNum)
+        @if (totalCount > 0)
+        {
+            <div class="notice_paging">
+                <ul class="paging">
+                    @if (startPageNum == 1)
                     {
-                        <li class="page-item active">
-                            <span class="page-link">
-                                @i
-                                <span class="blind">(current)</span>
-                            </span>
+                        <li class="page_arrow prev page-item">
+                            <span class="blind">이전 페이지로 이동</span>
                         </li>
                     }
                     else
                     {
-                        <li class="page-item">
-                            <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                        <li class="page_arrow prev page-item">
+                            <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
+                                <span class="blind">이전 페이지로 이동</span>
+                            </a>
                         </li>
                     }
-                }
-                @if (endPageNum == pageCount)
-                {
-                    <li class="page_arrow next page-item">
-                        <span class="blind">다음 페이지로 이동</span>
-                    </li>
-                }
-                else
-                {
-                    <li class="page_arrow next page-item">
-                        <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                    @for (int i = startPageNum; i <= endPageNum; i++)
+                    {
+                        if (i == pageNum)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    @i
+                                    <span class="blind">(current)</span>
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                            </li>
+                        }
+                    }
+                    @if (endPageNum == pageCount)
+                    {
+                        <li class="page_arrow next page-item">
                             <span class="blind">다음 페이지로 이동</span>
-                        </a>
-                    </li>
-                }
-            </ul>
-        </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page_arrow next page-item">
+                            <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                                <span class="blind">다음 페이지로 이동</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
     </div>
     <script type="text/JavaScript">
         $("#cbox_logout").click(function () {
