@@ -1,5 +1,49 @@
-﻿<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">New</h1>
-    </section>
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    int totalCount = ViewBag.TotalCount ?? 0;
+
+}
+<main>
+    <div class="component_section">
+        <div class="component_head novel_head">
+            <h2 class="new_novel_title">@(ViewBag.NowMonth)월 @(totalCount)작품</h2>
+        </div>
+        <ul class="card_list type1">
+            @foreach (var item in ViewBag.NovelList)
+            {
+                <li class="item">
+                    <a href="/Serial/NovelInfo?novelid=@item.Novelid" class="link">
+                        <div class="thumbnail">
+                            <img src="data:image/webp;base64, @item.ThumbnailBase64" width="299" height="192">
+                        </div>
+                        <div class="info_area">
+                            <p class="title_group">
+                                <span class="bullet_wrap">
+                                    @if (item.Opendt == ViewBag.NowDate)
+                                    {
+                                        <span class="bullet_up">UP</span>
+                                    }
+                                </span>
+                                <span class="title" name="novelTitle">@item.Noveltitle</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author" name="novelWriter">@item.Writer</span>
+                                <span class="count">총<span>@(item.Volumecnt)회</span></span>
+                            </p>
+                            <p class="meta_data_group">
+                                <span class="score_area"><span class="ico_star">별점</span>@item.StarPointAvg.ToString("0.0#")</span>
+                                <span class="count">관심<span>@item.Favoritecnt</span></span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
 </main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () { });
+    </script>
+}

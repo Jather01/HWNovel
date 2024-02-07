@@ -76,7 +76,7 @@
             @foreach (var item in ViewBag.NovelList)
             {
                 <li class="item">
-                    <a href="/Serial/NovelInfo?novelid=@item.Novelid&topmenu=NovelManage" class="link">
+                    <a href="/Serial/NovelInfo?novelid=@item.Novelid" class="link">
                         <div class="thumbnail">
                             <img src="data:image/webp;base64, @item.ThumbnailBase64" width="299" height="192">
                         </div>

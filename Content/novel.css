@@ -1494,6 +1494,11 @@ button, input, select, textarea {
     font-weight: bold;
 }
 
+.component_head .new_novel_title {
+    font-size: 17px;
+    font-weight: bold;
+}
+
     .component_head .title .past_number {
         margin-left: 4px;
         letter-spacing: -0.3px;
@@ -1789,18 +1794,27 @@ button, input, select, textarea {
         line-height: normal;
     }
 
-.but_label_prev {
-    background-image: url(/Content/Icons/novel-left.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 27px;
-    height: 27px;
-    text-indent: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    display: inline-block;
-    vertical-align: top;
-}
+    .dropdown-menu .dropdown-item:active {
+        color: var(--bs-dropdown-link-hover-color);
+        background-color: var(--bs-dropdown-link-hover-bg);
+    }
+
+    .dropdown-menu .dropdown-item.slt {
+        text-decoration: underline;
+    }
+
+    .but_label_prev {
+        background-image: url(/Content/Icons/novel-left.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 27px;
+        height: 27px;
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: top;
+    }
 
 .viewer_header .select_label .but_label_prev, .viewer_header .select_label .but_label_next {
     position: absolute;
@@ -2150,10 +2164,6 @@ span.but_label_next {
         font-size: 30px;
         color: #ff222e;
     }
-
-.dropdown-menu .slt a {
-    text-decoration: underline;
-}
 
 .comments_area {
     border: 1px solid #dadbdc;

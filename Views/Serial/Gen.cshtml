@@ -1,5 +1,145 @@
-﻿<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">@ViewBag.topmenu</h1>
-    </section>
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    string searchOrder = ViewBag.searchOrder ?? "view";
+    string searchGenre = ViewBag.searchGenre ?? "1";
+    int pageNum = ViewBag.searchPage ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+
+}
+<main>
+    <script type="text/JavaScript">
+        function pagingPrev(page) {
+            if (page - 1 > 0) {
+                $("#searchPage").val((page - 1));
+                $("#NovelGenSearch").submit();
+            }
+        }
+
+        function paging(page) {
+            $("#searchPage").val((page));
+            $("#NovelGenSearch").submit();
+        }
+
+        function pagingNext(page) {
+            if (page + 10 > @endPageNum) {
+                $("#searchPage").val((page + 10));
+                $("#NovelGenSearch").submit();
+            }
+        }
+    </script>
+    <div class="component_section">
+        <div class="component_head novel_head">
+            <form id="NovelGenSearch" name="NovelGenSearch" method="GET" action="/Serial/Gen">
+                <input type="hidden" id="genre" name="genre" value="@searchGenre"/>
+                <div class="right_area">
+                    <div class="select_group">
+                        <select class="novel_select form-select" name="searchOrder" id="searchOrder" asp-for="searchOrder">
+                            <option value="view" @(searchOrder == "view" ? "selected" : "")>조회수</option>
+                            <option value="star" @(searchOrder == "star" ? "selected" : "")>별점</option>
+                            <option value="title" @(searchOrder == "title" ? "selected" : "")>제목</option>
+                            <option value="favorite" @(searchOrder == "favorite" ? "selected" : "")>관심등록</option>
+                        </select>
+                        <input type="hidden" name="searchPage" id="searchPage" value="@pageNum" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <ul class="card_list type1">
+            @foreach (var item in ViewBag.NovelList)
+            {
+                <li class="item">
+                    <a href="/Serial/NovelInfo?novelid=@item.Novelid" class="link">
+                        <div class="thumbnail">
+                            <img src="data:image/webp;base64, @item.ThumbnailBase64" width="299" height="192">
+                        </div>
+                        <div class="info_area">
+                            <p class="title_group">
+                                <span class="bullet_wrap">
+                                    @if (item.Opendt == ViewBag.NowDate)
+                                    {
+                                        <span class="bullet_up">UP</span>
+                                    }
+                                </span>
+                                <span class="title" name="novelTitle">@item.Noveltitle</span>
+                            </p>
+                            <p class="info_group">
+                                <span class="author" name="novelWriter">@item.Writer</span>
+                                <span class="count">총<span>@(item.Volumecnt)회</span></span>
+                            </p>
+                            <p class="meta_data_group">
+                                <span class="score_area"><span class="ico_star">별점</span>@item.StarPointAvg.ToString("0.0#")</span>
+                                <span class="count">관심<span>@item.Favoritecnt</span></span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+        <div class="notice_paging">
+            <ul class="paging">
+                @if (startPageNum == 1)
+                {
+                    <li class="page_arrow prev page-item">
+                        <span class="blind">이전 페이지로 이동</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow prev page-item">
+                        <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
+                            <span class="blind">이전 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = startPageNum; i <= endPageNum; i++)
+                {
+                    if (i == pageNum)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">
+                                @i
+                                <span class="blind">(current)</span>
+                            </span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                        </li>
+                    }
+                }
+                @if (endPageNum == pageCount)
+                {
+                    <li class="page_arrow next page-item">
+                        <span class="blind">다음 페이지로 이동</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow next page-item">
+                        <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                            <span class="blind">다음 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
 </main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () { });
+
+        $("#searchOrder").change(function () {
+            $("#NovelGenSearch").submit();
+        });
+    </script>
+}
