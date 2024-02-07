@@ -76,7 +76,6 @@ namespace HWNovel.Controllers
                     rlist = (from a in list
                              join b in hwn031list
                              on a.NOVELID equals b.NOVELID
-                             where a.VOLUMENO < b.VOLUMENO
                              select new Recent
                              {
                                  Userid = a.USERID,
@@ -84,11 +83,11 @@ namespace HWNovel.Controllers
                                  Noveltitle = a.NOVELTITLE,
                                  Thumnail = a.THUMNAIL,
                                  Volumeno = a.VOLUMENO,
-                                 Nextvolumeno = b.VOLUMENO,
+                                 Nextvolumeno = b.VOLUMENO > a.VOLUMENO ? b.VOLUMENO : 999999,
                                  Volumtitle = a.VOLUMTITLE,
                                  Novelkind = a.NOVELKIND,
                                  Date = a.DATE
-                             } into c
+                             }into c
                              group c by new
                              {
                                  c.Userid,

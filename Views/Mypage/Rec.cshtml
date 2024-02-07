@@ -1,33 +1,75 @@
-﻿<main>
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    int pageNum = ViewBag.searchPage ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+
+}
+<main>
     <div id="content">
         <div class="cont_sub_wrap">
             <div class="cont_sub">
-                <ul id="recentArea" class="list_type2 v3">
-                    @foreach (var item in ViewBag.RecentList)
-                    {
-                        <li class="recentNovel">
-                            <a href="#" class="list_item">
-                                <div class="pic">
-                                    <img src="data:image/webp;base64, @item.ThumbnailBase64" width="150" height="120">
+                @if (totalCount > 0)
+                {
+                    <ul id="recentArea" class="list_type2 v3">
+                        @foreach (var item in ViewBag.RecentList)
+                        {
+                            <li class="recentNovel">
+                                @{
+                                    string url = "";
+                                    string kind = "";
+                                    if (item.Novelkind == "1")
+                                    {
+                                        url = "/Serial";
+                                        kind = "연재";
+                                    }
+                                    else
+                                    {
+                                        url = "/Challenge";
+                                        kind = "도전";
+                                    }
+                                }
+                                <a href="@(url)/NovelInfo?novelid=@(item.Novelid)" class="list_item">
+                                    <div class="pic">
+                                        <img src="data:image/webp;base64, @item.ThumbnailBase64" width="150" height="120">
+                                    </div>
+                                    <div class="list_info v6">
+                                        <p class="subj">@item.Noveltitle</p>
+                                        <p class="sub_title"><span class="ellipsis">@item.Volumtitle</span></p>
+                                        <p class="league">
+                                            <span>@kind 웹소설 </span>
+                                            <em class="line">|</em>
+                                            <span class="read recentDate">@item.Date.ToString("yyyy.MM.dd.") 읽음</span>
+                                        </p>
+                                    </div>
+                                </a>
+                                <div class="manage_area">
+                                    @if (item.Nextvolumeno == 999999)
+                                    {
+                                        <a class="button type2">다음회</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@(url)/NovelView?novelid=@(item.Novelid)&volumeno=@(item.Nextvolumeno)" class="button type2">다음회</a>
+                                    }
                                 </div>
-                                <div class="list_info v6">
-                                    <p class="subj">@item.Noveltitle</p>
-                                    <p class="sub_title"><span class="ellipsis">@item.Volumtitle</span></p>
-                                    <p class="league">
-                                        <span class="read recentDate">@item.Date.ToString("yyyy.MM.dd.") 읽음</span>
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="manage_area">
-                                <a href="#" class="button type2">다음회</a>
-                            </div>
-                            <a href="javascript:deleteRecent('@item.Novelid');" class="delete_area"><span class="blind">삭제</span></a>
-                        </li>
-                    }
-                </ul>
-                <div id="emptyArea" class="nodata my">
-                    <p>최근 본 작품이 없습니다</p>
-                </div>
+                                <a href="javascript:deleteRecent('@item.Novelid');" class="delete_area"><span class="blind">삭제</span></a>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div id="emptyArea" class="nodata my">
+                        <p>최근 본 작품이 없습니다</p>
+                    </div>
+                }
             </div>
         </div>
     </div>
