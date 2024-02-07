@@ -186,6 +186,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HWNovelDataModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Recent.cs" />
     <Compile Include="ViewModels\Novel.cs" />
     <Compile Include="ViewModels\Code.cs" />
     <Compile Include="ViewModels\Notice.cs" />
@@ -271,6 +272,7 @@
     <Content Include="Content\Icons\plus-circle-fill.svg" />
     <Content Include="Content\Icons\plus-circle.svg" />
     <Content Include="Content\Icons\star-fill.svg" />
+    <Content Include="Content\Icons\trash.svg" />
     <Content Include="Content\Images\img0.jpg" />
     <Content Include="Content\Images\img1.jpg" />
     <Content Include="Content\Images\img10.jpg" />

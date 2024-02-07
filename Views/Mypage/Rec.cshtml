@@ -1,5 +1,34 @@
 ﻿<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">Rec</h1>
-    </section>
+    <div id="content">
+        <div class="cont_sub_wrap">
+            <div class="cont_sub">
+                <ul id="recentArea" class="list_type2 v3">
+                    @foreach (var item in ViewBag.RecentList)
+                    {
+                        <li class="recentNovel">
+                            <a href="#" class="list_item">
+                                <div class="pic">
+                                    <img src="data:image/webp;base64, @item.ThumbnailBase64" width="150" height="120">
+                                </div>
+                                <div class="list_info v6">
+                                    <p class="subj">@item.Noveltitle</p>
+                                    <p class="sub_title"><span class="ellipsis">@item.Volumtitle</span></p>
+                                    <p class="league">
+                                        <span class="read recentDate">@item.Date.ToString("yyyy.MM.dd.") 읽음</span>
+                                    </p>
+                                </div>
+                            </a>
+                            <div class="manage_area">
+                                <a href="#" class="button type2">다음회</a>
+                            </div>
+                            <a href="javascript:deleteRecent('@item.Novelid');" class="delete_area"><span class="blind">삭제</span></a>
+                        </li>
+                    }
+                </ul>
+                <div id="emptyArea" class="nodata my">
+                    <p>최근 본 작품이 없습니다</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>

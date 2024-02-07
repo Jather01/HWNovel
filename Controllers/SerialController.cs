@@ -264,17 +264,18 @@ namespace HWNovel.Controllers
             {
                 List<HWN03> hwn03List = db.HWN03.Where(x => x.ENDYN.Equals("1")).ToList();
 
-                List<HWN031> hwn031List = (from a in db.HWN031.ToList()
+                var hwn031List = (from a in db.HWN031.ToList()
                                            where a.OPENDT.CompareTo(nowDate) <= 0
                                            group a by new
                                            {
                                                a.NOVELID
                                            } into b
-                                           select new HWN031
+                                           select new
                                            {
                                                NOVELID = b.Key.NOVELID,
                                                VOLUMENO = b.Count(),
-                                               OPENDT = b.Max(x => x.OPENDT),
+                                               MINOPENDT = b.Min(x => x.OPENDT),
+                                               MAXOPENDT = b.Max(x => x.OPENDT),
                                                VIEWCNT = b.Sum(x => x.VIEWCNT)
                                            }).ToList();
 
@@ -316,6 +317,7 @@ namespace HWNovel.Controllers
                              join d in hwn011List
                              on a.NOVELID equals d.NOVELID into table3
                              from d in table3.ToList().DefaultIfEmpty()
+                             where b.MINOPENDT.Substring(4,2) == nowMonth.PadLeft(2, '0')
                              orderby a.NOVELID
                              select new Novel
                              {
@@ -331,7 +333,7 @@ namespace HWNovel.Controllers
                                  Fri = a.FRI,
                                  Sat = a.SAT,
                                  Sun = a.SUN,
-                                 Opendt = b.OPENDT,
+                                 Opendt = b.MAXOPENDT,
                                  Viewcnt = b?.VIEWCNT ?? 0,
                                  Volumecnt = Decimal.ToInt32(b?.VOLUMENO ?? 0),
                                  StarPointAvg = Math.Round(c?.STARPOINT ?? 0, 2),
@@ -1218,11 +1220,11 @@ namespace HWNovel.Controllers
         public ActionResult NovelDelete()
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
-
-            string novelid = Request.Params["novelid"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            string novelid = Request.Params["novelid"];
 
             if (userinfo == null)
             {
@@ -1259,13 +1261,13 @@ namespace HWNovel.Controllers
         public ActionResult NovelEnd()
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             string novelid = Request.Params["novelid"];
             string pageNum = Request.Params["pageNum"];
             string order = Request.Params["order"];
-
-            List<string> userinfo = (List<string>)Session["userinfo"];
 
             if (userinfo == null)
             {
@@ -1299,13 +1301,13 @@ namespace HWNovel.Controllers
         public ActionResult NovelUpdate()
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             string novelid = Request.Params["novelid"];
             string pageNum = Request.Params["pageNum"];
             string order = Request.Params["order"];
-
-            List<string> userinfo = (List<string>)Session["userinfo"];
 
             if (userinfo == null)
             {
@@ -1378,13 +1380,13 @@ namespace HWNovel.Controllers
         public ActionResult NovelUpdatePro(Novel model)
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             string novelid = model.Novelid;
             int pageNum = model.searchPage;
             string order = model.searchOrder;
-
-            List<string> userinfo = (List<string>)Session["userinfo"];
 
             if (userinfo == null)
             {
@@ -1447,13 +1449,13 @@ namespace HWNovel.Controllers
         public ActionResult VolumeWrite()
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             string novelid = Request.Params["novelid"];
             string pageNum = Request.Params["pageNum"];
             string order = Request.Params["order"];
-
-            List<string> userinfo = (List<string>)Session["userinfo"];
 
             if (userinfo == null)
             {
@@ -1482,13 +1484,13 @@ namespace HWNovel.Controllers
         public ActionResult VolumeWritePro(Novel model)
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             string novelid = model.Novelid;
             int pageNum = model.searchPage;
             string order = model.searchOrder;
-
-            List<string> userinfo = (List<string>)Session["userinfo"];
 
             if (userinfo == null)
             {
@@ -1812,13 +1814,13 @@ namespace HWNovel.Controllers
         public ActionResult VolumeUpdatePro(Novel model)
         {
             ViewBag.topmenu = "none";
-            ViewBag.userinfo = Session["userinfo"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             string novelid = model.Novelid;
             int pageNum = model.searchPage;
             string order = model.searchOrder;
-
-            List<string> userinfo = (List<string>)Session["userinfo"];
 
             if (userinfo == null)
             {

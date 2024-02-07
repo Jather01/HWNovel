@@ -16,7 +16,8 @@ namespace HWNovel.Controllers
     {
         public ActionResult Main()
         {
-            ViewBag.userinfo = Session["userinfo"];
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             List<HWNNOTICE> noticeList = new List<HWNNOTICE>();
 
@@ -34,13 +35,15 @@ namespace HWNovel.Controllers
 
         public ActionResult Search()
         {
-            ViewBag.userinfo = Session["userinfo"];
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
             return View();
         }
 
         public ActionResult Notice(Notice model)
         {
-            ViewBag.userinfo = Session["userinfo"];
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             int listCount = 10;
             int pageNum = 1;
@@ -177,7 +180,8 @@ namespace HWNovel.Controllers
 
         public ActionResult NoticeDetail(Notice model)
         {
-            ViewBag.userinfo = Session["userinfo"];
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             HWNNOTICE noticeView = new HWNNOTICE();
             using (var db = new HWNovelEntities())
@@ -194,15 +198,16 @@ namespace HWNovel.Controllers
 
         public ActionResult NoticeDelete(Notice model)
         {
-            ViewBag.userinfo = Session["userinfo"];
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
-            if (ViewBag.userinfo == null)
+            if (userinfo == null)
             {
                 // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
                 return RedirectToAction("Notice", "Home", new { searchValue = model.searchValue, searchPage = model.searchPage });
             }
             else {
-                if (ViewBag.userinfo[3] == "1")
+                if (userinfo[3] == "1")
                 {
                     using (var db = new HWNovelEntities())
                     {

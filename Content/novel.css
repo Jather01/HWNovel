@@ -2433,3 +2433,103 @@ span.but_label_next {
         position: relative;
         padding: 2px 0 0 0;
     }
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+.list_type2 .list_item {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.list_type2 .manage_area {
+    position: absolute;
+    top: 42px;
+    right: 38px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+    .list_type2 .manage_area .button {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        float: left;
+        margin-left: 4px;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        padding: 0 12px;
+        min-width: 73px;
+        height: 36px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        text-align: center;
+        font-size: 13px;
+        color: #999;
+        cursor: default;
+    }
+
+        .list_type2 .manage_area .button[href] {
+            color: #000;
+            cursor: pointer;
+        }
+
+.list_type2 .delete_area {
+    background-image: url(/Content/Icons/trash.svg);
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    z-index: 10;
+}
+
+    .list_info .sub_title {
+        margin-top: 6px;
+        font-size: 13px;
+        line-height: 17px;
+        color: #999;
+    }
+
+    .list_info .league {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        margin-top: 6px;
+        font-size: 13px;
+        line-height: 17px;
+        color: #999;
+    }
+
+.nodata {
+    display: flex;
+    height: 300px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 17px;
+    line-height: 20px;
+    color: #000;
+}

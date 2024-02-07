@@ -15,9 +15,10 @@ namespace HWNovel.Controllers
         public ActionResult Rec()
         {
             ViewBag.topmenu = "Rec";
-            ViewBag.userinfo = Session["userinfo"];
+            int searchPage = Int32.Parse(Request.Params["searchPage"] ?? "1");
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -26,6 +27,135 @@ namespace HWNovel.Controllers
             }
             else
             {
+                List<HWN012> hwn012list = new List<HWN012>();
+                List<HWN03> hwn03list = new List<HWN03>();
+                List<HWN031> hwn031list = new List<HWN031>();
+
+                List<Recent> rlist = new List<Recent>();
+
+                string userid = userinfo[0];
+                string today = DateTime.Now.ToString("yyyyMMdd");
+
+                int listCount = 10;
+                int pageNum = searchPage == 0 ? 1 : searchPage;
+                int pageSize = 10;
+                int totalCount = 0;
+
+                using (var db = new HWNovelEntities())
+                {
+                    hwn012list = db.HWN012.Where(x => x.USERID.Equals(userid)).ToList();
+                    hwn03list = db.HWN03.ToList();
+                    if (userinfo[3].Equals("1"))
+                    {
+                        hwn031list = db.HWN031.ToList();
+                    }
+                    else
+                    {
+                        hwn031list = db.HWN031.Where(x => x.OPENDT.CompareTo(today) <= 0).ToList();
+                    }
+
+                    var list = (from a in hwn012list
+                                from b in hwn03list
+                                from c in hwn031list
+                                where a.NOVELID == b.NOVELID
+                                   && a.NOVELID == c.NOVELID
+                                   && a.VOLUMENO == c.VOLUMENO
+                                select new
+                                {
+                                    USERID = a.USERID,
+                                    NOVELID = a.NOVELID,
+                                    VOLUMENO = a.VOLUMENO,
+                                    NOVELKIND = a.NOVELKIND,
+                                    DATE = a.DATE,
+                                    NOVELTITLE = b.NOVELTITLE,
+                                    THUMNAIL = b.THUMNAIL,
+                                    VOLUMTITLE = c.VOLUMTITLE
+                                }
+                                ).ToList();
+
+                    rlist = (from a in list
+                             join b in hwn031list
+                             on a.NOVELID equals b.NOVELID
+                             where a.VOLUMENO < b.VOLUMENO
+                             select new Recent
+                             {
+                                 Userid = a.USERID,
+                                 Novelid = a.NOVELID,
+                                 Noveltitle = a.NOVELTITLE,
+                                 Thumnail = a.THUMNAIL,
+                                 Volumeno = a.VOLUMENO,
+                                 Nextvolumeno = b.VOLUMENO,
+                                 Volumtitle = a.VOLUMTITLE,
+                                 Novelkind = a.NOVELKIND,
+                                 Date = a.DATE
+                             } into c
+                             group c by new
+                             {
+                                 c.Userid,
+                                 c.Novelid,
+                                 c.Noveltitle,
+                                 c.Thumnail,
+                                 c.Volumeno,
+                                 c.Volumtitle,
+                                 c.Novelkind,
+                                 c.Date
+                             } into d
+                             orderby d.Key.Date descending
+                             select new Recent
+                             {
+                                 Userid = d.Key.Userid,
+                                 Novelid = d.Key.Novelid,
+                                 Noveltitle = d.Key.Noveltitle,
+                                 Thumnail = d.Key.Thumnail,
+                                 Volumeno = d.Key.Volumeno,
+                                 Nextvolumeno = d.Min(x => x.Nextvolumeno),
+                                 Volumtitle = d.Key.Volumtitle,
+                                 Novelkind = d.Key.Novelkind,
+                                 Date = d.Key.Date
+                             }).ToList();
+
+                    totalCount = rlist.Count;
+                }
+
+                rlist = rlist.Skip((pageNum - 1) * listCount)
+                     .Take(listCount)
+                     .ToList();
+
+                //하단 시작 페이지 번호 
+                int startPageNum = 1 + ((pageNum - 1) / pageSize) * pageSize;
+                //하단 끝 페이지 번호
+                int endPageNum = startPageNum + pageSize - 1;
+
+                //전체 페이지의 갯수 구하기
+                int totalPageCount = (int)Math.Ceiling(totalCount / (double)listCount);
+                //끝 페이지 번호가 이미 전체 페이지 갯수보다 크게 계산되었다면 잘못된 값이다.
+                if (endPageNum > totalPageCount)
+                {
+                    endPageNum = totalPageCount; //보정해 준다. 
+                }
+
+                foreach (var n in rlist)
+                {
+                    string imgPath = n.Thumnail;
+                    string imgBase24 = "";
+
+                    if (System.IO.File.Exists(imgPath))
+                    {
+                        byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                        imgBase24 = Convert.ToBase64String(b);
+                    }
+
+                    n.ThumbnailBase64 = imgBase24;
+                }
+
+                ViewBag.StartPageNum = startPageNum;
+                ViewBag.EndPageNum = endPageNum;
+                ViewBag.TotalCount = totalCount;
+                ViewBag.ListCount = listCount;
+                ViewBag.searchPage = pageNum;
+
+                ViewBag.RecentList = rlist;
+
                 return View();
             }
         }
@@ -33,9 +163,9 @@ namespace HWNovel.Controllers
         public ActionResult Wis()
         {
             ViewBag.topmenu = "Wis";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -52,9 +182,9 @@ namespace HWNovel.Controllers
         public ActionResult Cha()
         {
             ViewBag.topmenu = "Cha";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -71,9 +201,9 @@ namespace HWNovel.Controllers
         public ActionResult Min()
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -101,9 +231,9 @@ namespace HWNovel.Controllers
         public ActionResult Pwcheck(string NextUrl)
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -127,9 +257,9 @@ namespace HWNovel.Controllers
         public ActionResult InfoUpdateForm(string pwYn)
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -162,9 +292,9 @@ namespace HWNovel.Controllers
         public ActionResult InfoUpdate(User user)
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -207,9 +337,9 @@ namespace HWNovel.Controllers
         public ActionResult PwUpdateForm(string pwYn)
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -233,9 +363,9 @@ namespace HWNovel.Controllers
         public ActionResult PwUpdate(User user)
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -282,9 +412,9 @@ namespace HWNovel.Controllers
         public ActionResult UserDeleteForm(string pwYn)
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
@@ -308,9 +438,9 @@ namespace HWNovel.Controllers
         public ActionResult UserDelete(User user)
         {
             ViewBag.topmenu = "Min";
-            ViewBag.userinfo = Session["userinfo"];
 
             List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
