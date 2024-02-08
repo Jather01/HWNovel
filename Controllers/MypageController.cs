@@ -159,6 +159,40 @@ namespace HWNovel.Controllers
             }
         }
 
+        public ActionResult DeletRecent()
+        {
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                int pageNum = Int32.Parse(Request.Params["searchPage"] ?? "1");
+                string novelid = Request.Params["novelid"];
+                string userid = userinfo[0];
+
+                if (!string.IsNullOrWhiteSpace(novelid))
+                {
+                    using (var db = new HWNovelEntities())
+                    {
+                        HWN012 rec = new HWN012();
+
+                        rec = db.HWN012.Where(x => x.USERID.Equals(userid) && x.NOVELID.Equals(novelid)).SingleOrDefault();
+
+                        db.HWN012.Remove(rec);
+                        db.SaveChanges();
+                    }
+                }
+
+                return RedirectToAction("Rec", "Mypage", new { searchPage = pageNum });
+            }
+        }
+
         public ActionResult Wis()
         {
             ViewBag.topmenu = "Wis";
