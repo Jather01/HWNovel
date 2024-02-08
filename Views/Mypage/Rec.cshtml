@@ -13,9 +13,9 @@
 }
 <main>
     <script type="text/JavaScript">
-        function deleteRecent(novelid) {
+        function deleteRecent(novelid, novelkind) {
             if (confirm("최근 본 작품을 삭제하시겠습니까?")) {
-                location.href = "/Mypage/DeletRecent?searchPage=@pageNum&novelid=" + novelid;
+                location.href = "/Mypage/DeletRecent?searchPage=@pageNum&novelid=" + novelid + "&novelkind=" + novelkind;
             }
         }
 
@@ -82,7 +82,7 @@
                                         <a href="@(url)/NovelView?novelid=@(item.Novelid)&volumeno=@(item.Nextvolumeno)" class="button type2">다음회</a>
                                     }
                                 </div>
-                                <a href="javascript:deleteRecent('@item.Novelid');" class="delete_area"><span class="blind">삭제</span></a>
+                                <a href="javascript:deleteRecent('@item.Novelid', '@item.Novelkind');" class="delete_area"><span class="blind">삭제</span></a>
                             </li>
                         }
                     </ul>

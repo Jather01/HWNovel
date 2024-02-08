@@ -17,6 +17,7 @@ namespace HWNovel.ViewModels
         public decimal Nextvolumeno { get; set; }
         public string Volumtitle { get; set; }
         public string Novelkind { get; set; }
+        public string Opendt { get; set; }
         public DateTime Date { get; set; }
     }
 }

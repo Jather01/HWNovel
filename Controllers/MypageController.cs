@@ -30,6 +30,8 @@ namespace HWNovel.Controllers
                 List<HWN012> hwn012list = new List<HWN012>();
                 List<HWN03> hwn03list = new List<HWN03>();
                 List<HWN031> hwn031list = new List<HWN031>();
+                List<HWN04> hwn04list = new List<HWN04>();
+                List<HWN041> hwn041list = new List<HWN041>();
 
                 List<Recent> rlist = new List<Recent>();
 
@@ -43,7 +45,7 @@ namespace HWNovel.Controllers
 
                 using (var db = new HWNovelEntities())
                 {
-                    hwn012list = db.HWN012.Where(x => x.USERID.Equals(userid)).ToList();
+                    hwn012list = db.HWN012.Where(x => x.USERID.Equals(userid) && x.NOVELKIND.Equals("1")).ToList();
                     hwn03list = db.HWN03.ToList();
                     if (userinfo[3].Equals("1"))
                     {
@@ -73,7 +75,7 @@ namespace HWNovel.Controllers
                                 }
                                 ).ToList();
 
-                    rlist = (from a in list
+                    List< Recent> list2 = (from a in list
                              join b in hwn031list
                              on a.NOVELID equals b.NOVELID
                              select new Recent
@@ -112,6 +114,80 @@ namespace HWNovel.Controllers
                                  Novelkind = d.Key.Novelkind,
                                  Date = d.Key.Date
                              }).ToList();
+
+                    hwn012list = db.HWN012.Where(x => x.USERID.Equals(userid) && x.NOVELKIND.Equals("2")).ToList();
+                    hwn04list = db.HWN04.ToList();
+                    if (userinfo[3].Equals("1"))
+                    {
+                        hwn041list = db.HWN041.ToList();
+                    }
+                    else
+                    {
+                        hwn041list = db.HWN041.Where(x => x.OPENDT.CompareTo(today) <= 0).ToList();
+                    }
+
+                    var list3 = (from a in hwn012list
+                                from b in hwn04list
+                                from c in hwn041list
+                                where a.NOVELID == b.NOVELID
+                                   && a.NOVELID == c.NOVELID
+                                   && a.VOLUMENO == c.VOLUMENO
+                                select new
+                                {
+                                    USERID = a.USERID,
+                                    NOVELID = a.NOVELID,
+                                    VOLUMENO = a.VOLUMENO,
+                                    NOVELKIND = a.NOVELKIND,
+                                    DATE = a.DATE,
+                                    NOVELTITLE = b.NOVELTITLE,
+                                    THUMNAIL = b.THUMNAIL,
+                                    VOLUMTITLE = c.VOLUMTITLE
+                                }
+                                ).ToList();
+
+                    List<Recent> list4 = (from a in list
+                                 join b in hwn041list
+                                 on a.NOVELID equals b.NOVELID
+                                 select new Recent
+                                 {
+                                     Userid = a.USERID,
+                                     Novelid = a.NOVELID,
+                                     Noveltitle = a.NOVELTITLE,
+                                     Thumnail = a.THUMNAIL,
+                                     Volumeno = a.VOLUMENO,
+                                     Nextvolumeno = b.VOLUMENO > a.VOLUMENO ? b.VOLUMENO : 999999,
+                                     Volumtitle = a.VOLUMTITLE,
+                                     Novelkind = a.NOVELKIND,
+                                     Date = a.DATE
+                                 } into c
+                                 group c by new
+                                 {
+                                     c.Userid,
+                                     c.Novelid,
+                                     c.Noveltitle,
+                                     c.Thumnail,
+                                     c.Volumeno,
+                                     c.Volumtitle,
+                                     c.Novelkind,
+                                     c.Date
+                                 } into d
+                                 orderby d.Key.Date descending
+                                 select new Recent
+                                 {
+                                     Userid = d.Key.Userid,
+                                     Novelid = d.Key.Novelid,
+                                     Noveltitle = d.Key.Noveltitle,
+                                     Thumnail = d.Key.Thumnail,
+                                     Volumeno = d.Key.Volumeno,
+                                     Nextvolumeno = d.Min(x => x.Nextvolumeno),
+                                     Volumtitle = d.Key.Volumtitle,
+                                     Novelkind = d.Key.Novelkind,
+                                     Date = d.Key.Date
+                                 }).ToList();
+
+                    rlist = list2.Union(list4).ToList();
+
+                    rlist = rlist.OrderByDescending(x => x.Date).ToList();
 
                     totalCount = rlist.Count;
                 }
@@ -174,6 +250,7 @@ namespace HWNovel.Controllers
             {
                 int pageNum = Int32.Parse(Request.Params["searchPage"] ?? "1");
                 string novelid = Request.Params["novelid"];
+                string novelkind = Request.Params["novelkind"];
                 string userid = userinfo[0];
 
                 if (!string.IsNullOrWhiteSpace(novelid))
@@ -182,7 +259,7 @@ namespace HWNovel.Controllers
                     {
                         HWN012 rec = new HWN012();
 
-                        rec = db.HWN012.Where(x => x.USERID.Equals(userid) && x.NOVELID.Equals(novelid)).SingleOrDefault();
+                        rec = db.HWN012.Where(x => x.USERID.Equals(userid) && x.NOVELID.Equals(novelid) && x.NOVELKIND.Equals(novelkind)).SingleOrDefault();
 
                         db.HWN012.Remove(rec);
                         db.SaveChanges();
@@ -196,19 +273,228 @@ namespace HWNovel.Controllers
         public ActionResult Wis()
         {
             ViewBag.topmenu = "Wis";
+            int searchPage = Int32.Parse(Request.Params["searchPage"] ?? "1");
 
             List<string> userinfo = (List<string>)Session["userinfo"];
             ViewBag.userinfo = userinfo;
 
             if (userinfo == null)
             {
-                ViewBag.PreUrl = "/Mypage/Rec";
                 // 로그인 정보가 없으면 로그인 화면으로 이동
-                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Wis" });
+                return RedirectToAction("LoginForm", "User", new { PreUrl = "/Mypage/Rec" });
             }
             else
             {
+                List<HWN011> hwn011list = new List<HWN011>();
+                List<HWN03> hwn03list = new List<HWN03>();
+                List<HWN031> hwn031list = new List<HWN031>();
+                List<HWN04> hwn04list = new List<HWN04>();
+                List<HWN041> hwn041list = new List<HWN041>();
+
+                List<Recent> rlist = new List<Recent>();
+
+                string userid = userinfo[0];
+                string today = DateTime.Now.ToString("yyyyMMdd");
+
+                int listCount = 10;
+                int pageNum = searchPage == 0 ? 1 : searchPage;
+                int pageSize = 10;
+                int totalCount = 0;
+
+                using (var db = new HWNovelEntities())
+                {
+                    hwn011list = db.HWN011.Where(x => x.USERID.Equals(userid) && x.NOVELKIND.Equals("1")).ToList();
+                    hwn03list = db.HWN03.ToList();
+                    var hwn031list1 = new List<HWN031>();
+                    if (userinfo[3].Equals("1"))
+                    {
+                        hwn031list1 = (from a in db.HWN031.ToList()
+                                       group a by a.NOVELID into b
+                                       select new HWN031
+                                       {
+                                           NOVELID = b.Key,
+                                           VOLUMENO = b.Max(x => x.VOLUMENO),
+                                           OPENDT = b.Max(x => x.OPENDT)
+                                       }).ToList();
+                    }
+                    else
+                    {
+                        hwn031list1 = (from a in db.HWN031.ToList()
+                                       where a.OPENDT.CompareTo(today) <= 0
+                                       group a by a.NOVELID into b
+                                       select new HWN031
+                                       {
+                                           NOVELID = b.Key,
+                                           VOLUMENO = b.Max(x => x.VOLUMENO),
+                                           OPENDT = b.Max(x => x.OPENDT)
+                                       }).ToList();
+                    }
+                    hwn031list = (from a in db.HWN031.ToList()
+                                  from b in hwn031list1
+                                  where a.NOVELID == b.NOVELID
+                                     && a.VOLUMENO == b.VOLUMENO
+                                  select new HWN031
+                                  {
+                                      NOVELID = a.NOVELID,
+                                      VOLUMENO = b.VOLUMENO,
+                                      VOLUMTITLE = a.VOLUMTITLE,
+                                      OPENDT = b.OPENDT
+                                  }).ToList();
+
+                    var rlist1 = (from a in hwn011list
+                                  from b in hwn03list
+                                  from c in hwn031list
+                                  where a.NOVELID == b.NOVELID
+                                     && a.NOVELID == c.NOVELID
+                                  select new Recent
+                                  {
+                                      Userid = a.USERID,
+                                      Novelid =a.NOVELID,
+                                      Novelkind = a.NOVELKIND,
+                                      Thumnail = b.THUMNAIL,
+                                      Noveltitle = b.NOVELTITLE,
+                                      Volumeno = c.VOLUMENO,
+                                      Volumtitle = c.VOLUMTITLE,
+                                      Opendt = c.OPENDT
+                                  }).ToList();
+
+                    hwn011list = db.HWN011.Where(x => x.USERID.Equals(userid) && x.NOVELKIND.Equals("2")).ToList();
+                    hwn04list = db.HWN04.ToList();
+                    var hwn041list1 = new List<HWN041>();
+                    if (userinfo[3].Equals("1"))
+                    {
+                        hwn041list1 = (from a in db.HWN041.ToList()
+                                       group a by a.NOVELID into b
+                                       select new HWN041
+                                       {
+                                           NOVELID = b.Key,
+                                           VOLUMENO = b.Max(x => x.VOLUMENO),
+                                           OPENDT = b.Max(x => x.OPENDT)
+                                       }).ToList();
+                    }
+                    else
+                    {
+                        hwn041list1 = (from a in db.HWN041.ToList()
+                                       where a.OPENDT.CompareTo(today) <= 0
+                                       group a by a.NOVELID into b
+                                       select new HWN041
+                                       {
+                                           NOVELID = b.Key,
+                                           VOLUMENO = b.Max(x => x.VOLUMENO),
+                                           OPENDT = b.Max(x => x.OPENDT)
+                                       }).ToList();
+                    }
+                    hwn041list = (from a in db.HWN041.ToList()
+                                  from b in hwn041list1
+                                  where a.NOVELID == b.NOVELID
+                                     && a.VOLUMENO == b.VOLUMENO
+                                  select new HWN041
+                                  {
+                                      NOVELID = a.NOVELID,
+                                      VOLUMENO = b.VOLUMENO,
+                                      VOLUMTITLE = a.VOLUMTITLE,
+                                      OPENDT = b.OPENDT
+                                  }).ToList();
+
+                    var rlist2 = (from a in hwn011list
+                                  from b in hwn04list
+                                  from c in hwn041list
+                                  where a.NOVELID == b.NOVELID
+                                     && a.NOVELID == c.NOVELID
+                                  select new Recent
+                                  {
+                                      Userid = a.USERID,
+                                      Novelid = a.NOVELID,
+                                      Novelkind = a.NOVELKIND,
+                                      Thumnail = b.THUMNAIL,
+                                      Noveltitle = b.NOVELTITLE,
+                                      Volumeno = c.VOLUMENO,
+                                      Volumtitle = c.VOLUMTITLE,
+                                      Opendt = c.OPENDT
+                                  }).ToList();
+
+                    rlist = rlist1.Union(rlist2).ToList();
+
+                    rlist = rlist.OrderByDescending(x => x.Date).ToList();
+
+                    totalCount = rlist.Count;
+                }
+
+                rlist = rlist.Skip((pageNum - 1) * listCount)
+                     .Take(listCount)
+                     .ToList();
+
+                //하단 시작 페이지 번호 
+                int startPageNum = 1 + ((pageNum - 1) / pageSize) * pageSize;
+                //하단 끝 페이지 번호
+                int endPageNum = startPageNum + pageSize - 1;
+
+                //전체 페이지의 갯수 구하기
+                int totalPageCount = (int)Math.Ceiling(totalCount / (double)listCount);
+                //끝 페이지 번호가 이미 전체 페이지 갯수보다 크게 계산되었다면 잘못된 값이다.
+                if (endPageNum > totalPageCount)
+                {
+                    endPageNum = totalPageCount; //보정해 준다. 
+                }
+
+                foreach (var n in rlist)
+                {
+                    string imgPath = n.Thumnail;
+                    string imgBase24 = "";
+
+                    if (System.IO.File.Exists(imgPath))
+                    {
+                        byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                        imgBase24 = Convert.ToBase64String(b);
+                    }
+
+                    n.ThumbnailBase64 = imgBase24;
+                }
+
+                ViewBag.StartPageNum = startPageNum;
+                ViewBag.EndPageNum = endPageNum;
+                ViewBag.TotalCount = totalCount;
+                ViewBag.ListCount = listCount;
+                ViewBag.searchPage = pageNum;
+
+                ViewBag.RecentList = rlist;
+                ViewBag.NowDate = today;
+
                 return View();
+            }
+        }
+
+        public ActionResult DeletWish()
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                int pageNum = Int32.Parse(Request.Params["searchPage"] ?? "1");
+                string novelid = Request.Params["novelid"];
+                string novelkind = Request.Params["novelkind"];
+                string userid = userinfo[0];
+
+                if (!string.IsNullOrWhiteSpace(novelid))
+                {
+                    using (var db = new HWNovelEntities())
+                    {
+                        HWN011 rec = new HWN011();
+
+                        rec = db.HWN011.Where(x => x.USERID.Equals(userid) && x.NOVELID.Equals(novelid) && x.NOVELKIND.Equals(novelkind)).SingleOrDefault();
+
+                        db.HWN011.Remove(rec);
+                        db.SaveChanges();
+                    }
+                }
+
+                return RedirectToAction("Wis", "Mypage", new { searchPage = pageNum });
             }
         }
 

@@ -1,5 +1,156 @@
-﻿<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">Wis</h1>
-    </section>
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    int pageNum = ViewBag.searchPage ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+
+}
+<main>
+    <script type="text/JavaScript">
+        function deleteRecent(novelid, novelkind) {
+            if (confirm("관심 작품을 삭제하시겠습니까?")) {
+                location.href = "/Mypage/DeletWish?searchPage=@pageNum&novelid=" + novelid + "&novelkind=" + novelkind;
+            }
+        }
+
+        function pagingPrev(page) {
+            if (page - 1 > 0) {
+                location.href = "/Mypage/DeletWish?searchPage=" + (page - 1);
+            }
+        }
+
+        function paging(page) {
+            location.href = "/Mypage/DeletWish?searchPage=" + page;
+        }
+
+        function pagingNext(page) {
+            if (page + 10 > @endPageNum) {
+                location.href = "/Mypage/DeletWish?searchPage=" + (page + 10);
+            }
+        }
+    </script>
+    <div id="content">
+        <div class="cont_sub_wrap">
+            <div class="cont_sub">
+                @if (totalCount > 0)
+                {
+                    <ul id="recentArea" class="list_type2 v3">
+                        @foreach (var item in ViewBag.RecentList)
+                        {
+                            <li class="recentNovel">
+                                @{
+                                    string url = "";
+                                    string kind = "";
+                                    if (item.Novelkind == "1")
+                                    {
+                                        url = "/Serial";
+                                        kind = "연재";
+                                    }
+                                    else
+                                    {
+                                        url = "/Challenge";
+                                        kind = "도전";
+                                    }
+                                }
+                                <a href="@(url)/NovelInfo?novelid=@(item.Novelid)" class="list_item">
+                                    <div class="pic">
+                                        <img src="data:image/webp;base64, @item.ThumbnailBase64" width="150" height="120">
+                                    </div>
+                                    <div class="list_info v6">
+                                        <p class="subj">
+                                            @if(ViewBag.NowDate == item.Opendt)
+                                            {
+                                                <span class="bullet_wrap ">
+                                                    <span class="bullet_up">UP</span>
+                                                </span>
+                                            }
+                                            @item.Noveltitle
+                                        </p>
+                                        <p class="sub_title"><span class="ellipsis">@item.Volumtitle</span></p>
+                                        <p class="league">
+                                            <span>@kind 웹소설 </span>
+                                            <em class="line">|</em>
+                                            <span class="read recentDate">@(item.Opendt.Substring(0,4)).@(item.Opendt.Substring(4,2)).@(item.Opendt.Substring(6,2))</span>
+                                        </p>
+                                    </div>
+                                </a>
+                                <a href="javascript:deleteRecent('@item.Novelid', '@item.Novelkind');" class="delete_area"><span class="blind">삭제</span></a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="notice_paging">
+                        <ul class="paging">
+                            @if (startPageNum == 1)
+                            {
+                                <li class="page_arrow prev page-item">
+                                    <span class="blind">이전 페이지로 이동</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page_arrow prev page-item">
+                                    <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
+                                        <span class="blind">이전 페이지로 이동</span>
+                                    </a>
+                                </li>
+                            }
+                            @for (int i = startPageNum; i <= endPageNum; i++)
+                            {
+                                if (i == pageNum)
+                                {
+                                    <li class="page-item active">
+                                        <span class="page-link">
+                                            @i
+                                            <span class="blind">(current)</span>
+                                        </span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                                    </li>
+                                }
+                            }
+                            @if (endPageNum == pageCount)
+                            {
+                                <li class="page_arrow next page-item">
+                                    <span class="blind">다음 페이지로 이동</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page_arrow next page-item">
+                                    <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                                        <span class="blind">다음 페이지로 이동</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div id="emptyArea" class="nodata my">
+                        <p>관심작품이 없습니다</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            if ("@userinfo[3]" == "0") {
+                location.href = "/Home/Main";
+            }
+        });
+    </script>
+}
