@@ -21,17 +21,17 @@
 
         function pagingPrev(page) {
             if (page - 1 > 0) {
-                location.href = "/Mypage/DeletRecent?searchPage=" + (page - 1);
+                location.href = "/Mypage/Rec?searchPage=" + (page - 1);
             }
         }
 
         function paging(page) {
-            location.href = "/Mypage/DeletRecent?searchPage=" + page;
+            location.href = "/Mypage/Rec?searchPage=" + page;
         }
 
         function pagingNext(page) {
             if (page + 10 > @endPageNum) {
-                location.href = "/Mypage/DeletRecent?searchPage=" + (page + 10);
+                location.href = "/Mypage/Rec?searchPage=" + (page + 10);
             }
         }
     </script>
@@ -140,7 +140,7 @@
                 else
                 {
                     <div id="emptyArea" class="nodata my">
-                        <p>최근 본 작품이 없습니다</p>
+                        <p>최근 본 작품이 없습니다.</p>
                     </div>
                 }
             </div>

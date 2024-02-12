@@ -1,5 +1,128 @@
-﻿<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">Cha</h1>
-    </section>
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    int pageNum = ViewBag.searchPage ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+
+}
+<main>
+    <script type="text/JavaScript">
+        function pagingPrev(page) {
+            if (page - 1 > 0) {
+                location.href = "/Mypage/Cha?searchPage=" + (page - 1);
+            }
+        }
+
+        function paging(page) {
+            location.href = "/Mypage/Cha?searchPage=" + page;
+        }
+
+        function pagingNext(page) {
+            if (page + 10 > @endPageNum) {
+                location.href = "/Mypage/Cha?searchPage=" + (page + 10);
+            }
+        }
+    </script>
+    <div id="content">
+        <div class="cont_sub_wrap">
+            <div class="cont_sub">
+                @if (totalCount > 0)
+                {
+                    <ul id="recentArea" class="list_type2 v3">
+                        @foreach (var item in ViewBag.ChaList)
+                        {
+                            <li class="recentNovel">
+                                <a href="Challenge/NovelInfo?novelid=@(item.Novelid)" class="list_item">
+                                    <div class="pic">
+                                        <img src="~/Content/ChallengeThumbnail/@(item.Thumbnail).jpg" width="150" height="120">
+                                    </div>
+                                    <div class="list_info v6">
+                                        <p class="subj">@item.Noveltitle</p>
+                                        <p class="sub_title"><span class="ellipsis">@item.Nickname</span></p>
+                                    </div>
+                                </a>
+                                <div class="manage_area">
+                                    <a href="Challenge/NovelUpdate?novelid=@(item.Novelid)" class="button type2">작품 정보 수정</a>
+                                    <a href="Challenge/VolumeWrite?novelid=@(item.Novelid)" class="button type2">회차 쓰기</a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <div class="notice_paging">
+                        <ul class="paging">
+                            @if (startPageNum == 1)
+                            {
+                                <li class="page_arrow prev page-item">
+                                    <span class="blind">이전 페이지로 이동</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page_arrow prev page-item">
+                                    <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
+                                        <span class="blind">이전 페이지로 이동</span>
+                                    </a>
+                                </li>
+                            }
+                            @for (int i = startPageNum; i <= endPageNum; i++)
+                            {
+                                if (i == pageNum)
+                                {
+                                    <li class="page-item active">
+                                        <span class="page-link">
+                                            @i
+                                            <span class="blind">(current)</span>
+                                        </span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                                    </li>
+                                }
+                            }
+                            @if (endPageNum == pageCount)
+                            {
+                                <li class="page_arrow next page-item">
+                                    <span class="blind">다음 페이지로 이동</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page_arrow next page-item">
+                                    <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                                        <span class="blind">다음 페이지로 이동</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <a href="#" class="cha_novel_write_new"><strong>새 작품 쓰기</strong></a>
+                }
+                else
+                {
+                    <div id="emptyArea" class="nodata my">
+                        <p>등록된 작품이 없습니다.</p>
+                        <a href="#" class="cha_novel_write_new"><strong>새 작품 쓰기</strong></a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            if ("@userinfo[3]" == "0") {
+                location.href = "/Home/Main";
+            }
+        });
+    </script>
+}

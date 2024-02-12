@@ -635,6 +635,7 @@ button, input, select, textarea {
     .notice_paging .paging {
         display: inline-block;
         vertical-align: top;
+        padding-left:0;
     }
 
     .notice_paging .page-item {
@@ -1564,7 +1565,6 @@ button, input, select, textarea {
     display: -ms-flexbox;
     display: flex;
 }
-
     .list_type2 .list_item .pic {
         position: relative;
         margin-right: 18px;
@@ -1585,6 +1585,10 @@ button, input, select, textarea {
             border-radius: 4px;
             content: '';
         }
+
+    .list_type2 .list_item:hover > .list_info .subj {
+        text-decoration: underline;
+    }
 
 .list_type2.v3 .list_item {
     height: 120px;
@@ -2443,13 +2447,6 @@ span.but_label_next {
     max-width: 100%;
 }
 
-.list_type2 .list_item {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
-
 .list_type2 .manage_area {
     position: absolute;
     top: 42px;
@@ -2547,4 +2544,19 @@ span.but_label_next {
     font-size: 17px;
     line-height: 20px;
     color: #000;
+}
+
+.cha_novel_write_new {
+    display: block;
+    width: 240px;
+    line-height: 50px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    background-color: #7030A0;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-decoration: none;
 }
