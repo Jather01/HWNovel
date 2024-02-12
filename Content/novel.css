@@ -1073,6 +1073,12 @@ button, input, select, textarea {
     padding-left: 2em;
 }
 
+    .novel_head > form {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+    }
+
 .right_area > form {
     display: -webkit-inline-box;
 }

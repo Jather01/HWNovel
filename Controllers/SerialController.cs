@@ -85,6 +85,7 @@ namespace HWNovel.Controllers
                                            }).ToList();
 
                 var hwn011List = (from a in db.HWN011.ToList()
+                                  where a.NOVELKIND == "1"
                                   group a by new
                                   {
                                       a.NOVELID
@@ -296,6 +297,7 @@ namespace HWNovel.Controllers
                                            }).ToList();
 
                 var hwn011List = (from a in db.HWN011.ToList()
+                                  where a.NOVELKIND == "1"
                                   group a by new
                                   {
                                       a.NOVELID
@@ -450,6 +452,7 @@ namespace HWNovel.Controllers
                                            }).ToList();
 
                 var hwn011List = (from a in db.HWN011.ToList()
+                                  where a.NOVELKIND == "1"
                                   group a by new
                                   {
                                       a.NOVELID
@@ -626,6 +629,7 @@ namespace HWNovel.Controllers
                                            }).ToList();
 
                 var hwn011List = (from a in db.HWN011.ToList()
+                                  where a.NOVELKIND == "1"
                                   group a by new
                                   {
                                       a.NOVELID

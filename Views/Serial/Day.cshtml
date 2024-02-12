@@ -38,18 +38,6 @@
     <div class="component_section">
         <div class="component_head novel_head">
             <form id="NovelDaySearch" name="NovelDaySearch" method="GET" action="/Serial/Day">
-                <div class="select_group">
-                    <select class="novel_select form-select" name="searchDay" id="searchDay" asp-for="searchDay">
-                        <option value="7" @(searchDay == "7" ? "selected" : "")>전체</option>
-                        <option value="1" @(searchDay == "1" ? "selected" : "")>월요일</option>
-                        <option value="2" @(searchDay == "2" ? "selected" : "")>화요일</option>
-                        <option value="3" @(searchDay == "3" ? "selected" : "")>수요일</option>
-                        <option value="4" @(searchDay == "4" ? "selected" : "")>목요일</option>
-                        <option value="5" @(searchDay == "5" ? "selected" : "")>금요일</option>
-                        <option value="6" @(searchDay == "6" ? "selected" : "")>토요일</option>
-                        <option value="0" @(searchDay == "0" ? "selected" : "")>일요일</option>
-                    </select>
-                </div>
                 <div class="right_area">
                     <div class="select_group">
                         <select class="novel_select form-select" name="searchGenre" id="searchGenre" asp-for="searchGenre">
@@ -69,6 +57,18 @@
                         </select>
                         <input type="hidden" name="searchPage" id="searchPage" value="@pageNum" />
                     </div>
+                </div>
+                <div class="select_group">
+                    <select class="novel_select form-select" name="searchDay" id="searchDay" asp-for="searchDay">
+                        <option value="7" @(searchDay == "7" ? "selected" : "")>전체</option>
+                        <option value="1" @(searchDay == "1" ? "selected" : "")>월요일</option>
+                        <option value="2" @(searchDay == "2" ? "selected" : "")>화요일</option>
+                        <option value="3" @(searchDay == "3" ? "selected" : "")>수요일</option>
+                        <option value="4" @(searchDay == "4" ? "selected" : "")>목요일</option>
+                        <option value="5" @(searchDay == "5" ? "selected" : "")>금요일</option>
+                        <option value="6" @(searchDay == "6" ? "selected" : "")>토요일</option>
+                        <option value="0" @(searchDay == "0" ? "selected" : "")>일요일</option>
+                    </select>
                 </div>
             </form>
         </div>
