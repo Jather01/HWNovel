@@ -100,7 +100,7 @@ namespace HWNovel.Controllers
                 novelList = (from a in hwn03List
                              join b in hwn031List
                              on a.NOVELID equals b.NOVELID into table1
-                             from b in table1.ToList().DefaultIfEmpty()
+                             from b in table1.ToList()
                              join c in hwn033List
                              on a.NOVELID equals c.NOVELID into table2
                              from c in table2.ToList().DefaultIfEmpty()
@@ -312,7 +312,7 @@ namespace HWNovel.Controllers
                 novelList = (from a in hwn03List
                              join b in hwn031List
                              on a.NOVELID equals b.NOVELID into table1
-                             from b in table1.ToList().DefaultIfEmpty()
+                             from b in table1.ToList()
                              join c in hwn033List
                              on a.NOVELID equals c.NOVELID into table2
                              from c in table2.ToList().DefaultIfEmpty()
@@ -467,7 +467,7 @@ namespace HWNovel.Controllers
                 novelList = (from a in hwn03List
                              join b in hwn031List
                              on a.NOVELID equals b.NOVELID into table1
-                             from b in table1.ToList().DefaultIfEmpty()
+                             from b in table1.ToList()
                              join c in hwn033List
                              on a.NOVELID equals c.NOVELID into table2
                              from c in table2.ToList().DefaultIfEmpty()
@@ -488,7 +488,7 @@ namespace HWNovel.Controllers
                                  Fri = a.FRI,
                                  Sat = a.SAT,
                                  Sun = a.SUN,
-                                 Opendt = b.OPENDT,
+                                 Opendt = b?.OPENDT ?? "",
                                  Viewcnt = b?.VIEWCNT ?? 0,
                                  Volumecnt = Decimal.ToInt32(b?.VOLUMENO ?? 0),
                                  StarPointAvg = Math.Round(c?.STARPOINT ?? 0, 2),
@@ -644,7 +644,7 @@ namespace HWNovel.Controllers
                 novelList = (from a in hwn03List
                              join b in hwn031List
                              on a.NOVELID equals b.NOVELID into table1
-                             from b in table1.ToList().DefaultIfEmpty()
+                             from b in table1.ToList()
                              join c in hwn033List
                              on a.NOVELID equals c.NOVELID into table2
                              from c in table2.ToList().DefaultIfEmpty()

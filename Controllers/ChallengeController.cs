@@ -42,6 +42,7 @@ namespace HWNovel.Controllers
 
             string searchGenre = genre;
             string searchOrder = model.searchOrder ?? "view";
+            string searchValue = model.searchValue ?? "1";
 
             int listCount = 20;
             int pageNum = 1;
@@ -59,7 +60,7 @@ namespace HWNovel.Controllers
 
             using (var db = new HWNovelEntities())
             {
-                List<HWN04> HWN04List = db.HWN04.Where(x => x.ENDYN.Equals("1") && x.GENRE.Equals(searchGenre)).ToList();
+                List<HWN04> HWN04List = db.HWN04.Where(x => x.ENDYN.Equals(searchValue) && x.GENRE.Equals(searchGenre)).ToList();
 
                 List<HWN041> HWN041List = (from a in db.HWN041.ToList()
                                            where a.OPENDT.CompareTo(nowDate) <= 0
@@ -108,7 +109,7 @@ namespace HWNovel.Controllers
                 novelList = (from a in HWN04List
                              join b in HWN041List
                              on a.NOVELID equals b.NOVELID into table1
-                             from b in table1.ToList().DefaultIfEmpty()
+                             from b in table1.ToList()
                              join c in HWN043List
                              on a.NOVELID equals c.NOVELID into table2
                              from c in table2.ToList().DefaultIfEmpty()
@@ -125,7 +126,7 @@ namespace HWNovel.Controllers
                                  Writer = e.NICKNAME,
                                  Genre = a.GENRE,
                                  Thumnail = a.THUMNAIL,
-                                 Opendt = b.OPENDT,
+                                 Opendt = b?.OPENDT ?? "",
                                  Viewcnt = b?.VIEWCNT ?? 0,
                                  Volumecnt = Decimal.ToInt32(b?.VOLUMENO ?? 0),
                                  StarPointAvg = Math.Round(c?.STARPOINT ?? 0, 2),
@@ -186,6 +187,7 @@ namespace HWNovel.Controllers
             ViewBag.searchPage = pageNum;
             ViewBag.searchGenre = searchGenre;
             ViewBag.searchOrder = searchOrder;
+            ViewBag.searchValue = searchValue;
 
             return View();
         }

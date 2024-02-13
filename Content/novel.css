@@ -2626,3 +2626,40 @@ span.but_label_next {
     box-sizing: border-box;
     text-decoration: none;
 }
+
+.novel_head .check_group {
+    flex: 1 1 auto;
+}
+
+    .novel_head .check_group .checkbox {
+        vertical-align: middle;
+    }
+
+    .novel_head .check_group label {
+        display: inline-block;
+        position: relative;
+        margin-left: -32px;
+        padding: 4px 0 4px 32px;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
+    .novel_head .check_group .keep_text {
+        margin-right: 5px;
+        font-size: 14px;
+        letter-spacing: -.8px;
+    }
+
+    .novel_head .check_group .checkbox {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        transition: background 0.2s;
+        background-image: url(/Content/Icons/check-circle-small.svg);
+        background-repeat: no-repeat;
+    }
+
+        .novel_head .check_group .checkbox:checked {
+            background-image: url(/Content/Icons/check-circle-fill-small.svg);
+            background-repeat: no-repeat;
+        }

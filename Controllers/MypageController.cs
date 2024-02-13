@@ -645,6 +645,154 @@ namespace HWNovel.Controllers
             }
         }
 
+        public ActionResult NovelUpdate()
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            string pageNum = Request.Params["searchPage"];
+            string novelid = Request.Params["novelid"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                List<HWN021> genreList = new List<HWN021>();
+                Novel novel = new Novel();
+
+                using (var db = new HWNovelEntities())
+                {
+                    genreList = db.HWN021.Where(x => x.GROUPNO.Equals("03")).ToList();
+                    var h04 = db.HWN04.ToList();
+
+                    novel = (from a in h04
+                             where a.NOVELID == novelid
+                             select new Novel
+                             {
+                                 Novelid = a.NOVELID,
+                                 Noveltitle = a.NOVELTITLE,
+                                 Novelinfo = a.NOVELINFO,
+                                 Writer = a.WRITER,
+                                 Genre = a.GENRE,
+                                 Thumnail = a.THUMNAIL,
+                                 Endyn = a.ENDYN
+                             }).SingleOrDefault();
+                }
+
+                ViewBag.GenreList = genreList;
+                ViewBag.Novel = novel;
+
+                ViewBag.searchPage = pageNum;
+
+                return View();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult NovelUpdatePro(Novel model)
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            int pageNum = model.searchPage;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (model != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(model.Noveltitle) && !string.IsNullOrWhiteSpace(model.Genre) && !string.IsNullOrWhiteSpace(model.Novelinfo) && !string.IsNullOrWhiteSpace(model.Thumnail))
+                    {
+                        using (var db = new HWNovelEntities())
+                        {
+                            model.Writer = userinfo[0];
+                            db.PRO_CHALLENGE_NOVEL_UPDATE(model.Novelid, model.Noveltitle, model.Novelinfo, model.Writer, model.Genre, model.Thumnail);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                return RedirectToAction("Cha", "Mypage", new { searchPage = pageNum });
+            }
+        }
+
+        public ActionResult NovelDelete()
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            string novelid = Request.Params["novelid"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                HWN04 h04 = new HWN04();
+                List<HWN041> h041 = new List<HWN041>();
+
+                using (var db = new HWNovelEntities())
+                {
+                    h04 = db.HWN04.Where(x => x.NOVELID.Equals(novelid)).SingleOrDefault();
+                    db.HWN04.Remove(h04);
+
+                    h041 = db.HWN041.Where(x => x.NOVELID.Equals(novelid)).ToList();
+                    db.HWN041.RemoveRange(h041);
+                    db.SaveChanges();
+                }
+
+                return RedirectToAction("Cha", "Mypage");
+            }
+        }
+
+        public ActionResult NovelEnd()
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            string novelid = Request.Params["novelid"];
+            string pageNum = Request.Params["pageNum"];
+            string order = Request.Params["order"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                HWN04 h04 = new HWN04();
+                List<HWN041> h041 = new List<HWN041>();
+
+                using (var db = new HWNovelEntities())
+                {
+                    h04 = db.HWN04.Where(x => x.NOVELID.Equals(novelid)).SingleOrDefault();
+                    h04.ENDYN = "2";
+                    db.SaveChanges();
+                }
+
+                return RedirectToAction("Cha", "Mypage", new { novelid = novelid, pageNum = pageNum, order = order });
+            }
+        }
+
         public ActionResult Min()
         {
             ViewBag.topmenu = "Min";

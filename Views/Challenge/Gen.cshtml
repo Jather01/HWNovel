@@ -3,6 +3,7 @@
 
     string searchOrder = ViewBag.searchOrder ?? "view";
     string searchGenre = ViewBag.searchGenre ?? "1";
+    string searchValue = ViewBag.searchValue ?? "1";
     int pageNum = ViewBag.searchPage ?? 1;
     int totalCount = ViewBag.TotalCount ?? 0;
     int listCount = ViewBag.ListCount ?? 1;
@@ -37,19 +38,25 @@
     <div class="component_section">
         <div class="component_head novel_head">
             <form id="ChaNovelGenSearch" name="ChaNovelGenSearch" method="GET" action="/Challenge/Gen">
-                <div>
-                    <input type="hidden" id="genre" name="genre" value="@searchGenre" />
-                    <div class="right_area">
-                        <div class="select_group">
-                            <select class="novel_select form-select" name="searchOrder" id="searchOrder" asp-for="searchOrder">
-                                <option value="view" @(searchOrder == "view" ? "selected" : "")>조회수</option>
-                                <option value="star" @(searchOrder == "star" ? "selected" : "")>별점</option>
-                                <option value="title" @(searchOrder == "title" ? "selected" : "")>제목</option>
-                                <option value="favorite" @(searchOrder == "favorite" ? "selected" : "")>관심등록</option>
-                            </select>
-                            <input type="hidden" name="searchPage" id="searchPage" value="@pageNum" />
-                        </div>
+                <input type="hidden" id="genre" name="genre" value="@searchGenre" />
+                <div class="right_area">
+                    <div class="select_group">
+                        <select class="novel_select form-select" name="searchOrder" id="searchOrder" asp-for="searchOrder">
+                            <option value="view" @(searchOrder == "view" ? "selected" : "")>조회수</option>
+                            <option value="star" @(searchOrder == "star" ? "selected" : "")>별점</option>
+                            <option value="title" @(searchOrder == "title" ? "selected" : "")>제목</option>
+                            <option value="favorite" @(searchOrder == "favorite" ? "selected" : "")>관심등록</option>
+                        </select>
+                        <input type="hidden" name="searchPage" id="searchPage" value="@pageNum" />
                     </div>
+                </div>
+                <div class="check_group">
+                    <input type="checkbox" class="checkbox" name="searchValue" id="searchValue" value="2" @(searchValue == "2" ? "checked" : "") />
+                    <label for="searchValue" class="keep_text">
+                        <div class="text_wrap">
+                            <span class="keep_text">완결작 보기</span>
+                        </div>
+                    </label>
                 </div>
             </form>
         </div>
@@ -141,6 +148,10 @@
         $(function () { });
 
         $("#searchOrder").change(function () {
+            $("#ChaNovelGenSearch").submit();
+        });
+
+        $("#searchValue").change(function () {
             $("#ChaNovelGenSearch").submit();
         });
     </script>
