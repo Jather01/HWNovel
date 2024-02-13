@@ -2551,6 +2551,11 @@ span.but_label_next {
             cursor: pointer;
         }
 
+        .list_type2 .manage_area .button.end {
+            color: #999;
+            cursor: default;
+        }
+
 .list_type2 .delete_area {
     background-image: url(/Content/Icons/trash.svg);
     background-repeat: no-repeat;
@@ -2663,3 +2668,16 @@ span.but_label_next {
             background-image: url(/Content/Icons/check-circle-fill-small.svg);
             background-repeat: no-repeat;
         }
+
+.bullet_comp_ex {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 42px;
+    height: auto;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    background-color: rgba( 0, 0, 0, 0.7 );
+}

@@ -40,6 +40,10 @@
                             <li class="recentNovel">
                                 <a href="/Challenge/NovelInfo?novelid=@(item.Novelid)" class="list_item">
                                     <div class="pic">
+                                        @if (item.Endyn == "2")
+                                        {
+                                            <span class="bullet_comp_ex">완결</span>
+                                        }
                                         <img src="~/Content/ChallengeThumbnail/@(item.Thumnail).jpg" width="150" height="120">
                                     </div>
                                     <div class="list_info v6">
@@ -48,8 +52,16 @@
                                     </div>
                                 </a>
                                 <div class="manage_area">
-                                    <a href="/Mypage/NovelUpdate?novelid=@(item.Novelid)" class="button type2">작품 정보 수정</a>
-                                    <a href="/Mypage/VolumeWrite?novelid=@(item.Novelid)" class="button type2">회차 쓰기</a>
+                                    @if (item.Endyn == "1")
+                                    {
+                                        <a href="/Mypage/NovelUpdate?novelid=@(item.Novelid)" class="button type2">작품 정보 수정</a>
+                                        <a href="/Mypage/VolumeWrite?novelid=@(item.Novelid)" class="button type2">회차 쓰기</a>
+                                    }
+                                    else if (item.Endyn == "2")
+                                    {
+                                        <span class="button type2 end">작품 정보 수정</span>
+                                        <span class="button type2 end">회차 쓰기</span>
+                                    }
                                 </div>
                             </li>
                         }

@@ -126,6 +126,7 @@ namespace HWNovel.Controllers
                                  Writer = e.NICKNAME,
                                  Genre = a.GENRE,
                                  Thumnail = a.THUMNAIL,
+                                 Endyn = a.ENDYN,
                                  Opendt = b?.OPENDT ?? "",
                                  Viewcnt = b?.VIEWCNT ?? 0,
                                  Volumecnt = Decimal.ToInt32(b?.VOLUMENO ?? 0),

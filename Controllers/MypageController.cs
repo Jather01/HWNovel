@@ -540,7 +540,8 @@ namespace HWNovel.Controllers
                                      Noveltitle = a.NOVELTITLE,
                                      Writer = e.NICKNAME,
                                      Genre = a.GENRE,
-                                     Thumnail = a.THUMNAIL
+                                     Thumnail = a.THUMNAIL,
+                                     Endyn = a.ENDYN
                                  }).ToList();
 
                     novelList = novelList.OrderByDescending(x => x.Insertdt).ToList();

@@ -57,6 +57,10 @@
                 <li class="item">
                     <a href="/Serial/NovelInfo?novelid=@item.Novelid" class="link">
                         <div class="thumbnail">
+                            @if (item.Endyn == "2")
+                            {
+                                <span class="bullet_comp_ex">완결</span>
+                            }
                             <img src="data:image/webp;base64, @item.ThumbnailBase64" width="299" height="192">
                         </div>
                         <div class="info_area">

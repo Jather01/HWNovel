@@ -66,6 +66,10 @@
                 <li class="item">
                     <a href="/Challenge/NovelInfo?novelid=@item.Novelid" class="link">
                         <div class="thumbnail">
+                            @if (item.Endyn == "2")
+                            {
+                                <span class="bullet_comp_ex">완결</span>
+                            }
                             <img src="~/Content/ChallengeThumbnail/@(item.Thumnail).jpg" width="299" height="192">
                         </div>
                         <div class="info_area">
