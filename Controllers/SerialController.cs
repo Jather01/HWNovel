@@ -897,7 +897,7 @@ namespace HWNovel.Controllers
 
         public ActionResult NovelWrite(Novel model)
         {
-            ViewBag.topmenu = "NovelManage";
+            ViewBag.topmenu = "none";
 
             List<string> userinfo = (List<string>)Session["userinfo"];
             ViewBag.userinfo = userinfo;

@@ -38,9 +38,9 @@
                         @foreach (var item in ViewBag.ChaList)
                         {
                             <li class="recentNovel">
-                                <a href="Challenge/NovelInfo?novelid=@(item.Novelid)" class="list_item">
+                                <a href="/Challenge/NovelInfo?novelid=@(item.Novelid)" class="list_item">
                                     <div class="pic">
-                                        <img src="~/Content/ChallengeThumbnail/@(item.Thumbnail).jpg" width="150" height="120">
+                                        <img src="~/Content/ChallengeThumbnail/@(item.Thumnail).jpg" width="150" height="120">
                                     </div>
                                     <div class="list_info v6">
                                         <p class="subj">@item.Noveltitle</p>
@@ -48,8 +48,8 @@
                                     </div>
                                 </a>
                                 <div class="manage_area">
-                                    <a href="Challenge/NovelUpdate?novelid=@(item.Novelid)" class="button type2">작품 정보 수정</a>
-                                    <a href="Challenge/VolumeWrite?novelid=@(item.Novelid)" class="button type2">회차 쓰기</a>
+                                    <a href="/Mypage/NovelUpdate?novelid=@(item.Novelid)" class="button type2">작품 정보 수정</a>
+                                    <a href="/Mypage/VolumeWrite?novelid=@(item.Novelid)" class="button type2">회차 쓰기</a>
                                 </div>
                             </li>
                         }
@@ -104,13 +104,13 @@
                             }
                         </ul>
                     </div>
-                    <a href="#" class="cha_novel_write_new"><strong>새 작품 쓰기</strong></a>
+                    <a href="/Mypage/NovelWrite?searchPage=@pageNum" class="cha_novel_write_new"><strong>새 작품 쓰기</strong></a>
                 }
                 else
                 {
                     <div id="emptyArea" class="nodata my">
                         <p>등록된 작품이 없습니다.</p>
-                        <a href="#" class="cha_novel_write_new"><strong>새 작품 쓰기</strong></a>
+                        <a href="/Mypage/NovelWrite?searchPage=@pageNum" class="cha_novel_write_new"><strong>새 작품 쓰기</strong></a>
                     </div>
                 }
             </div>

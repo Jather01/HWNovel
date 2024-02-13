@@ -264,6 +264,7 @@
     <Content Include="Content\Icons\caret-up-square.svg" />
     <Content Include="Content\Icons\check-circle-fill.svg" />
     <Content Include="Content\Icons\check-circle.svg" />
+    <Content Include="Content\Icons\check2.svg" />
     <Content Include="Content\Icons\chevron-compact-down.svg" />
     <Content Include="Content\Icons\novel-left-gray.svg" />
     <Content Include="Content\Icons\novel-left.svg" />
@@ -385,6 +386,7 @@
     <Content Include="Views\Serial\NovelView.cshtml" />
     <Content Include="Views\Serial\CommentInclude.cshtml" />
     <Content Include="Views\Serial\VolumeUpdate.cshtml" />
+    <Content Include="Views\Mypage\NovelWrite.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

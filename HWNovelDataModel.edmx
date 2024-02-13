@@ -22,6 +22,7 @@
           <Key>
             <PropertyRef Name="USERID" />
             <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="NOVELKIND" />
           </Key>
           <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
@@ -32,6 +33,7 @@
           <Key>
             <PropertyRef Name="USERID" />
             <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="NOVELKIND" />
           </Key>
           <Property Name="USERID" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="NOVELID" Type="varchar" MaxLength="5" Nullable="false" />
@@ -175,6 +177,47 @@
           <Property Name="NOTICETEXT" Type="varchar(max)" Nullable="false" />
           <Property Name="INSERTDT" Type="smalldatetime" Nullable="false" />
         </EntityType>
+        <Function Name="PRO_CHALLENGE_NOVEL_COMMENT_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
+          <Parameter Name="USERCOMMENT" Type="text" Mode="In" />
+          <Parameter Name="USERID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PRO_CHALLENGE_NOVEL_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELINFO" Type="varchar" Mode="In" />
+          <Parameter Name="WRITER" Type="varchar" Mode="In" />
+          <Parameter Name="GENRE" Type="varchar" Mode="In" />
+          <Parameter Name="THUMNAIL" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PRO_CHALLENGE_NOVEL_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELINFO" Type="varchar" Mode="In" />
+          <Parameter Name="WRITER" Type="varchar" Mode="In" />
+          <Parameter Name="GENRE" Type="varchar" Mode="In" />
+          <Parameter Name="THUMNAIL" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PRO_CHALLENGE_VIEWCNT_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PRO_CHALLENGE_VOLUME_UPDATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMENO" Type="numeric" Mode="In" />
+          <Parameter Name="VOLUMTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTEXT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="WRITERCOMMENT" Type="text" Mode="In" />
+          <Parameter Name="OPENDT" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PRO_CHALLENGE_VOLUME_WRITE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOVELID" Type="varchar" Mode="In" />
+          <Parameter Name="VOLUMTITLE" Type="varchar" Mode="In" />
+          <Parameter Name="NOVELTEXT" Type="varchar(max)" Mode="In" />
+          <Parameter Name="WRITERCOMMENT" Type="text" Mode="In" />
+          <Parameter Name="OPENDT" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="PRO_NOTICE_EDIT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOTICENO" Type="numeric" Mode="In" />
           <Parameter Name="NOTICETITLE" Type="varchar" Mode="In" />
@@ -289,6 +332,7 @@
           <Key>
             <PropertyRef Name="USERID" />
             <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="NOVELKIND" />
           </Key>
           <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
@@ -299,6 +343,7 @@
           <Key>
             <PropertyRef Name="USERID" />
             <PropertyRef Name="NOVELID" />
+            <PropertyRef Name="NOVELKIND" />
           </Key>
           <Property Name="USERID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NOVELID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
@@ -534,6 +579,47 @@
             <Parameter Name="NOVELID" Mode="In" Type="String" />
             <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
           </FunctionImport>
+          <FunctionImport Name="PRO_CHALLENGE_NOVEL_COMMENT_WRITE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
+            <Parameter Name="USERCOMMENT" Mode="In" Type="String" />
+            <Parameter Name="USERID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_CHALLENGE_NOVEL_UPDATE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="NOVELTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELINFO" Mode="In" Type="String" />
+            <Parameter Name="WRITER" Mode="In" Type="String" />
+            <Parameter Name="GENRE" Mode="In" Type="String" />
+            <Parameter Name="THUMNAIL" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_CHALLENGE_NOVEL_WRITE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="NOVELTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELINFO" Mode="In" Type="String" />
+            <Parameter Name="WRITER" Mode="In" Type="String" />
+            <Parameter Name="GENRE" Mode="In" Type="String" />
+            <Parameter Name="THUMNAIL" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_CHALLENGE_VIEWCNT_UPDATE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_CHALLENGE_VOLUME_UPDATE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMENO" Mode="In" Type="Decimal" />
+            <Parameter Name="VOLUMTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELTEXT" Mode="In" Type="String" />
+            <Parameter Name="WRITERCOMMENT" Mode="In" Type="String" />
+            <Parameter Name="OPENDT" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_CHALLENGE_VOLUME_WRITE">
+            <Parameter Name="NOVELID" Mode="In" Type="String" />
+            <Parameter Name="VOLUMTITLE" Mode="In" Type="String" />
+            <Parameter Name="NOVELTEXT" Mode="In" Type="String" />
+            <Parameter Name="WRITERCOMMENT" Mode="In" Type="String" />
+            <Parameter Name="OPENDT" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -722,6 +808,12 @@
           <FunctionImportMapping FunctionImportName="PRO_SERIAL_NOVEL_COMMENT_WRITE" FunctionName="HWNovelModel.Store.PRO_SERIAL_NOVEL_COMMENT_WRITE" />
           <FunctionImportMapping FunctionImportName="PRO_VOLUME_UPDATE" FunctionName="HWNovelModel.Store.PRO_VOLUME_UPDATE" />
           <FunctionImportMapping FunctionImportName="PRO_VIEWCNT_UPDATE" FunctionName="HWNovelModel.Store.PRO_VIEWCNT_UPDATE" />
+          <FunctionImportMapping FunctionImportName="PRO_CHALLENGE_NOVEL_COMMENT_WRITE" FunctionName="HWNovelModel.Store.PRO_CHALLENGE_NOVEL_COMMENT_WRITE" />
+          <FunctionImportMapping FunctionImportName="PRO_CHALLENGE_NOVEL_UPDATE" FunctionName="HWNovelModel.Store.PRO_CHALLENGE_NOVEL_UPDATE" />
+          <FunctionImportMapping FunctionImportName="PRO_CHALLENGE_NOVEL_WRITE" FunctionName="HWNovelModel.Store.PRO_CHALLENGE_NOVEL_WRITE" />
+          <FunctionImportMapping FunctionImportName="PRO_CHALLENGE_VIEWCNT_UPDATE" FunctionName="HWNovelModel.Store.PRO_CHALLENGE_VIEWCNT_UPDATE" />
+          <FunctionImportMapping FunctionImportName="PRO_CHALLENGE_VOLUME_UPDATE" FunctionName="HWNovelModel.Store.PRO_CHALLENGE_VOLUME_UPDATE" />
+          <FunctionImportMapping FunctionImportName="PRO_CHALLENGE_VOLUME_WRITE" FunctionName="HWNovelModel.Store.PRO_CHALLENGE_VOLUME_WRITE" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -1,0 +1,167 @@
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+}
+
+<main>
+    <script type="text/javascript">
+        function coverClick(num) {
+            $("li[name=coverItem]").removeClass("cover_on");
+            $("#cover" + num).addClass("cover_on");
+            $("#Thumnail").val(num);
+        }
+    </script>
+    <div class="component_section">
+        <div>
+            <h2 class="noti_title">소설 신규 작성</h2>
+        </div>
+        <div class="novel_write">
+            <form id="writeChallengeNovel" name="writeChallengeNovel" method="POST" action="/Mypage/NovelWritePro" enctype="multipart/form-data">
+                <input type="hidden" name="searchPage" asp-for="searchPage" value="@ViewBag.searchPage" />
+                <ul class="novel_write_table">
+                    <li class="novel_write_item">
+                        <input type="text" class="novel_input" placeholder="제목" name="Noveltitle" id="Noveltitle" asp-for="Noveltitle" maxlength="1000" />
+                    </li>
+                    <li class="novel_write_item">
+                        <span class="novel_sub_title">작가</span>
+                        <span class="novel_sub_writer">@userinfo[2]</span>
+                        <input type="hidden" name="Writer" id="Writer" asp-for="Writer" value="@userinfo[0]" />
+                    </li>
+                    <li class="novel_write_item">
+                        <span class="novel_sub_title">장르</span>
+                        <span class="novel_sub_genre">
+                            <select class="novel_select form-select" name="Genre" id="Genre" asp-for="Genre">
+                                <option value="">장르선택</option>
+                                @foreach (var genre in ViewBag.GenreList)
+                                {
+                                    <option value="@genre.CODENO">@genre.CODENAME</option>
+                                }
+                            </select>
+                        </span>
+                    </li>
+                    <li class="novel_write_item novel_li_thumbnail">
+                        <span class="novel_sub_title">썸네일</span>
+                        <input type="hidden" name="Thumnail" id="Thumnail" asp-for="Thumnail"/>
+                        <ul class="card_list" id="coverImageList" style="display:none;"></ul>
+                    </li>
+                    <li class="novel_write_item" id="novelInfoArea">
+                        <textarea placeholder="작품 소개" class="novel_txtarea" id="Novelinfo" name="Novelinfo" asp-for="Novelinfo"></textarea>
+                    </li>
+                    <li class="notice-button-group">
+                        <button type="button" class="btn btn-outline-primary" id="btnSave">저장</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnCancel">취소</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        var checkUnload = true;
+
+        $(function () {
+            if ("@userinfo[3]" == "0") {
+                location.href = "/Home/Main";
+            }
+        });
+
+        $(window).on("beforeunload", function () {
+            if (checkUnload) return '페이지를 벗어나시겠습니까?';
+        });
+
+        $("#Genre").change(function () {
+            $("#Thumnail").val("");
+            var genre = $(this).val();
+            if (genre == "") {
+                $("#coverImageList").css("display", "none");
+                $("#coverImageList").html("");
+            } else {
+                var html = "";
+                for (var i = 1; i <= 10; i++) {
+                    var num = genre + "";
+                    if ((i + "").length == 1) {
+                        num += "0" + i;
+                    } else {
+                        num += i;
+                    }
+
+                    html += '<li class="item" name="coverItem" id="cover' + num + '">';
+                    html += '<a href="javascript:coverClick(' + num + ')">';
+                    html += '<img src="/Content/ChallengeThumbnail/' + num + '.jpg" width="100" height="138">';
+                    html += '<span class="checked">선택</span>';
+                    html += '</a>';
+                    html += '</li>';
+                }
+                $("#coverImageList").html(html);
+                $("#coverImageList").css("display", "");
+            }
+        });
+
+        $('#novelInfoArea').each(function () {
+            var update = function () {
+                var input = $("#Novelinfo");
+                var before = 500;
+                var now = 500 - input.val().length;
+
+                if (now < 0) {
+                    var str = input.val();
+                    $("#Novelinfo").focus();
+
+                    var inputVal = str.substr(0, 500);
+                    alert('작품 소개는 500자까지 입력 가능합니다.');
+
+                    now = 0;
+
+                    input.val(inputVal);
+                }
+            };
+
+            $('#Novelinfo').bind('input keyup paste', function () {
+                setTimeout(update, 0);
+            });
+
+            update();
+        });
+
+        $("#btnCancel").click(function () {
+            checkUnload = false;
+            var url = "/Mypage/Cha?";
+
+            if ("@ViewBag.searchPage" != "1") {
+                url += "&searchPage=@ViewBag.searchPage";
+            }
+
+            location.href = url;
+        });
+
+        $("#btnSave").click(function () {
+            if ($("#Noveltitle").val() == "") {
+                alert("제목을 입력해주세요.");
+                $("#Noveltitle").focus();
+                return;
+            }
+            if ($("#Genre").val() == "") {
+                alert("장르를 선택해주세요.");
+                $("#Genre").focus();
+                return;
+            }
+
+            if ($("#Thumnail").val() == "") {
+                alert("썸네일을 선택해주세요.");
+                $("#coverImageList").focus();
+                return;
+            }
+
+            if ($("#Novelinfo").val() == "") {
+                alert("작품 소개를 입력해주세요.");
+                $("#Novelinfo").focus();
+                return;
+            }
+
+            if ("@userinfo[3]" != "0") {
+                checkUnload = false;
+                $("#writeChallengeNovel").submit();
+            }
+        });
+    </script>
+}

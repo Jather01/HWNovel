@@ -1,6 +1,7 @@
 ﻿using HWNovel.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -145,45 +146,45 @@ namespace HWNovel.Controllers
                                 }
                                 ).ToList();
 
-                    List<Recent> list4 = (from a in list
-                                 join b in hwn041list
-                                 on a.NOVELID equals b.NOVELID
-                                 select new Recent
-                                 {
-                                     Userid = a.USERID,
-                                     Novelid = a.NOVELID,
-                                     Noveltitle = a.NOVELTITLE,
-                                     Thumnail = a.THUMNAIL,
-                                     Volumeno = a.VOLUMENO,
-                                     Nextvolumeno = b.VOLUMENO > a.VOLUMENO ? b.VOLUMENO : 999999,
-                                     Volumtitle = a.VOLUMTITLE,
-                                     Novelkind = a.NOVELKIND,
-                                     Date = a.DATE
-                                 } into c
-                                 group c by new
-                                 {
-                                     c.Userid,
-                                     c.Novelid,
-                                     c.Noveltitle,
-                                     c.Thumnail,
-                                     c.Volumeno,
-                                     c.Volumtitle,
-                                     c.Novelkind,
-                                     c.Date
-                                 } into d
-                                 orderby d.Key.Date descending
-                                 select new Recent
-                                 {
-                                     Userid = d.Key.Userid,
-                                     Novelid = d.Key.Novelid,
-                                     Noveltitle = d.Key.Noveltitle,
-                                     Thumnail = d.Key.Thumnail,
-                                     Volumeno = d.Key.Volumeno,
-                                     Nextvolumeno = d.Min(x => x.Nextvolumeno),
-                                     Volumtitle = d.Key.Volumtitle,
-                                     Novelkind = d.Key.Novelkind,
-                                     Date = d.Key.Date
-                                 }).ToList();
+                    List<Recent> list4 = (from a in list3
+                                          join b in hwn041list
+                                          on a.NOVELID equals b.NOVELID
+                                          select new Recent
+                                          {
+                                              Userid = a.USERID,
+                                              Novelid = a.NOVELID,
+                                              Noveltitle = a.NOVELTITLE,
+                                              Thumnail = a.THUMNAIL,
+                                              Volumeno = a.VOLUMENO,
+                                              Nextvolumeno = b.VOLUMENO > a.VOLUMENO ? b.VOLUMENO : 999999,
+                                              Volumtitle = a.VOLUMTITLE,
+                                              Novelkind = a.NOVELKIND,
+                                              Date = a.DATE
+                                          } into c
+                                          group c by new
+                                          {
+                                              c.Userid,
+                                              c.Novelid,
+                                              c.Noveltitle,
+                                              c.Thumnail,
+                                              c.Volumeno,
+                                              c.Volumtitle,
+                                              c.Novelkind,
+                                              c.Date
+                                          } into d
+                                          orderby d.Key.Date descending
+                                          select new Recent
+                                          {
+                                              Userid = d.Key.Userid,
+                                              Novelid = d.Key.Novelid,
+                                              Noveltitle = d.Key.Noveltitle,
+                                              Thumnail = d.Key.Thumnail,
+                                              Volumeno = d.Key.Volumeno,
+                                              Nextvolumeno = d.Min(x => x.Nextvolumeno),
+                                              Volumtitle = d.Key.Volumtitle,
+                                              Novelkind = d.Key.Novelkind,
+                                              Date = d.Key.Date
+                                          }).ToList();
 
                     rlist = list2.Union(list4).ToList();
 
@@ -513,7 +514,134 @@ namespace HWNovel.Controllers
             }
             else
             {
+                int listCount = 20;
+                int pageNum = Int32.Parse(Request.Params["searchPage"] ?? "1");
+                int pageSize = 10;
+                int totalCount = 0;
+
+                List<Novel> novelList = new List<Novel>();
+
+                string nowDate = DateTime.Now.ToString("yyyyMMdd");
+                string userid = userinfo[0];
+
+                using (var db = new HWNovelEntities())
+                {
+                    List<HWN04> HWN04List = db.HWN04.Where(x => x.WRITER.Equals(userid)).ToList();
+
+                    List<HWN01> HWN01List = db.HWN01.Where(x => x.USERID.Equals(userid)).ToList();
+
+                    novelList = (from a in HWN04List
+                                 join e in HWN01List
+                                 on a.WRITER equals e.USERID into table4
+                                 from e in table4.ToList()
+                                 select new Novel
+                                 {
+                                     Novelid = a.NOVELID,
+                                     Noveltitle = a.NOVELTITLE,
+                                     Writer = e.NICKNAME,
+                                     Genre = a.GENRE,
+                                     Thumnail = a.THUMNAIL
+                                 }).ToList();
+
+                    novelList = novelList.OrderByDescending(x => x.Insertdt).ToList();
+
+                    totalCount = novelList.Count;
+                }
+
+                novelList = novelList.Skip((pageNum - 1) * listCount)
+                     .Take(listCount)
+                     .ToList();
+
+                //하단 시작 페이지 번호 
+                int startPageNum = 1 + ((pageNum - 1) / pageSize) * pageSize;
+                //하단 끝 페이지 번호
+                int endPageNum = startPageNum + pageSize - 1;
+
+                //전체 페이지의 갯수 구하기
+                int totalPageCount = (int)Math.Ceiling(totalCount / (double)listCount);
+                //끝 페이지 번호가 이미 전체 페이지 갯수보다 크게 계산되었다면 잘못된 값이다.
+                if (endPageNum > totalPageCount)
+                {
+                    endPageNum = totalPageCount; //보정해 준다. 
+                }
+
+                ViewBag.StartPageNum = startPageNum;
+                ViewBag.EndPageNum = endPageNum;
+                ViewBag.TotalCount = totalCount;
+                ViewBag.ListCount = listCount;
+                ViewBag.NowDate = nowDate;
+
+                ViewBag.ChaList = novelList;
+
+                ViewBag.searchPage = pageNum;
+
                 return View();
+            }
+        }
+
+        public ActionResult NovelWrite(Novel model)
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                List<HWN021> genreList = new List<HWN021>();
+
+                using (var db = new HWNovelEntities())
+                {
+                    genreList = db.HWN021.Where(x => x.GROUPNO.Equals("03")).ToList();
+                }
+
+                ViewBag.GenreList = genreList;
+
+                ViewBag.searchPage = model.searchPage;
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult NovelWritePro(Novel model)
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (model != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(model.Noveltitle) && !string.IsNullOrWhiteSpace(model.Genre) && !string.IsNullOrWhiteSpace(model.Novelinfo) && !string.IsNullOrWhiteSpace(model.Thumnail))
+                    {
+                        using (var db = new HWNovelEntities())
+                        {
+                            string k = db.HWN04.Max(x => x.NOVELID) ?? "0";
+                            k = (Int32.Parse(k) + 1).ToString().PadLeft(5, '0');
+
+                            model.Novelid = k;
+                            model.Writer = userinfo[0];
+
+                            db.PRO_CHALLENGE_NOVEL_WRITE(model.Novelid, model.Noveltitle, model.Novelinfo, model.Writer, model.Genre, model.Thumnail);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                return RedirectToAction("Cha", "Mypage", new { searchPage = model.searchPage });
             }
         }
 

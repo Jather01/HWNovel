@@ -34,6 +34,7 @@ namespace HWNovel.ViewModels
         public int Volumecnt { get; set; }
         public int Favoritecnt { get; set; }
         public decimal StarPointAvg { get; set; }
+        public string Userid { get; set; }
 
         public HttpPostedFileBase ThumbnailFile { get; set; }
         public string ThumbnailBase64 { get; set; }

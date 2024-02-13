@@ -319,5 +319,151 @@ namespace HWNovel
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_VIEWCNT_UPDATE", nOVELIDParameter, vOLUMENOParameter);
         }
+    
+        public virtual int PRO_CHALLENGE_NOVEL_COMMENT_WRITE(string nOVELID, Nullable<decimal> vOLUMENO, string uSERCOMMENT, string uSERID)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var vOLUMENOParameter = vOLUMENO.HasValue ?
+                new ObjectParameter("VOLUMENO", vOLUMENO) :
+                new ObjectParameter("VOLUMENO", typeof(decimal));
+    
+            var uSERCOMMENTParameter = uSERCOMMENT != null ?
+                new ObjectParameter("USERCOMMENT", uSERCOMMENT) :
+                new ObjectParameter("USERCOMMENT", typeof(string));
+    
+            var uSERIDParameter = uSERID != null ?
+                new ObjectParameter("USERID", uSERID) :
+                new ObjectParameter("USERID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_CHALLENGE_NOVEL_COMMENT_WRITE", nOVELIDParameter, vOLUMENOParameter, uSERCOMMENTParameter, uSERIDParameter);
+        }
+    
+        public virtual int PRO_CHALLENGE_NOVEL_UPDATE(string nOVELID, string nOVELTITLE, string nOVELINFO, string wRITER, string gENRE, string tHUMNAIL)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var nOVELTITLEParameter = nOVELTITLE != null ?
+                new ObjectParameter("NOVELTITLE", nOVELTITLE) :
+                new ObjectParameter("NOVELTITLE", typeof(string));
+    
+            var nOVELINFOParameter = nOVELINFO != null ?
+                new ObjectParameter("NOVELINFO", nOVELINFO) :
+                new ObjectParameter("NOVELINFO", typeof(string));
+    
+            var wRITERParameter = wRITER != null ?
+                new ObjectParameter("WRITER", wRITER) :
+                new ObjectParameter("WRITER", typeof(string));
+    
+            var gENREParameter = gENRE != null ?
+                new ObjectParameter("GENRE", gENRE) :
+                new ObjectParameter("GENRE", typeof(string));
+    
+            var tHUMNAILParameter = tHUMNAIL != null ?
+                new ObjectParameter("THUMNAIL", tHUMNAIL) :
+                new ObjectParameter("THUMNAIL", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_CHALLENGE_NOVEL_UPDATE", nOVELIDParameter, nOVELTITLEParameter, nOVELINFOParameter, wRITERParameter, gENREParameter, tHUMNAILParameter);
+        }
+    
+        public virtual int PRO_CHALLENGE_NOVEL_WRITE(string nOVELID, string nOVELTITLE, string nOVELINFO, string wRITER, string gENRE, string tHUMNAIL)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var nOVELTITLEParameter = nOVELTITLE != null ?
+                new ObjectParameter("NOVELTITLE", nOVELTITLE) :
+                new ObjectParameter("NOVELTITLE", typeof(string));
+    
+            var nOVELINFOParameter = nOVELINFO != null ?
+                new ObjectParameter("NOVELINFO", nOVELINFO) :
+                new ObjectParameter("NOVELINFO", typeof(string));
+    
+            var wRITERParameter = wRITER != null ?
+                new ObjectParameter("WRITER", wRITER) :
+                new ObjectParameter("WRITER", typeof(string));
+    
+            var gENREParameter = gENRE != null ?
+                new ObjectParameter("GENRE", gENRE) :
+                new ObjectParameter("GENRE", typeof(string));
+    
+            var tHUMNAILParameter = tHUMNAIL != null ?
+                new ObjectParameter("THUMNAIL", tHUMNAIL) :
+                new ObjectParameter("THUMNAIL", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_CHALLENGE_NOVEL_WRITE", nOVELIDParameter, nOVELTITLEParameter, nOVELINFOParameter, wRITERParameter, gENREParameter, tHUMNAILParameter);
+        }
+    
+        public virtual int PRO_CHALLENGE_VIEWCNT_UPDATE(string nOVELID, Nullable<decimal> vOLUMENO)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var vOLUMENOParameter = vOLUMENO.HasValue ?
+                new ObjectParameter("VOLUMENO", vOLUMENO) :
+                new ObjectParameter("VOLUMENO", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_CHALLENGE_VIEWCNT_UPDATE", nOVELIDParameter, vOLUMENOParameter);
+        }
+    
+        public virtual int PRO_CHALLENGE_VOLUME_UPDATE(string nOVELID, Nullable<decimal> vOLUMENO, string vOLUMTITLE, string nOVELTEXT, string wRITERCOMMENT, string oPENDT)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var vOLUMENOParameter = vOLUMENO.HasValue ?
+                new ObjectParameter("VOLUMENO", vOLUMENO) :
+                new ObjectParameter("VOLUMENO", typeof(decimal));
+    
+            var vOLUMTITLEParameter = vOLUMTITLE != null ?
+                new ObjectParameter("VOLUMTITLE", vOLUMTITLE) :
+                new ObjectParameter("VOLUMTITLE", typeof(string));
+    
+            var nOVELTEXTParameter = nOVELTEXT != null ?
+                new ObjectParameter("NOVELTEXT", nOVELTEXT) :
+                new ObjectParameter("NOVELTEXT", typeof(string));
+    
+            var wRITERCOMMENTParameter = wRITERCOMMENT != null ?
+                new ObjectParameter("WRITERCOMMENT", wRITERCOMMENT) :
+                new ObjectParameter("WRITERCOMMENT", typeof(string));
+    
+            var oPENDTParameter = oPENDT != null ?
+                new ObjectParameter("OPENDT", oPENDT) :
+                new ObjectParameter("OPENDT", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_CHALLENGE_VOLUME_UPDATE", nOVELIDParameter, vOLUMENOParameter, vOLUMTITLEParameter, nOVELTEXTParameter, wRITERCOMMENTParameter, oPENDTParameter);
+        }
+    
+        public virtual int PRO_CHALLENGE_VOLUME_WRITE(string nOVELID, string vOLUMTITLE, string nOVELTEXT, string wRITERCOMMENT, string oPENDT)
+        {
+            var nOVELIDParameter = nOVELID != null ?
+                new ObjectParameter("NOVELID", nOVELID) :
+                new ObjectParameter("NOVELID", typeof(string));
+    
+            var vOLUMTITLEParameter = vOLUMTITLE != null ?
+                new ObjectParameter("VOLUMTITLE", vOLUMTITLE) :
+                new ObjectParameter("VOLUMTITLE", typeof(string));
+    
+            var nOVELTEXTParameter = nOVELTEXT != null ?
+                new ObjectParameter("NOVELTEXT", nOVELTEXT) :
+                new ObjectParameter("NOVELTEXT", typeof(string));
+    
+            var wRITERCOMMENTParameter = wRITERCOMMENT != null ?
+                new ObjectParameter("WRITERCOMMENT", wRITERCOMMENT) :
+                new ObjectParameter("WRITERCOMMENT", typeof(string));
+    
+            var oPENDTParameter = oPENDT != null ?
+                new ObjectParameter("OPENDT", oPENDT) :
+                new ObjectParameter("OPENDT", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PRO_CHALLENGE_VOLUME_WRITE", nOVELIDParameter, vOLUMTITLEParameter, nOVELTEXTParameter, wRITERCOMMENTParameter, oPENDTParameter);
+        }
     }
 }

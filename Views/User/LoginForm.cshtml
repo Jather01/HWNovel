@@ -54,7 +54,7 @@
                                     <input type="text" id="id" name="id" placeholder="아이디" title="아이디" class="input_text" maxlength="40">
                                 </div>
                                 <div class="input_row" id="pw_line">
-                                    <input type="password" id="pw" name="pw" placeholder="비밀번호" title="비밀번호" class="input_text" maxlength="16">
+                                    <input type="password" id="pw" name="pw" placeholder="비밀번호" title="비밀번호" class="input_text" maxlength="16" onkeydown="" >
                                 </div>
                             </div>
                             <div class="check_terms">
@@ -104,7 +104,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
 
-<script type="text/JavaScript">
+    <script type="text/JavaScript">
         $(function () {
             var error = "@ViewBag.loginError";
             if (error == "error") {
@@ -127,7 +127,7 @@
             if (e.keyCode == 32) return false;
         });
 
-        $("#doLogin").click(function () {
+        function loginFormSubmit() {
             var bool = "true";
 
             if ($("#id").val() == "") {
@@ -140,7 +140,7 @@
             if ($("#pw").val() == "") {
                 $("#err_empty_pw").css("display", "");
                 bool = "false";
-            }  else {
+            } else {
                 $("#err_empty_pw").css("display", "none");
             }
 
@@ -150,7 +150,20 @@
                 $("#CookyId").val($("#keep").is(":checked"));
                 $("#Login").submit();
             }
+        }
+
+        $("#pw").keydown(function (e) {
+            if (e.keyCode == 13) {
+                loginFormSubmit();
+                return false;
+            } else {
+                return true;
+            }
         });
-</script>
+
+        $("#doLogin").click(function () {
+            loginFormSubmit();
+        });
+    </script>
 </body>
 </html>
