@@ -13,6 +13,9 @@
                 <input type="hidden" name="Novelid" asp-for="Novelid" value="@ViewBag.novelid" />
                 <ul class="novel_write_table">
                     <li class="novel_write_item">
+                        <span class="novel_title">@ViewBag.novelTitle</span>
+                    </li>
+                    <li class="novel_write_item">
                         <input type="text" class="novel_input" placeholder="제목" name="Volumtitle" id="Volumtitle" asp-for="Volumtitle" maxlength="1000" />
                     </li>
                     <li class="novel_write_item" id="volumeInfoArea">

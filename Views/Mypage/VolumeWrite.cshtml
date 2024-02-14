@@ -4,33 +4,31 @@
 <main>
     <div class="component_section">
         <div>
-            <h2 class="noti_title">회차 수정</h2>
+            <h2 class="noti_title">회차 쓰기</h2>
         </div>
         <div class="novel_write">
-            <form id="writeVolume" name="writeVolume" method="POST" action="/Serial/VolumeUpdatePro">
-                <input type="hidden" name="searchPage" asp-for="searchPage" value="@ViewBag.pageNum" />
-                <input type="hidden" name="searchOrder" asp-for="searchOrder" value="@ViewBag.order" />
-                <input type="hidden" name="Novelid" asp-for="Novelid" value="@ViewBag.Novel.NOVELID" />
-                <input type="hidden" name="Volumeno" asp-for="Volumeno" value="@ViewBag.Novel.VOLUMENO" />
+            <form id="writeChallengeVolume" name="writeChallengeVolume" method="POST" action="/Mypage/VolumeWritePro">
+                <input type="hidden" name="searchPage" asp-for="searchPage" value="@ViewBag.searchPage" />
+                <input type="hidden" name="Novelid" asp-for="Novelid" value="@ViewBag.novelid" />
                 <ul class="novel_write_table">
                     <li class="novel_write_item">
-                        <span class="novel_title">@ViewBag.novelTitle</span>
+                        <span class="novel_title">@ViewBag.Novel.NOVELTITLE</span>
                     </li>
                     <li class="novel_write_item">
-                        <input type="text" class="novel_input" placeholder="제목" name="Volumtitle" id="Volumtitle" asp-for="Volumtitle" maxlength="1000" value="@ViewBag.Novel.VOLUMTITLE" />
+                        <input type="text" class="novel_input" placeholder="제목" name="Volumtitle" id="Volumtitle" asp-for="Volumtitle" maxlength="1000" />
                     </li>
                     <li class="novel_write_item" id="volumeInfoArea">
-                        <textarea placeholder="내용" class="volume_txtarea" id="Noveltext" name="Noveltext" asp-for="Noveltext">@ViewBag.Novel.NOVELTEXT</textarea>
+                        <textarea placeholder="내용" class="volume_txtarea" id="Noveltext" name="Noveltext" asp-for="Noveltext"></textarea>
                         <div class="volume_text_length_check">
                             <span><span id="textLengthCheck">0</span>/20,000자</span>
                         </div>
                     </li>
                     <li class="novel_write_item" id="writerInfoArea">
-                        <textarea placeholder="작가의 말" class="comment_txtarea" id="Writercomment" name="Writercomment" asp-for="Writercomment">@ViewBag.Novel.WRITERCOMMENT</textarea>
+                        <textarea placeholder="작가의 말" class="comment_txtarea" id="Writercomment" name="Writercomment" asp-for="Writercomment"></textarea>
                     </li>
                     <li class="novel_write_item">
                         <span class="novel_sub_title">공개일</span>
-                        <input type="text" class="input_date" id="Opendt" name="Opendt" asp-for="Opendt" maxlength="10" placeholder="YYYY.MM.DD" size="12" readonly value="@(ViewBag.Novel.OPENDT.Substring(0,4)).@(ViewBag.Novel.OPENDT.Substring(4,2)).@(ViewBag.Novel.OPENDT.Substring(6,2))" />
+                        <input type="text" class="input_date" id="Opendt" name="Opendt" asp-for="Opendt" maxlength="10" placeholder="YYYY.MM.DD" size="12" readonly />
                     </li>
                     <li class="notice-button-group">
                         <button type="button" class="btn btn-outline-primary" id="btnSave">저장</button>
@@ -65,9 +63,9 @@
         });
 
         $(function () {
-            if ("@userinfo[3]" != "1") {
+            if ("@userinfo[0]" != "@ViewBag.Novel.WRITER") {
                 checkUnload = false;
-                location.href = "/Serial/Day";
+                location.href = "/Home/Main";
             }
 
             $("#Opendt").datepicker();
@@ -141,19 +139,10 @@
 
         $("#btnCancel").click(function () {
             checkUnload = false;
-            var url = "/Serial/NovelView?";
+            var url = "/Mypage/Cha?";
 
-            if ("@ViewBag.novelId" != "1") {
-                url += "&novelId=@ViewBag.novelId";
-            }
-            if ("@ViewBag.volumeno" != "") {
-                url += "&volumeno=@ViewBag.volumeno";
-            }
-            if ("@ViewBag.pageNum" != "") {
-                url += "&pageNum=@ViewBag.pageNum";
-            }
-            if ("@ViewBag.order" != "") {
-                url += "&order=@ViewBag.order";
+            if ("@ViewBag.searchPage" != "") {
+                url += "searchPage=@ViewBag.searchPage";
             }
 
             location.href = url;
@@ -177,10 +166,8 @@
                 return;
             }
 
-            if ("@userinfo[3]" == "1") {
-                checkUnload = false;
-                $("#writeVolume").submit();
-            }
+            checkUnload = false;
+            $("#writeChallengeVolume").submit();
         });
     </script>
 }

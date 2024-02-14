@@ -47,20 +47,23 @@
                                 @{
                                     string url = "";
                                     string kind = "";
+                                    string thumbnail = "";
                                     if (item.Novelkind == "1")
                                     {
                                         url = "/Serial";
                                         kind = "연재";
+                                        thumbnail = "data:image/webp;base64, " + item.ThumbnailBase64;
                                     }
                                     else
                                     {
                                         url = "/Challenge";
                                         kind = "도전";
+                                        thumbnail = "/Content/ChallengeThumbnail/" + item.Thumnail + ".jpg";
                                     }
                                 }
                                 <a href="@(url)/NovelInfo?novelid=@(item.Novelid)" class="list_item">
                                     <div class="pic">
-                                        <img src="data:image/webp;base64, @item.ThumbnailBase64" width="150" height="120">
+                                        <img src="@thumbnail" width="150" height="120">
                                     </div>
                                     <div class="list_info v6">
                                         <p class="subj">

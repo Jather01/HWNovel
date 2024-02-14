@@ -1,0 +1,197 @@
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    decimal starText = ViewBag.SpText[0];
+    decimal starPointVal = ViewBag.SpText[1];
+    decimal starPointPer = ViewBag.SpText[1] * 10;
+
+    string searchParams = "";
+
+    if (!string.IsNullOrEmpty(ViewBag.novelid))
+    {
+        searchParams += "&novelid=" + ViewBag.novelid;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.order))
+    {
+        searchParams += "&order=" + ViewBag.order;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.pageNum))
+    {
+        searchParams += "&pageNum=" + ViewBag.pageNum;
+    }
+}
+<main>
+    <div id="content">
+        <div class="section_area_viewer">
+            <div class="viewer_header" id="menuFloatingLayer">
+                <span class="blind">작품명: </span>
+                <a href="/Challenge/NovelInfo?novelId=@ViewBag.novelid" class="tit_book">@ViewBag.Novel.Noveltitle</a>
+                <div class="select_area">
+                    <div class="select_label">
+                        <span class="blind">현재회차:</span>
+                        <a role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @ViewBag.Novel.Volumtitle
+                            <span class="icon_select_arr3"></span>
+                        </a>
+                        <div class="dropdown">
+                            <ul class="dropdown-menu">
+                                @foreach (var item in ViewBag.NList)
+                                {
+                                    <li><a class="dropdown-item @(item.Volumeno == @ViewBag.Novel.Volumeno ? "slt" : "")" href="/Challenge/NovelView?volumeno=@(item.Volumeno)@(searchParams)">@item.Volumtitle</a></li>
+                                }
+                            </ul>
+                        </div>
+                        @if (ViewBag.PrevN != null)
+                        {
+                            <a href="/Challenge/NovelView?volumeno=@(ViewBag.PrevN.Volumeno)@(searchParams)" class="but_label_prev">이전회</a>
+                        }
+                        else
+                        {
+                            <span class="but_label_prev">이전회</span>
+                        }
+                        @if (ViewBag.NextN != null)
+                        {
+                            <a href="/Challenge/NovelView?volumeno=@(ViewBag.NextN.Volumeno)@(searchParams)" class="but_label_next">다음회</a>
+                        }
+                        else
+                        {
+                            <span class="but_label_next">다음회</span>
+                        }
+                    </div>
+                </div>
+                @if (userinfo[0] == ViewBag.Novel.Writer)
+                {
+                    <div class="button_area">
+                        <button type="button" id="volumeUpdate">회차 수정</button>
+                    </div>
+                }
+            </div>
+            <div class="viewer_container dotum ">
+                <h2 class="detail_view_header">@ViewBag.Novel.Volumtitle<span class="date">@(ViewBag.Novel.Opendt.Substring(0, 4)).@(ViewBag.Novel.Opendt.Substring(4, 2)).@(ViewBag.Novel.Opendt.Substring(6, 2))</span></h2>
+                <div class="detail_view_content ft15"><p>@ViewBag.Novel.Noveltext</p><p class="pic last"><img src="/Content/ChallengeThumbnail/@(ViewBag.Novel.Thumnail).jpg" alt=""></p></div>
+            </div>
+            <div class="viewer_footer">
+                <div class="section_grade">
+                    <span class="stargrade"><span style="width:@(starPointPer)%" id="currentStarScorePercent">별점</span></span>
+                    <em id="currentStarScore">@starPointVal.ToString("0.0#")</em>
+                    <span class="num" id="currentStarScoreCount">@(starText)명</span>
+                    <div class="grade_insert" id="gradeInsert">
+                        @if (ViewBag.StarYn > 0)
+                        {
+                            <button class="starpoint_complete" type="button">참여완료</button>
+                        }
+                        else
+                        {
+                            <button class="starpoint_dropdown" type="button" id="btnSPdown">
+                                별점주기
+                            </button>
+                            <div class="rate_wrap" id="divRateWrap" style="display: none;">
+                                <div id="spText" class="spText_area">10</div>
+                                <span class="starpoint_bg">
+                                    <span class="rate" style="width:100%" id="rate_starbgfull">
+                                        <a name="starpointA" data-rate="1" id="starpointA1">1점</a>
+                                        <a name="starpointA" data-rate="2" id="starpointA2" class="half mid">2점</a>
+                                        <a name="starpointA" data-rate="3" id="starpointA3">3점</a>
+                                        <a name="starpointA" data-rate="4" id="starpointA4" class="half mid">4점</a>
+                                        <a name="starpointA" data-rate="5" id="starpointA5">5점</a>
+                                        <a name="starpointA" data-rate="6" id="starpointA6" class="half mid">6점</a>
+                                        <a name="starpointA" data-rate="7" id="starpointA7">7점</a>
+                                        <a name="starpointA" data-rate="8" id="starpointA8" class="half mid">8점</a>
+                                        <a name="starpointA" data-rate="9" id="starpointA9">9점</a>
+                                        <a name="starpointA" data-rate="10" id="starpointA10" class="half">10점</a>
+                                    </span>
+                                </span>
+                                <button type="button" id="btnSPsubmit" class="btn_area">확인</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <dl class="editor">
+                    <dt>작가의 말 </dt>
+                    <dd>@ViewBag.Novel.Writercomment</dd>
+                </dl>
+            </div>
+        </div>
+        <a href="#" class="but_top" id="topButton"></a>
+        <div class="cbox_wrap" id="cbox_wrap">
+            @Html.Action("CommentInclude", "Challenge", new { Novelid = ViewBag.novelid, Volumeno = ViewBag.Novel.Volumeno })
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () { });
+
+        $("a[name=starpointA]").click(function () {
+            var rate = $(this).data("rate");
+            $("#spText").text(rate);
+            for (var i = 10; i >= 1; i--) {
+                var item = $("#starpointA" + i);
+                if (i > rate) item.addClass("bgnone");
+                else item.removeClass("bgnone");
+            }
+        });
+
+        $("#btnSPdown").click(function () {
+            var dis = $("#divRateWrap").css("display");
+            if (dis == "block") {
+                $("#divRateWrap").css("display", "none");
+            } else if (dis == "none") {
+                $("#divRateWrap").css("display", "block");
+            }
+        });
+
+        $("html").click(function (e) {
+            if ($(e.target).parents('.rate_wrap').length < 1 && !$(e.target).hasClass('rate_wrap') && !$(e.target).hasClass('starpoint_dropdown')) {
+                $("#divRateWrap").css("display", "none");
+            }
+        });
+
+        $("#btnSPsubmit").click(function () {
+            if ("@userinfo[0]" == "0") {
+                if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
+                    var url = window.location.pathname + window.location.search;
+                    $("#PreUrl").val(url);
+                    $("#goLogInAndOut").attr("action", "/User/LoginForm");
+                    $("#goLogInAndOut").submit();
+                }
+            }
+            else
+            {
+                $("#divRateWrap").css("display", "none");
+
+                var starPoint = $("#spText").text()*1;
+                $.ajax({
+                    url: "/Ajax/StarPointChallengeNovelSubmit",
+                    type: "POST",
+                    data: {
+                        novelid: "@ViewBag.novelid",
+                        volumeno: @ViewBag.Novel.Volumeno,
+                        starpoint: starPoint
+                    },
+                    success: function (r) {
+                        var html = "<button class='starpoint_complete' type='button'>참여완료</button>";
+                        $("#gradeInsert").html(html);
+
+                        var result = r.split("/");
+                        $("#currentStarScorePercent").css("width", (result[1] * 10) + "%");
+                        $("#currentStarScore").text(result[1]);
+                        $("#currentStarScoreCount").text(result[0] + "명");
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
+        });
+
+        $("#volumeUpdate").click(function () {
+            if ("@userinfo[0]" == "@ViewBag.Novel.Writer") {
+                var params = "@searchParams".replaceAll("&amp;", "&");
+                console.log(params);
+                location.href = "/Mypage/VolumeUpdate?volumeno=@(ViewBag.Novel.Volumeno)" + params;
+            }
+        });
+    </script>
+}

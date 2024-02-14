@@ -943,6 +943,11 @@ button, input, select, textarea {
         vertical-align: middle;
     }
 
+    .novel_write_item .novel_title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
 .novel_li_thumbnail {
     line-height: normal;
 }
@@ -980,7 +985,7 @@ button, input, select, textarea {
 }
 
 .volume_txtarea {
-    height: 612px;
+    height: 430px;
     line-height: 26px;
     width: 100%;
     padding: 19px 0;

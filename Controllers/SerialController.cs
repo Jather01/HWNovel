@@ -1479,9 +1479,18 @@ namespace HWNovel.Controllers
                 }
                 else
                 {
+                    string novelTitle = "";
+
+                    using (var db = new HWNovelEntities())
+                    {
+                        novelTitle = db.HWN03.Where(x => x.NOVELID.Equals(novelid)).Select(x => x.NOVELTITLE).SingleOrDefault();
+                    }
+
                     ViewBag.novelid = novelid;
                     ViewBag.pageNum = pageNum;
                     ViewBag.order = order;
+
+                    ViewBag.novelTitle = novelTitle;
 
                     return View();
                 }
@@ -1800,10 +1809,12 @@ namespace HWNovel.Controllers
                 else
                 {
                     HWN031 n = new HWN031();
+                    string novelTitle = "";
 
                     using (var db = new HWNovelEntities())
                     {
                         n = db.HWN031.Where(x => x.NOVELID.Equals(novelid) && x.VOLUMENO.ToString().Equals(volumeno)).SingleOrDefault();
+                        novelTitle = db.HWN03.Where(x => x.NOVELID.Equals(novelid)).Select(x => x.NOVELTITLE).SingleOrDefault();
                     }
 
                     ViewBag.Novel = n;
@@ -1812,6 +1823,8 @@ namespace HWNovel.Controllers
                     ViewBag.volumeno = volumeno;
                     ViewBag.pageNum = pageNum;
                     ViewBag.order = order;
+
+                    ViewBag.novelTitle = novelTitle;
 
                     return View();
                 }

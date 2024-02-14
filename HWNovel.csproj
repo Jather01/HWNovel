@@ -390,6 +390,11 @@
     <Content Include="Views\Serial\VolumeUpdate.cshtml" />
     <Content Include="Views\Mypage\NovelWrite.cshtml" />
     <Content Include="Views\Mypage\NovelUpdate.cshtml" />
+    <Content Include="Views\Mypage\VolumeWrite.cshtml" />
+    <Content Include="Views\Mypage\VolumeUpdate.cshtml" />
+    <Content Include="Views\Challenge\NovelInfo.cshtml" />
+    <Content Include="Views\Challenge\NovelView.cshtml" />
+    <Content Include="Views\Challenge\CommentInclude.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

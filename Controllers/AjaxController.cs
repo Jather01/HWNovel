@@ -21,7 +21,7 @@ namespace HWNovel.Controllers
 
             var ids = new List<HWN01>();
 
-            if (!string.IsNullOrEmpty(id))
+            if (!string.IsNullOrWhiteSpace(id))
             {
                 using (var db = new HWNovelEntities())
                 {
@@ -44,7 +44,7 @@ namespace HWNovel.Controllers
 
             var nicknames = new List<HWN01>();
 
-            if (!string.IsNullOrEmpty(nickname))
+            if (!string.IsNullOrWhiteSpace(nickname))
             {
                 using (var db = new HWNovelEntities())
                 {
@@ -66,7 +66,7 @@ namespace HWNovel.Controllers
 
             var nicknames = new List<HWN01>();
 
-            if (!string.IsNullOrEmpty(nickname))
+            if (!string.IsNullOrWhiteSpace(nickname))
             {
                 using (var db = new HWNovelEntities())
                 {
@@ -87,7 +87,7 @@ namespace HWNovel.Controllers
 
             var ids = new List<string>();
 
-            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(birthday))
+            if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(birthday))
             {
                 using (var db = new HWNovelEntities())
                 {
@@ -124,7 +124,7 @@ namespace HWNovel.Controllers
 
             var ids = new List<string>();
 
-            if (!string.IsNullOrEmpty(id) &&  !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(birthday))
+            if (!string.IsNullOrWhiteSpace(id) &&  !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(birthday))
             {
                 using (var db = new HWNovelEntities())
                 {
@@ -176,7 +176,7 @@ namespace HWNovel.Controllers
 
             HWN01 user = new HWN01();
 
-            if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(pw))
+            if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(pw))
             {
                 SHA256 sha = new SHA256Managed();
                 byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(pw));
@@ -212,7 +212,7 @@ namespace HWNovel.Controllers
 
             List<string> userinfo = (List<string>)Session["userinfo"];
 
-           if (userinfo != null && !string.IsNullOrEmpty(novelid))
+           if (userinfo != null && !string.IsNullOrWhiteSpace(novelid))
             {
                 string userid = userinfo[0];
                 HWN011 h011 = new HWN011();
@@ -255,7 +255,7 @@ namespace HWNovel.Controllers
 
             List<string> userinfo = (List<string>)Session["userinfo"];
 
-            if (userinfo != null && !string.IsNullOrEmpty(novelid))
+            if (userinfo != null && !string.IsNullOrWhiteSpace(novelid))
             {
                 string userid = userinfo[0];
                 HWN033 h033 = new HWN033();
@@ -297,11 +297,59 @@ namespace HWNovel.Controllers
         }
 
         [HttpPost]
+        public JsonResult StarPointChallengeNovelSubmit(string novelid, int volumeno, int starpoint)
+        {
+            string result = "0/0"; // 별점참여인원수/별점평균
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo != null && !string.IsNullOrWhiteSpace(novelid))
+            {
+                string userid = userinfo[0];
+                HWN043 h043 = new HWN043();
+
+                using (var db = new HWNovelEntities())
+                {
+                    h043.USERID = userid;
+                    h043.NOVELID = novelid;
+                    h043.VOLUMENO = volumeno;
+                    h043.INSERTDT = DateTime.Now;
+                    h043.STARPOINT = starpoint;
+
+                    db.HWN043.Add(h043);
+                    db.SaveChanges();
+
+                    Novel spResult = db.HWN043.Where(x => x.NOVELID.Equals(novelid) && x.VOLUMENO == volumeno)
+                                        .GroupBy(x => new { x.NOVELID, x.VOLUMENO })
+                                        .Select(x => new Novel
+                                        {
+                                            Novelid = x.Key.NOVELID,
+                                            Volumeno = x.Key.VOLUMENO,
+                                            StarPointAvg = x.Average(a => a.STARPOINT),
+                                            Commentcnt = x.Count()
+                                        }).SingleOrDefault();
+
+                    result = spResult.Commentcnt.ToString() + "/";
+                    if (spResult.StarPointAvg == 10)
+                    {
+                        result += Math.Round(spResult.StarPointAvg, 1).ToString();
+                    }
+                    else
+                    {
+                        result += Math.Round(spResult.StarPointAvg, 2).ToString();
+                    }
+                }
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
         public ActionResult writeSerialNovelComment(string novelid, int volumeno, string comment)
         {
             List<string> userinfo = (List<string>)Session["userinfo"];
 
-            if (userinfo != null && !string.IsNullOrEmpty(novelid))
+            if (userinfo != null && !string.IsNullOrWhiteSpace(novelid))
             {
                 string userid = userinfo[0];
 
@@ -320,7 +368,7 @@ namespace HWNovel.Controllers
         {
             List<string> userinfo = (List<string>)Session["userinfo"];
 
-            if (userinfo != null && !string.IsNullOrEmpty(novelid))
+            if (userinfo != null && !string.IsNullOrWhiteSpace(novelid))
             {
                 string userid = userinfo[0];
                 HWN032 h032 = new HWN032();
@@ -340,6 +388,52 @@ namespace HWNovel.Controllers
             }
 
             return RedirectToAction("CommentInclude", "Serial", new { Novelid = novelid, Volumeno = volumeno });
+        }
+
+        [HttpPost]
+        public ActionResult writeChallengeNovelComment(string novelid, int volumeno, string comment)
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo != null && !string.IsNullOrWhiteSpace(novelid))
+            {
+                string userid = userinfo[0];
+
+                using (var db = new HWNovelEntities())
+                {
+                    db.PRO_CHALLENGE_NOVEL_COMMENT_WRITE(novelid, volumeno, comment, userid);
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("CommentInclude", "Challenge", new { Novelid = novelid, Volumeno = volumeno });
+        }
+
+        [HttpPost]
+        public ActionResult deleteChallengeNovelComment(string novelid, int volumeno, int usercommentno)
+        {
+            List<string> userinfo = (List<string>)Session["userinfo"];
+
+            if (userinfo != null && !string.IsNullOrWhiteSpace(novelid))
+            {
+                string userid = userinfo[0];
+                HWN042 h042 = new HWN042();
+
+                using (var db = new HWNovelEntities())
+                {
+                    h042 = db.HWN042.Where(x => x.NOVELID.Equals(novelid) && x.VOLUMENO == volumeno && x.USERCOMMENTNO == usercommentno).SingleOrDefault();
+                    if (h042 != null)
+                    {
+                        if (userid.Equals(h042.USERID) || userinfo[3].Equals("1"))
+                        {
+                            db.HWN042.Remove(h042);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("CommentInclude", "Challenge", new { Novelid = novelid, Volumeno = volumeno });
         }
     }
 }

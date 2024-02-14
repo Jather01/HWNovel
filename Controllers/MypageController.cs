@@ -186,6 +186,20 @@ namespace HWNovel.Controllers
                                               Date = d.Key.Date
                                           }).ToList();
 
+                    foreach (var n in list2)
+                    {
+                        string imgPath = n.Thumnail;
+                        string imgBase24 = "";
+
+                        if (System.IO.File.Exists(imgPath))
+                        {
+                            byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                            imgBase24 = Convert.ToBase64String(b);
+                        }
+
+                        n.ThumbnailBase64 = imgBase24;
+                    }
+
                     rlist = list2.Union(list4).ToList();
 
                     rlist = rlist.OrderByDescending(x => x.Date).ToList();
@@ -208,20 +222,6 @@ namespace HWNovel.Controllers
                 if (endPageNum > totalPageCount)
                 {
                     endPageNum = totalPageCount; //보정해 준다. 
-                }
-
-                foreach (var n in rlist)
-                {
-                    string imgPath = n.Thumnail;
-                    string imgBase24 = "";
-
-                    if (System.IO.File.Exists(imgPath))
-                    {
-                        byte[] b = System.IO.File.ReadAllBytes(imgPath);
-                        imgBase24 = Convert.ToBase64String(b);
-                    }
-
-                    n.ThumbnailBase64 = imgBase24;
                 }
 
                 ViewBag.StartPageNum = startPageNum;
@@ -414,6 +414,20 @@ namespace HWNovel.Controllers
                                       Opendt = c.OPENDT
                                   }).ToList();
 
+                    foreach (var n in rlist1)
+                    {
+                        string imgPath = n.Thumnail;
+                        string imgBase24 = "";
+
+                        if (System.IO.File.Exists(imgPath))
+                        {
+                            byte[] b = System.IO.File.ReadAllBytes(imgPath);
+                            imgBase24 = Convert.ToBase64String(b);
+                        }
+
+                        n.ThumbnailBase64 = imgBase24;
+                    }
+
                     rlist = rlist1.Union(rlist2).ToList();
 
                     rlist = rlist.OrderByDescending(x => x.Date).ToList();
@@ -436,20 +450,6 @@ namespace HWNovel.Controllers
                 if (endPageNum > totalPageCount)
                 {
                     endPageNum = totalPageCount; //보정해 준다. 
-                }
-
-                foreach (var n in rlist)
-                {
-                    string imgPath = n.Thumnail;
-                    string imgBase24 = "";
-
-                    if (System.IO.File.Exists(imgPath))
-                    {
-                        byte[] b = System.IO.File.ReadAllBytes(imgPath);
-                        imgBase24 = Convert.ToBase64String(b);
-                    }
-
-                    n.ThumbnailBase64 = imgBase24;
                 }
 
                 ViewBag.StartPageNum = startPageNum;
@@ -790,7 +790,156 @@ namespace HWNovel.Controllers
                     db.SaveChanges();
                 }
 
-                return RedirectToAction("Cha", "Mypage", new { novelid = novelid, pageNum = pageNum, order = order });
+                return RedirectToAction("Cha", "Mypage", new { searchPage = pageNum });
+            }
+        }
+
+        public ActionResult VolumeWrite()
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            string novelid = Request.Params["novelid"];
+            string searchPage = Request.Params["searchPage"];
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 공지사항 목록 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                HWN04 novel = new HWN04();
+
+                using (var db = new HWNovelEntities())
+                {
+                    novel = db.HWN04.Where(x => x.NOVELID.Equals(novelid)).SingleOrDefault();
+                }
+
+                ViewBag.novelid = novelid;
+                ViewBag.searchPage = searchPage;
+
+                ViewBag.Novel = novel;
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult VolumeWritePro(Novel model)
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            string novelid = model.Novelid;
+            int pageNum = model.searchPage;
+            string order = model.searchOrder;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (model != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(model.Volumtitle) && !string.IsNullOrWhiteSpace(model.Noveltext) && !string.IsNullOrWhiteSpace(model.Opendt))
+                    {
+                        string opendt = model.Opendt.Replace(".", "");
+                        string writerComment = model.Writercomment ?? ".";
+                        using (var db = new HWNovelEntities())
+                        {
+                            db.PRO_CHALLENGE_VOLUME_WRITE(model.Novelid, model.Volumtitle, model.Noveltext, writerComment, opendt);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                return RedirectToAction("Cha", "Mypage", new { searchPage = pageNum });
+            }
+        }
+
+        public ActionResult VolumeUpdate()
+        {
+            ViewBag.topmenu = "none";
+
+            string novelid = Request.Params["novelid"];
+            string volumeno = Request.Params["volumeno"];
+
+            string searchPage = Request.Params["searchPage"];
+            string order = Request.Params["order"];
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                HWN04 novel = new HWN04();
+                HWN041 volume = new HWN041();
+
+                using (var db = new HWNovelEntities())
+                {
+                    volume = db.HWN041.Where(x => x.NOVELID.Equals(novelid) && x.VOLUMENO.ToString().Equals(volumeno)).SingleOrDefault();
+                    novel = db.HWN04.Where(x => x.NOVELID.Equals(novelid)).SingleOrDefault();
+                }
+
+                ViewBag.Volume = volume;
+
+                ViewBag.novelid = novelid;
+                ViewBag.volumeno = volumeno;
+                ViewBag.searchPage = searchPage;
+                ViewBag.order = order;
+
+                ViewBag.Novel= novel;
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult VolumeUpdatePro(Novel model)
+        {
+            ViewBag.topmenu = "none";
+
+            List<string> userinfo = (List<string>)Session["userinfo"];
+            ViewBag.userinfo = userinfo;
+
+            string novelid = model.Novelid;
+            int searchPage = model.searchPage;
+            string order = model.searchOrder;
+
+            if (userinfo == null)
+            {
+                // 로그인 정보가 없으면 메인 홈 화면으로 이동
+                return RedirectToAction("Main", "Home");
+            }
+            else
+            {
+                if (model != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(model.Volumtitle) && !string.IsNullOrWhiteSpace(model.Noveltext) && !string.IsNullOrWhiteSpace(model.Opendt))
+                    {
+                        string opendt = model.Opendt.Replace(".", "");
+                        string writerComment = model.Writercomment ?? ".";
+                        using (var db = new HWNovelEntities())
+                        {
+                            db.PRO_CHALLENGE_VOLUME_UPDATE(model.Novelid, model.Volumeno, model.Volumtitle, model.Noveltext, writerComment, opendt);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                return RedirectToAction("NovelInfo", "Challenge", new { novelid = novelid, searchPage = searchPage, order = order });
             }
         }
 

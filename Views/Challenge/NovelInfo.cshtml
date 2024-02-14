@@ -1,0 +1,245 @@
+﻿@{
+    List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
+
+    int pageNum = ViewBag.pageNum ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int listCount = ViewBag.ListCount ?? 1;
+    int startPageNum = ViewBag.StartPageNum ?? 1;
+    int endPageNum = ViewBag.EndPageNum ?? 1;
+
+    int pageCount = totalCount % listCount > 0 ? totalCount / listCount + 1 : totalCount / listCount;
+    endPageNum = endPageNum > pageCount ? pageCount : endPageNum;
+
+    string searchParams = "";
+
+    if (!string.IsNullOrEmpty(ViewBag.novelid))
+    {
+        searchParams += "&novelid=" + ViewBag.novelid;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.order))
+    {
+        searchParams += "&order=" + ViewBag.order;
+    }
+    if (pageNum != 1)
+    {
+        searchParams += "&pageNum=" + pageNum;
+    }
+}
+<main>
+    <script type="text/JavaScript">
+        function pagingPrev(page) {
+            if (page - 1 > 0) {
+                $("#pageNum").val((page - 1));
+                $("#novelInfo").submit();
+            }
+        }
+
+        function paging(page) {
+            $("#pageNum").val((page));
+            $("#novelInfo").submit();
+        }
+
+        function pagingNext(page) {
+            if (page + 10 > @endPageNum) {
+                $("#pageNum").val((page + 10));
+                $("#novelInfo").submit();
+            }
+        }
+    </script>
+    <div class="component_section">
+        <div class="section_area_info">
+            <img src="/Content/ChallengeThumbnail/@(ViewBag.Novel.Thumnail).jpg" class="thumbnail" width="250" height="357">
+            <div class="info_area">
+                <div class="info_top">
+                    <h2 class="title">@ViewBag.Novel.Noveltitle</h2>
+                    <div class="info_group">
+                        <span class="item">@ViewBag.Novel.Genre</span>
+                        <span class="item"><a href="#" class="link">@ViewBag.Novel.Writer</a></span>
+                    </div>
+                    <div class="info_group">
+                        <span class="score_area"><span class="ico_star">별점</span>@ViewBag.Novel.StarPointAvg.ToString("0.0#")</span>
+                    </div>
+                </div>
+                <div class="info_bottom">
+                    <p class="summary">
+                        <span>
+                            @ViewBag.Novel.Novelinfo
+                        </span>
+                    </p>
+                    <div class="link_group">
+                        @if (ViewBag.NList.Count > 0)
+                        {
+                            <a href="/Challenge/NovelView?volumeno=1@(searchParams)" class="link type1"><strong>첫회보기</strong></a>
+                        }
+                        @if (userinfo[0] == ViewBag.Novel.Writer)
+                        {
+                            <a href="/Mypage/NovelUpdate?@searchParams" class="link type1"><strong>소설정보수정</strong></a>
+                            <a href="/Mypage/VolumeWrite?@searchParams" class="link type1"><strong>신규회차등록</strong></a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <ul class="section_function">
+                <li><a class="favorite @(ViewBag.UserFavorite == null ? "" : "check")" id="concernNovelIcon">관심 <span>@ViewBag.FavoritCnt</span></a></li>
+            </ul>
+        </div>
+        <div class="cont_sub_wrap">
+            <div class="cont_sub">
+                <div class="component_head">
+                    <h3 class="title">작품 회차<span class="past_number">(@ViewBag.NCount)</span></h3>
+                    <div class="right_area">
+                        <ul class="tab_segment_control" role="tablist">
+                            <li class="item" role="presentation" id="changeOrderUpdate">
+                                <button type="button" role="tab" aria-selected="@(ViewBag.order == "update" ? "true" : "false")" class="button_tab">최신순</button>
+                            </li>
+                            <li class="item" role="presentation" id="changeOrderOldest">
+                                <button type="button" role="tab" aria-selected="@(ViewBag.order == "oldest" ? "true" : "false")" class="button_tab">1회부터</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <ul class="list_type2 v3">
+                    @if (ViewBag.NList.Count == 0)
+                    {
+                        <li class="volumeComment"><div class="volumeNull">회차가 없습니다.</div></li>
+                    }
+                    else
+                    {
+                        foreach (var item in ViewBag.NList)
+                        {
+                            <li class="volumeComment">
+                                <a href="/Challenge/NovelView?volumeno=@(item.Volumeno)@(searchParams)" class="list_item">
+                                    <div class="pic">
+                                        <img src="/Content/ChallengeThumbnail/@(ViewBag.Novel.Thumnail).jpg" width="100%">
+                                    </div>
+                                    <div class="list_info v6">
+                                        <p class="subj">
+                                            @if (item.Opendt == DateTime.Now.ToString("yyyyMMdd"))
+                                            {
+                                                <span class="bullet_wrap">
+                                                    <span class="bullet_up">UP</span>
+                                                </span>
+                                            }
+                                            @item.Volumtitle
+                                        </p>
+                                        <p class="rating">
+                                            <span class="score_area"><span class="ico_star">별점</span><em>@item.StarPointAvg.ToString("0.0#")</em></span>
+                                            <span class="count">댓글 <span class="num">@item.Commentcnt</span></span>
+                                            <span class="date">@(item.Opendt.Substring(0,4)).@(item.Opendt.Substring(4,2)).@(item.Opendt.Substring(6,2))</span>
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="notice_paging">
+            <ul class="paging">
+                @if (startPageNum == 1)
+                {
+                    <li class="page_arrow prev page-item">
+                        <span class="blind">이전 페이지로 이동</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow prev page-item">
+                        <a class="page-link" role="button" href="javascript:pagingPrev(@startPageNum)">
+                            <span class="blind">이전 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
+                @for (int i = startPageNum; i <= endPageNum; i++)
+                {
+                    if (i == pageNum)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">
+                                @i
+                                <span class="blind">(current)</span>
+                            </span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" role="button" href="javascript:paging(@i)">@i</a>
+                        </li>
+                    }
+                }
+                @if (endPageNum == pageCount)
+                {
+                    <li class="page_arrow next page-item">
+                        <span class="blind">다음 페이지로 이동</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page_arrow next page-item">
+                        <a class="page-link" role="button" href="javascript:pagingNext(@startPageNum)">
+                            <span class="blind">다음 페이지로 이동</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <form name="novelInfo" id="novelInfo" action="/Challenge/NovelInfo" method="get">
+        <input type="hidden" name="novelid" id="novelid" value="@ViewBag.novelid" />
+        <input type="hidden" name="pageNum" id="pageNum" value="@ViewBag.pageNum" />
+        <input type="hidden" name="order" id="order" value="@ViewBag.order" />
+    </form>
+    <form id="goLogin" name="goLogin" method="POST" action="/User/LoginForm">
+        <input type="hidden" id="PreUrl" name="PreUrl" asp-for="PreUrl" value="" />
+    </form>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () { });
+
+        // 회차 정렬 최신순
+        $("#changeOrderUpdate").click(function () {
+            $("#order").val("update");
+            $("#novelInfo").submit();
+        });
+
+        // 회차 정렬 1화부터
+        $("#changeOrderOldest").click(function () {
+            $("#order").val("oldest");
+            $("#novelInfo").submit();
+        });
+
+        // 관심등록
+        $("#concernNovelIcon").click(function () {
+            if ("@userinfo[0]" == "0") {
+                if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
+                    var url = window.location.pathname + window.location.search;
+                    $("#PreUrl").val(url);
+                    $("#goLogInAndOut").attr("action","/User/LoginForm");
+                    $("#goLogInAndOut").submit();
+                }
+            } else {
+                $.ajax({
+                    url: "/Ajax/NovelFavorite",
+                    type: "POST",
+                    data: { novelid: "@ViewBag.novelid", novelkind: "2" },
+                    success: function (r) {
+                        var arr = r.split('/');
+                        if (arr[0] == "on") {
+                            $("#concernNovelIcon").attr("class", "favorite check");
+                        } else if (arr[0] == "off") {
+                            $("#concernNovelIcon").attr("class", "favorite");
+                        }
+                        $("#concernNovelIcon").html("관심 <span>" + arr[1] + "</span>");
+                    },
+                    failure: function () { alert("fail"); },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            }
+        });
+    </script>
+}
