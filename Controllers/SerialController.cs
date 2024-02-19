@@ -68,10 +68,12 @@ namespace HWNovel.Controllers
                                                VIEWCNT = b.Sum(x => x.VIEWCNT)
                                            }).ToList();
 
+                var list1 = (from c in db.HWN031.ToList()
+                             where c.OPENDT.CompareTo(nowDate) <= 0
+                             select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO }).ToList();
+
                 List<HWN033> hwn033List = (from a in db.HWN033.ToList()
-                                           from b in (from c in db.HWN031.ToList()
-                                                      where c.OPENDT.CompareTo(nowDate) <= 0
-                                                      select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                           from b in list1
                                            where a.NOVELID == b.NOVELID
                                               && a.VOLUMENO == b.VOLUMENO
                                            group a by new
@@ -281,10 +283,12 @@ namespace HWNovel.Controllers
                                                VIEWCNT = b.Sum(x => x.VIEWCNT)
                                            }).ToList();
 
+                var tempList1 = (from c in db.HWN031.ToList()
+                             where c.OPENDT.CompareTo(nowDate) <= 0
+                             select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO }).ToList();
+
                 List<HWN033> hwn033List = (from a in db.HWN033.ToList()
-                                           from b in (from c in db.HWN031.ToList()
-                                                      where c.OPENDT.CompareTo(nowDate) <= 0
-                                                      select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                           from b in tempList1
                                            where a.NOVELID == b.NOVELID
                                               && a.VOLUMENO == b.VOLUMENO
                                            group a by new
@@ -309,7 +313,6 @@ namespace HWNovel.Controllers
                                       FAVORITECNT = b.Count()
                                   }).ToList();
 
-
                 novelList = (from a in hwn03List
                              join b in hwn031List
                              on a.NOVELID equals b.NOVELID into table1
@@ -320,7 +323,7 @@ namespace HWNovel.Controllers
                              join d in hwn011List
                              on a.NOVELID equals d.NOVELID into table3
                              from d in table3.ToList().DefaultIfEmpty()
-                             where b.MINOPENDT.Substring(4,2) == nowMonth.PadLeft(2, '0')
+                             where b.MINOPENDT.Substring(0,6) == nowDate.Substring(0, 6)
                              orderby a.NOVELID
                              select new Novel
                              {
@@ -437,10 +440,12 @@ namespace HWNovel.Controllers
                                                VIEWCNT = b.Sum(x => x.VIEWCNT)
                                            }).ToList();
 
+                var tempList1 = (from c in db.HWN031.ToList()
+                                 where c.OPENDT.CompareTo(nowDate) <= 0
+                                 select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO }).ToList();
+
                 List<HWN033> hwn033List = (from a in db.HWN033.ToList()
-                                           from b in (from c in db.HWN031.ToList()
-                                                      where c.OPENDT.CompareTo(nowDate) <= 0
-                                                      select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                           from b in tempList1
                                            where a.NOVELID == b.NOVELID
                                               && a.VOLUMENO == b.VOLUMENO
                                            group a by new
@@ -615,10 +620,12 @@ namespace HWNovel.Controllers
                                                VIEWCNT = b.Sum(x => x.VIEWCNT)
                                            }).ToList();
 
+                var tempList1 = (from c in db.HWN031.ToList()
+                                 where c.OPENDT.CompareTo(nowDate) <= 0
+                                 select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO }).ToList();
+
                 List<HWN033> hwn033List = (from a in db.HWN033.ToList()
-                                           from b in (from c in db.HWN031.ToList()
-                                                      where c.OPENDT.CompareTo(nowDate) <= 0
-                                                      select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                           from b in tempList1
                                            where a.NOVELID == b.NOVELID
                                               && a.VOLUMENO == b.VOLUMENO
                                            group a by new
@@ -1023,7 +1030,7 @@ namespace HWNovel.Controllers
             ViewBag.topmenu = topmenu;
             ViewBag.userinfo = userinfo;
 
-            int listCount = 20;
+            int listCount = 10;
             int pageNum = 1;
             int pageSize = 10;
             int totalCount = 0;
@@ -1048,10 +1055,12 @@ namespace HWNovel.Controllers
             {
                 var n03 = db.HWN03.Where(x => x.NOVELID.Equals(novelId)).ToList();
 
+                var tempList1 = (from c in db.HWN031.ToList()
+                                 where c.OPENDT.CompareTo(nowDate) <= 0
+                                 select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO }).ToList();
+
                 var hwn033List = (from a in db.HWN033.ToList()
-                                  from b in (from c in db.HWN031.ToList()
-                                              where c.OPENDT.CompareTo(nowDate) <= 0
-                                              select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                  from b in tempList1
                                   where a.NOVELID == b.NOVELID
                                       && a.VOLUMENO == b.VOLUMENO
                                   group a by new

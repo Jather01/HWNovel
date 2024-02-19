@@ -42,7 +42,7 @@ namespace HWNovel.Controllers
 
             string searchGenre = genre;
             string searchOrder = model.searchOrder ?? "view";
-            string searchValue = model.searchValue ?? "1";
+            string searchDay = model.searchDay ?? "1";
 
             int listCount = 20;
             int pageNum = 1;
@@ -60,7 +60,7 @@ namespace HWNovel.Controllers
 
             using (var db = new HWNovelEntities())
             {
-                List<HWN04> HWN04List = db.HWN04.Where(x => x.ENDYN.Equals(searchValue) && x.GENRE.Equals(searchGenre)).ToList();
+                List<HWN04> HWN04List = db.HWN04.Where(x => x.ENDYN.Equals(searchDay) && x.GENRE.Equals(searchGenre)).ToList();
 
                 List<HWN041> HWN041List = (from a in db.HWN041.ToList()
                                            where a.OPENDT.CompareTo(nowDate) <= 0
@@ -76,10 +76,12 @@ namespace HWNovel.Controllers
                                                VIEWCNT = b.Sum(x => x.VIEWCNT)
                                            }).ToList();
 
+                var tempList1 = (from c in db.HWN041.ToList()
+                                 where c.OPENDT.CompareTo(nowDate) <= 0
+                                 select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO }).ToList();
+
                 List<HWN043> HWN043List = (from a in db.HWN043.ToList()
-                                           from b in (from c in db.HWN041.ToList()
-                                                      where c.OPENDT.CompareTo(nowDate) <= 0
-                                                      select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                           from b in tempList1
                                            where a.NOVELID == b.NOVELID
                                               && a.VOLUMENO == b.VOLUMENO
                                            group a by new
@@ -91,6 +93,7 @@ namespace HWNovel.Controllers
                                                NOVELID = d.Key.NOVELID,
                                                STARPOINT = d.Average(x => x.STARPOINT)
                                            }).ToList();
+
                 List<HWN01> HWN01List = db.HWN01.ToList();
 
                 var hwn011List = (from a in db.HWN011.ToList()
@@ -188,7 +191,7 @@ namespace HWNovel.Controllers
             ViewBag.searchPage = pageNum;
             ViewBag.searchGenre = searchGenre;
             ViewBag.searchOrder = searchOrder;
-            ViewBag.searchValue = searchValue;
+            ViewBag.searchDay = searchDay;
 
             return View();
         }
@@ -211,7 +214,7 @@ namespace HWNovel.Controllers
             ViewBag.topmenu = topmenu;
             ViewBag.userinfo = userinfo;
 
-            int listCount = 20;
+            int listCount = 10;
             int pageNum = 1;
             int pageSize = 10;
             int totalCount = 0;
@@ -236,10 +239,12 @@ namespace HWNovel.Controllers
             {
                 var n04 = db.HWN04.Where(x => x.NOVELID.Equals(novelId)).ToList();
 
+                var tempList1 = (from c in db.HWN041.ToList()
+                                 where c.OPENDT.CompareTo(nowDate) <= 0
+                                 select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO }).ToList();
+
                 var hwn043List = (from a in db.HWN043.ToList()
-                                  from b in (from c in db.HWN041.ToList()
-                                             where c.OPENDT.CompareTo(nowDate) <= 0
-                                             select new { NOVELID = c.NOVELID, VOLUMENO = c.VOLUMENO })
+                                  from b in tempList1
                                   where a.NOVELID == b.NOVELID
                                       && a.VOLUMENO == b.VOLUMENO
                                   group a by new
@@ -261,7 +266,7 @@ namespace HWNovel.Controllers
                          Novelid = a.NOVELID,
                          Noveltitle = a.NOVELTITLE,
                          Novelinfo = a.NOVELINFO,
-                         Writer = a.WRITER,
+                         Writer = (db.HWN01.Where(x => x.USERID.Equals(a.WRITER)).Select(x => x.NICKNAME).SingleOrDefault()),
                          searchGenre = a.GENRE,
                          Thumnail = a.THUMNAIL,
                          StarPointAvg = Math.Round(b?.STARPOINT ?? 0, 2)

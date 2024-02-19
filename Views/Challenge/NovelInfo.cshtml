@@ -54,7 +54,7 @@
                     <h2 class="title">@ViewBag.Novel.Noveltitle</h2>
                     <div class="info_group">
                         <span class="item">@ViewBag.Novel.Genre</span>
-                        <span class="item"><a href="#" class="link">@ViewBag.Novel.Writer</a></span>
+                        <span class="item"><a href="/Home/Search?searchValue=@ViewBag.Novel.Writer" class="link">@ViewBag.Novel.Writer</a></span>
                     </div>
                     <div class="info_group">
                         <span class="score_area"><span class="ico_star">별점</span>@ViewBag.Novel.StarPointAvg.ToString("0.0#")</span>

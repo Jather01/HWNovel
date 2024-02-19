@@ -395,6 +395,7 @@
     <Content Include="Views\Challenge\NovelInfo.cshtml" />
     <Content Include="Views\Challenge\NovelView.cshtml" />
     <Content Include="Views\Challenge\CommentInclude.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

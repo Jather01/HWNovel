@@ -1,0 +1,265 @@
+﻿@{ 
+    int sListCnt = ViewBag.sListCnt ?? 0;
+    int cListCnt = ViewBag.cListCnt ?? 0;
+    int totalCnt = sListCnt + cListCnt;
+    string nowDate = DateTime.Now.ToString("yyyyMMdd");
+}
+<main>
+    <script type="text/JavaScript">
+        function changeSection(menu) {
+            location.href = "/Home/Search?searchValue=@(ViewBag.searchValue)&Section=" + menu;
+        }
+    </script>
+    <div id="content" class="search">
+        <div class="cont_sub_wrap search_wrap">
+            <div class="cont_sub">
+                <div class="srch_area">
+                    <div class="input_box">
+                        <input name="searchValue" id="searchValue2" class="input_text" value="@ViewBag.searchValue">
+                        <button type="button" class="btn_search" id="btn_submit2"><span class="blind">검색</span></button>
+                    </div>
+                </div>
+                <ul class="tab_segment_control type2">
+                    <li class="item">
+                        <button type="button" aria-selected="@(ViewBag.Section == "all" || ViewBag.Section == null ? "true" : "false")" class="button_tab" onclick="changeSection('all');">전체 @totalCnt</button>
+                    </li>
+                    <li class="item">
+                        <button type="button" aria-selected="@(ViewBag.Section == "Serial" ? "true" : "false")" class="button_tab" onclick="changeSection('Serial');">연재 웹소설 @sListCnt</button>
+                    </li>
+                    <li class="item">
+                        <button type="button" aria-selected="@(ViewBag.Section == "Challenge" ? "true" : "false")" class="button_tab" onclick="changeSection('Challenge');">도전 웹소설 @cListCnt</button>
+                    </li>
+                </ul>
+                <div class="component_section type2">
+                    @if (totalCnt == 0)
+                    {
+                        <div class="srch_cont none">검색결과가 없습니다.</div>
+                    }
+                    else
+                    {
+                        if (ViewBag.Section == "all")
+                        {
+                            <div class="component_head">
+                                <h2 class="title">
+                                    <a href="/Home/Search?searchValue=@(ViewBag.searchValue)&Section=Serial" class="link">연재 웹소설 〉</a>
+                                </h2>
+                            </div>
+                            if (ViewBag.sListCnt > 0)
+                            {
+                                <ul class="default_list type2">
+                                    @foreach (var item in ViewBag.sList)
+                                    {
+                                        <li class="item">
+                                            <a href="/Serial/NovelInfo?novelid=@item.Novelid" class="link">
+                                                <div class="thumbnail">
+                                                    @if (item.Endyn == "2")
+                                                    {
+                                                        <span class="bullet_comp_search">완결</span>
+                                                    }
+                                                    <img src="data:image/webp;base64, @item.ThumbnailBase64" width="150" height="120">
+                                                </div>
+                                                <div class="info_area">
+                                                    <p class="title_group">
+                                                        @if (item.Opendt == nowDate)
+                                                        {
+                                                            <span class="bullet_up">UP</span><span>&nbsp;</span>
+                                                        }
+                                                        <span class="title">@item.Noveltitle</span>
+                                                    </p>
+                                                    <p class="info_group">
+                                                        <span class="author">@item.Writer</span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p class="srch_none">검색결과가 없습니다.</p>
+                            }
+                            <div class="component_section">
+                                <div class="component_head">
+                                    <h2 class="title">
+                                        <a href="/Home/Search?searchValue=@(ViewBag.searchValue)&Section=Challenge" class="link">도전 웹소설 〉</a>
+                                    </h2>
+                                </div>
+                                @if (ViewBag.cListCnt > 0)
+                                {
+                                    <ul class="default_list type2">
+                                        @foreach (var item in ViewBag.cList)
+                                        {
+                                            <li class="item">
+                                                <a href="/Challenge/NovelInfo?novelid=@item.Novelid" class="link">
+                                                    <div class="thumbnail">
+                                                        @if (item.Endyn == "2")
+                                                        {
+                                                            <span class="bullet_comp_search">완결</span>
+                                                        }
+                                                        <img src="/Content/ChallengeThumbnail/@(item.Thumnail).jpg" width="150" height="120">
+                                                    </div>
+                                                    <div class="info_area">
+                                                        <p class="title_group">
+                                                            @if (item.Opendt == nowDate)
+                                                            {
+                                                                <span class="bullet_up">UP</span><span>&nbsp;</span>
+                                                            }
+                                                            <span class="title">@item.Noveltitle</span>
+                                                        </p>
+                                                        <p class="info_group">
+                                                            <span class="author">@item.Writer</span>
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p class="srch_none">검색결과가 없습니다.</p>
+                                }
+                            </div>
+                        }
+                        else if (ViewBag.Section == "Serial")
+                        {
+                            if (ViewBag.sListCnt > 0)
+                            {
+                                <div class="component_head">
+                                    <h2 class="title">
+                                        <a href="/Home/Search?searchValue=@(ViewBag.searchValue)&Section=Serial" class="link">연재 웹소설 〉</a>
+                                    </h2>
+                                </div>
+                                <ul class="default_list type2">
+                                    @foreach (var item in ViewBag.sList)
+                                    {
+                                        <li class="item">
+                                            <a href="/Serial/NovelInfo?novelid=@item.Novelid" class="link">
+                                                <div class="thumbnail">
+                                                    @if (item.Endyn == "2")
+                                                    {
+                                                        <span class="bullet_comp_search">완결</span>
+                                                    }
+                                                    <img src="data:image/webp;base64, @item.ThumbnailBase64" width="150" height="120">
+                                                </div>
+                                                <div class="info_area">
+                                                    <p class="title_group">
+                                                        @if (item.Opendt == nowDate)
+                                                        {
+                                                            <span class="bullet_up">UP</span><span>&nbsp;</span>
+                                                        }
+                                                        <span class="title">@item.Noveltitle</span>
+                                                    </p>
+                                                    <p class="info_group">
+                                                        <span class="author">@item.Writer</span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <div class="srch_cont none">검색결과가 없습니다.</div>
+                            }
+                        }
+                        else if (ViewBag.Section == "Challenge")
+                        {
+                            if (ViewBag.cListCnt > 0)
+                            {
+                                <div class="component_head">
+                                    <h2 class="title">
+                                        <a href="/Home/Search?searchValue=@(ViewBag.searchValue)&Section=Challenge" class="link">도전 웹소설 〉</a>
+                                    </h2>
+                                </div>
+                                <ul class="default_list type2">
+                                    @foreach (var item in ViewBag.cList)
+                                    {
+                                        <li class="item">
+                                            <a href="/Challenge/NovelInfo?novelid=@item.Novelid" class="link">
+                                                <div class="thumbnail">
+                                                    @if (item.Endyn == "2")
+                                                    {
+                                                        <span class="bullet_comp_search">완결</span>
+                                                    }
+                                                    <img src="/Content/ChallengeThumbnail/@(item.Thumnail).jpg" width="150" height="120">
+                                                </div>
+                                                <div class="info_area">
+                                                    <p class="title_group">
+                                                        @if (item.Opendt == nowDate)
+                                                        {
+                                                            <span class="bullet_up">UP</span><span>&nbsp;</span>
+                                                        }
+                                                        <span class="title">@item.Noveltitle</span>
+                                                    </p>
+                                                    <p class="info_group">
+                                                        <span class="author">@item.Writer</span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <div class="srch_cont none">검색결과가 없습니다.</div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+@section scripts{
+    <script type="text/JavaScript">
+        $(function () {
+            var keyword = "@ViewBag.searchValue";
+            var keywordLen = keyword.length;
+            var titles = $(".title_group .title");
+            for (var i = 0; i < titles.length; i++) {
+                var text = titles[i].innerHTML;
+                var startNo = text.toUpperCase().indexOf(keyword.toUpperCase());
+                if (startNo >= 0) {
+                    var changeText = text.substr(startNo, keywordLen);
+                    text = text.replaceAll(changeText, '<strong>' + changeText + '</strong>');
+                    titles[i].innerHTML = text;
+                }
+            }
+
+            var authors = $(".info_group .author");
+            for (var i = 0; i < authors.length; i++) {
+                var text = authors[i].innerHTML;
+                var startNo = text.toUpperCase().indexOf(keyword.toUpperCase());
+                if (startNo >= 0) {
+                    var changeText = text.substr(startNo, keywordLen);
+                    text = text.replaceAll(changeText, '<strong>' + changeText + '</strong>');
+                    authors[i].innerHTML = text;
+                }
+            }
+        });
+
+        $("#btn_submit2").click(function () {
+            searchSubmit();
+        });
+
+        $("#searchValue2").keydown(function (e) {
+            if (e.keyCode == 13) {
+                searchSubmit();
+            }
+        });
+
+        function searchSubmit() {
+            var keyword = $("#searchValue2").val().trim();
+            if (keyword == "") {
+                alert("검색어를 입력해주세요.");
+                return;
+            } else {
+                location.href = "/Home/Search?searchValue=" + keyword;
+            }
+        }
+    </script>
+}

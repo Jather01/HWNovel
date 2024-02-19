@@ -21,10 +21,10 @@
         <div class="container">
             <a href="/Home/Main" class="logo"></a>
             <div class="d-flex" role="search">
-                <form id="TopSearch" name="TopSearch" method="POST" action="/Home/Search">
+                <form id="TopSearch" name="TopSearch" method="get" action="/Home/Search">
                     <div class="top_search">
                         <div class="input_box">
-                            <input placeholder="작품명, 작가명을 입력하세요." name="searchValue" class="input_text" value="">
+                            <input placeholder="작품명, 작가명을 입력하세요." name="searchValue" id="searchValue" class="input_text" value="@ViewBag.searchValue">
                             <button type="submit" class="btn_search"><span class="blind">검색</span></button>
                         </div>
                     </div>
@@ -154,6 +154,16 @@
             $("#PreUrl").val(url);
             $("#goLogInAndOut").attr("action", "/User/Logout");
             $("#goLogInAndOut").submit();
+        });
+
+        $("#TopSearch").submit(function () {
+            var keyword = $("#searchValue").val().trim();
+            if (keyword == "") {
+                alert("검색어를 입력해주세요.");
+                return false;
+            } else {
+                return true;
+            }
         });
     </script>
     @RenderSection("include", required: false)

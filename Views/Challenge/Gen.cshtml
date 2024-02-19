@@ -3,7 +3,7 @@
 
     string searchOrder = ViewBag.searchOrder ?? "view";
     string searchGenre = ViewBag.searchGenre ?? "1";
-    string searchValue = ViewBag.searchValue ?? "1";
+    string searchDay = ViewBag.searchDay ?? "1";
     int pageNum = ViewBag.searchPage ?? 1;
     int totalCount = ViewBag.TotalCount ?? 0;
     int listCount = ViewBag.ListCount ?? 1;
@@ -51,8 +51,8 @@
                     </div>
                 </div>
                 <div class="check_group">
-                    <input type="checkbox" class="checkbox" name="searchValue" id="searchValue" value="2" @(searchValue == "2" ? "checked" : "") />
-                    <label for="searchValue" class="keep_text">
+                    <input type="checkbox" class="checkbox" name="searchDay" id="searchDay" value="2" @(searchDay == "2" ? "checked" : "") />
+                    <label for="searchDay" class="keep_text">
                         <div class="text_wrap">
                             <span class="keep_text">완결작 보기</span>
                         </div>
@@ -155,7 +155,7 @@
             $("#ChaNovelGenSearch").submit();
         });
 
-        $("#searchValue").change(function () {
+        $("#searchDay").change(function () {
             $("#ChaNovelGenSearch").submit();
         });
     </script>
