@@ -105,11 +105,11 @@
             if ($("#name").val() == "") {
                 $("#nameMsg").text("이름 : 이름을 입력해주세요.");
                 $("#nameMsg").css("display", "");
-                $("#nameDiv").addClass("error");
+                $("#nameLi").addClass("error");
                 bool = "false";
             } else {
                 $("#nameMsg").css("display", "none");
-                $("#nameDiv").removeClass("error");
+                $("#nameLi").removeClass("error");
                 $("#Name").val($("#name").val());
             }
 
@@ -117,37 +117,37 @@
             if ($("#birthdayInput").val() == "") {
                 $("#birthdayMsg").text("생년월일 : 생년월일을 입력해주세요.");
                 $("#birthdayMsg").css("display", "");
-                $("#birthdayDiv").addClass("error");
+                $("#birthLi").addClass("error");
                 bool = "false";
             } else if (!birthCheck.test($("#birthdayInput").val())) {
                 $("#birthdayMsg").text("생년월일 : 8자리의 숫자를 입력해주세요.");
                 $("#birthdayMsg").css("display", "");
-                $("#birthdayDiv").addClass("error");
+                $("#birthLi").addClass("error");
                 bool = "false";
             } else if ($("#birthdayInput").val().length != 8) {
                 $("#birthdayMsg").text("생년월일 : 8자리의 생년월일을 입력해주세요.");
                 $("#birthdayMsg").css("display", "");
-                $("#birthdayDiv").addClass("error");
+                $("#birthLi").addClass("error");
                 bool = "false";
             } else {
                 $("#birthdayMsg").css("display", "none");
-                $("#birthdayDiv").removeClass("error");
+                $("#birthLi").removeClass("error");
                 $("#Birthday").val($("#birthdayInput").val());
             }
 
             if ($("#nickname").val() == "") {
                 $("#nicknameMsg").text("닉네임 : 닉네임을 입력해주세요.");
                 $("#nicknameMsg").css("display", "");
-                $("#nicknameDiv").addClass("error");
+                $("#nicknameLi").addClass("error");
                 bool = "false";
             } else if ($("#nicknameCheck").val() != "check") {
                 $("#nicknameMsg").text("닉네임 : 닉네임 중복확인을 해주세요.");
                 $("#nicknameMsg").css("display", "");
-                $("#nicknameDiv").addClass("error");
+                $("#nicknameLi").addClass("error");
                 bool = "false";
             } else {
                 $("#nicknameMsg").css("display", "none");
-                $("#nicknameDiv").removeClass("error");
+                $("#nicknameLi").removeClass("error");
                 $("#Nickname").val($("#nickname").val());
             }
 
