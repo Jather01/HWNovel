@@ -845,9 +845,9 @@ namespace HWNovel.Controllers
                                        Opendt = g.OPENDT
                                    }).ToList();
 
-                        if (!string.IsNullOrWhiteSpace(model.searchValue))
+                        if (!string.IsNullOrWhiteSpace(model.searchOrder))
                         {
-                            novelList = novelList.Where(x => x.Writer.IndexOf(model.searchValue) >= 0 || x.Noveltitle.IndexOf(model.searchValue) >= 0).ToList();
+                            novelList = novelList.Where(x => x.Writer.IndexOf(model.searchOrder) >= 0 || x.Noveltitle.IndexOf(model.searchOrder) >= 0).ToList();
                         }
                         if (!string.IsNullOrWhiteSpace(model.searchGenre))
                         {
@@ -897,7 +897,7 @@ namespace HWNovel.Controllers
                     ViewBag.NovelList = novelList;
                     ViewBag.GenreList = genreList;
 
-                    ViewBag.searchValue = model.searchValue;
+                    ViewBag.searchOrder = model.searchOrder;
                     ViewBag.searchPage = pageNum;
                     ViewBag.searchGenre = model.searchGenre;
 

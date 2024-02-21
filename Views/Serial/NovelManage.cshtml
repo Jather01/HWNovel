@@ -1,7 +1,7 @@
 ﻿@{
     List<string> userinfo = ViewBag.userinfo == null ? new List<string>(new string[] { "0", "0", "0", "0" }) : ViewBag.userinfo;
 
-    string searchValue = ViewBag.searchValue ?? "";
+    string searchOrder = ViewBag.searchOrder ?? "";
     string searchGenre = ViewBag.searchGenre ?? "all";
     int pageNum = ViewBag.searchPage ?? 1;
     int totalCount = ViewBag.TotalCount ?? 0;
@@ -36,11 +36,10 @@
     </script>
     <div class="component_section">
         <div class="component_head novel_head">
-            <button type="button" id="writeNewNovel" class="btn_new_write btn btn-outline-dark">신작 등록</button>
-            <div class="right_area">
-                <form id="NovelManageSearch" name="NovelManageSearch" method="GET" action="/Serial/NovelManage">
+            <form id="NovelManageSearch" name="NovelManageSearch" method="GET" action="/Serial/NovelManage">
+                <div class="right_area">
                     <div class="input_box">
-                        <input placeholder="작품명, 작가명을 입력하세요." name="searchValue" class="input_text" value="@searchValue">
+                        <input placeholder="작품명, 작가명을 입력하세요." name="searchOrder" class="input_text" value="@searchOrder">
                         <button type="submit" class="btn_search"><span class="blind">검색</span></button>
                     </div>
                     <select class="novel_select form-select" name="searchGenre" id="searchGenre" asp-for="searchGenre">
@@ -51,8 +50,9 @@
                         }
                     </select>
                     <input type="hidden" name="searchPage" id="searchPage" value="@pageNum" />
-                </form>
-            </div>
+                </div>
+                <button type="button" id="writeNewNovel" class="btn_new_write btn btn-outline-dark">신작 등록</button>
+            </form>
         </div>
         <ul class="card_list type1">
             @foreach (var item in ViewBag.NovelList)
@@ -136,20 +136,29 @@
                 location.href = "/Serial/Day";
             }
 
-            var keyword = "@searchValue";
+            var keyword = "@searchOrder";
+            var keywordLen = keyword.length;
             if (keyword.length > 0) {
                 var novelTitle = $("span[name=novelTitle]");
                 for (var i = 0; i < novelTitle.length; i++) {
                     var text = novelTitle[i].innerHTML;
-                    text = text.replaceAll(keyword, '<font class="font_purple">' + keyword + '</font>');
-                    novelTitle[i].innerHTML = text;
+                    var startNo = text.toUpperCase().indexOf(keyword.toUpperCase());
+                    if (startNo >= 0) {
+                        var changeText = text.substr(startNo, keywordLen);
+                        text = text.replaceAll(changeText, '<font class="font_purple">' + changeText + '</font>');
+                        novelTitle[i].innerHTML = text;
+                    }
                 }
 
                 var novelWriter = $("span[name=novelWriter]");
                 for (var i = 0; i < novelWriter.length; i++) {
                     var text = novelWriter[i].innerHTML;
-                    text = text.replaceAll(keyword, '<font class="font_purple">' + keyword + '</font>');
-                    novelWriter[i].innerHTML = text;
+                    var startNo = text.toUpperCase().indexOf(keyword.toUpperCase());
+                    if (startNo >= 0) {
+                        var changeText = text.substr(startNo, keywordLen);
+                        text = text.replaceAll(changeText, '<font class="font_purple">' + changeText + '</font>');
+                        novelWriter[i].innerHTML = text;
+                    }
                 }
             }
         });
@@ -164,8 +173,8 @@
             if ("@pageNum" != "1") {
                 url += "&searchPage=@pageNum";
             }
-            if ("@searchValue" != "") {
-                url += "&searchValue=@searchValue";
+            if ("@searchOrder" != "") {
+                url += "&searchOrder=@searchOrder";
             }
             if ("@searchGenre" != "") {
                 url += "&searchGenre=@searchGenre";

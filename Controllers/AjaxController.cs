@@ -220,7 +220,7 @@ namespace HWNovel.Controllers
 
                 using (var db = new HWNovelEntities())
                 {
-                    h011 = db.HWN011.Where(x => x.USERID.Equals(userid) && x.NOVELID.Equals(novelid)).SingleOrDefault();
+                    h011 = db.HWN011.Where(x => x.USERID.Equals(userid) && x.NOVELID.Equals(novelid) && x.NOVELKIND.Equals(novelkind)).SingleOrDefault();
                     if(h011 == null)
                     {
                         HWN011 favoritNovel = new HWN011();
@@ -240,7 +240,7 @@ namespace HWNovel.Controllers
                         result = "off";
                     }
 
-                    h011Cnt = db.HWN011.Where(x => x.NOVELID.Equals(novelid)).ToList().Count();
+                    h011Cnt = db.HWN011.Where(x => x.NOVELID.Equals(novelid) && x.NOVELKIND.Equals(novelkind)).ToList().Count();
                     result += ("/" + h011Cnt);
                 }
             }

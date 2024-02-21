@@ -280,7 +280,7 @@ namespace HWNovel.Controllers
                 {
                     List<HWN011> list = db.HWN011.ToList();
                     u = (from a in list
-                         where a.NOVELID.Equals(novelId) && a.USERID.Equals(userid) && a.NOVELKIND.Equals("1")
+                         where a.NOVELID.Equals(novelId) && a.USERID.Equals(userid) && a.NOVELKIND.Equals("2")
                          select new HWN011
                          {
                              USERID = a.USERID,
@@ -344,7 +344,7 @@ namespace HWNovel.Controllers
                              })
                                 .ToList();
 
-                favorits = db.HWN011.Where(x => x.NOVELID.Equals(novelId) && x.NOVELKIND.Equals("1")).ToList();
+                favorits = db.HWN011.Where(x => x.NOVELID.Equals(novelId) && x.NOVELKIND.Equals("2")).ToList();
                 favorit = favorits.Count;
             }
 
